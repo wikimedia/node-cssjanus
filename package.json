@@ -1,0 +1,20 @@
+{
+  "author": "Trevor Parscal <trevorparscal@gmail.com> (http://www.trevorparscal.com/)",
+  "name": "cssjanus",
+  "description": "Converts CSS stylesheets between left-to-right and right-to-left",
+  "version": "1.0.0",
+  "homepage": "http://github.com/trevorparscal/cssjanus",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/trevorparscal/cssjanus.git"
+  },
+  "main": "./lib/cssjanus",
+  "scripts": {
+    "test": "node ./test/cssjanus.test"
+  },
+  "engines": {
+    "node": ">=0.4.1"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
