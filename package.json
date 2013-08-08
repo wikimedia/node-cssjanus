@@ -2,7 +2,7 @@
   "author": "Trevor Parscal <trevorparscal@gmail.com> (http://www.trevorparscal.com/)",
   "name": "cssjanus",
   "description": "Converts CSS stylesheets between left-to-right and right-to-left",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "http://github.com/trevorparscal/cssjanus",
   "repository": {
     "type": "git",
