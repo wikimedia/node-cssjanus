@@ -400,6 +400,15 @@ var tests = {
 			flip( '.foo { background: 100% 20% } .bar { background: 60% 30% }' ),
 			'.foo { background: 0% 20% } .bar { background: 40% 30% }'
 		);
+		// Test that it doesn't modify other styles
+		assert.equal(
+			flip( '.foo { background: #777 } .bar{ margin: 0 5% 4% 0 }' ),
+			'.foo { background: #777 } .bar{ margin: 0 0 4% 5% }'
+		);
+		assert.equal(
+			flip( '.foo { background: #777; margin: 0 5% 4% 0 }' ),
+			'.foo { background: #777; margin: 0 0 4% 5% }'
+		);
 	},
 	'leaves class names alone': function() {
 		// Makes sure we don't unnecessarily destroy classnames with tokens in them.
