@@ -1,4 +1,4 @@
-# CSSJanus [![Build Status](https://travis-ci.org/trevorparscal/cssjanus.png?branch=master)](https://travis-ci.org/trevorparscal/cssjanus)
+# CSSJanus [![Build Status](https://travis-ci.org/trevorparscal/cssjanus.png?branch=master)](https://travis-ci.org/trevorparscal/cssjanus) [![NPM version](https://badge.fury.io/js/oojs.png)](https://badge.fury.io/js/oojs)
 
 Converts CSS stylesheets between left-to-right and right-to-left. This is a JavaScript port for Node.js of [CSSJanus](http://code.google.com/p/cssjanus/), which is written in python.
 
