@@ -3,10 +3,10 @@
   "name": "cssjanus",
   "description": "Converts CSS stylesheets between left-to-right and right-to-left",
   "version": "1.0.2",
-  "homepage": "http://github.com/trevorparscal/cssjanus",
+  "homepage": "http://github.com/cssjanus/cssjanus",
   "repository": {
     "type": "git",
-    "url": "git://github.com/trevorparscal/cssjanus.git"
+    "url": "git://github.com/cssjanus/cssjanus.git"
   },
   "main": "./lib/cssjanus",
   "scripts": {
