@@ -1,9 +1,9 @@
 /**
  * Copyright 2008 Google Inc. All Rights Reserved.
- * 
+ *
  * Tests converting Cascading Style Sheets from LTR to RTL.
  * This is a series of CSS test cases for cssjanus.py
- * 
+ *
  * @author "Trevor Parscal" <trevorparscal@gmail.com>
  * @author "Lindsey Simon" <elsigh@google.com>
  */
@@ -12,7 +12,7 @@ var assert = require( 'assert' ),
 
 /**
  * Flips a stylesheet.
- * 
+ *
  * @function
  * @param {String} code Stylesheet to flip
  * @param {Boolean} swapLtrRtlInUrl Swap "ltr" and "rtl" in CSS URLs
@@ -30,7 +30,7 @@ var styles = {
 
 /**
  * Gets a version of a string with console styling applied, if supported.
- * 
+ *
  * @function
  * @param {String} text Text to color
  * @param {String} style Symbolic name of style to apply
