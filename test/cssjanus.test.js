@@ -547,8 +547,10 @@ for ( var msg in tests ) {
 }
 if ( failures === 1 ) {
 	console.log( applyStyle( '1 test failed', 'error' ) );
+	process.exit( 1 );
 } else if ( failures > 1 ) {
 	console.log( applyStyle( failures + ' tests failed', 'error' ) );
+	process.exit( 1 );
 } else {
 	console.log( applyStyle( 'All tests passed', 'ok' ) );
 }
