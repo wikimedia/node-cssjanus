@@ -542,6 +542,7 @@ for ( var msg in tests ) {
 		console.log( applyStyle( '  ✓ ' + msg, 'ok' ) );
 	} catch ( e ) {
 		console.log( applyStyle('  ✗ ' + msg, 'error' ) );
+		console.log( e.stack );
 		failures++;
 	}
 }
