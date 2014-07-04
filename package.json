@@ -13,7 +13,7 @@
     "test": "node ./test/cssjanus.test"
   },
   "engines": {
-    "node": ">=0.4.1"
+    "node": ">=0.8.14"
   },
   "dependencies": {},
   "devDependencies": {}
