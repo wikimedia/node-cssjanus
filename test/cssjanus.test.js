@@ -24,8 +24,8 @@ function flip( code, swapLtrRtlInUrl, swapLeftRightInUrl ) {
 }
 
 var styles = {
-    'ok': [32, 39],
-    'error': [31, 39]
+    ok: [32, 39],
+    error: [31, 39]
 };
 
 /**
@@ -426,17 +426,17 @@ var tests = {
 			flip( 'a.left:hover { float: right }' ),
 			'a.left:hover { float: left }'
 		);
-		//tests newlines
+		// Tests newlines
 		assert.equal(
 			flip( '#bright-left,\n.test-me { float: right }' ),
 			'#bright-left,\n.test-me { float: left }'
 		);
-		//tests newlines
+		// Tests newlines
 		assert.equal(
 			flip( '#bright-left, .test-me { float: right }' ),
 			'#bright-left, .test-me { float: left }'
 		);
-		//tests multiple names and commas
+		// Tests multiple names and commas
 		assert.equal(
 			flip( 'div.leftpill, div.leftpillon {margin-left: 0 !important}' ),
 			'div.leftpill, div.leftpillon {margin-right: 0 !important}'

@@ -10,11 +10,13 @@
   },
   "main": "./lib/cssjanus",
   "scripts": {
-    "test": "node ./test/cssjanus.test"
+    "test": "jshint . && node ./test/cssjanus.test"
   },
   "engines": {
     "node": ">=0.8.14"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "jshint": "2.5.1"
+  }
 }
