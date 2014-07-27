@@ -521,6 +521,14 @@ var tests = {
 			flip( 'border-radius: 5px' ),
 			'border-radius: 5px'
 		);
+		assert.equal(
+			flip( 'div { border-radius: 0 !important }' ),
+			'div { border-radius: 0 !important }'
+		);
+		assert.equal(
+			flip( 'div { border-radius: 8px 7px !important }' ),
+			'div { border-radius: 7px 8px !important }'
+		);
 	},
 	'flips gradient notation': function() {
 		assert.equal(
