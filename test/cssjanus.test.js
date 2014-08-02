@@ -96,8 +96,8 @@ var tests = {
 			'padding: 1px 2px 3px auto'
 		);
 		assert.equal(
-			flip( 'padding: 1px auto 3px inherit' ),
-			'padding: 1px inherit 3px auto'
+			flip( 'padding: 1px auto 3px inherit !important' ),
+			'padding: 1px inherit 3px auto !important'
 		);
 		// not really four notation
 		assert.equal(
