@@ -521,6 +521,10 @@ var tests = {
 			flip( 'border-radius: 5px' ),
 			'border-radius: 5px'
 		);
+		assert.equal(
+			flip( 'border-radius: 5px 9px 7px' ),
+			'border-radius: 9px 5px 9px 7px'
+		);
 		// Test horizontal / vertical radius rules
 		assert.equal(
 			flip( 'border-radius: 15px / 0 20px' ),
@@ -529,6 +533,14 @@ var tests = {
 		assert.equal(
 			flip( 'border-radius: 15px 40px / 20px 15px' ),
 			'border-radius: 40px 15px / 15px 20px'
+		);
+		assert.equal(
+			flip( 'border-radius: 5px 9px 7px / 3px 4px' ),
+			'border-radius: 9px 5px 9px 7px / 4px 3px'
+		);
+		assert.equal(
+			flip( 'border-radius: 10px / 20px' ),
+			'border-radius: 10px / 20px'
 		);
 		// Test correct position of !important after flip
 		assert.equal(
