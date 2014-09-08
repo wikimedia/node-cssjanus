@@ -500,8 +500,8 @@ var tests = {
 			'/* @noflip */div{float:left;text-align:left;}div{float:left}'
 		);
 		assert.equal(
-			flip( '/* @noflip */', 'div{float:left;text-align:left;}a{foo:right}' ),
-			'/* @noflip */','div{float:left;text-align:left;}a{foo:left}'
+			flip( '/* @noflip */\ndiv{float:left;text-align:left;}a{foo:right}' ),
+			'/* @noflip */\ndiv{float:left;text-align:left;}a{foo:left}'
 		);
 	},
 	'flips border radius notation': function() {
