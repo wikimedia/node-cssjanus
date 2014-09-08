@@ -220,7 +220,6 @@
 				"background: url(/foo/bar.left.png)"
 			],
 			[
-				"background: url(/foo/bright.png)",
 				"background: url(/foo/bright.png)"
 			],
 			[
@@ -356,7 +355,6 @@
 				"background-position-x: 23%"
 			],
 			[
-				"background-position-y: 23%",
 				"background-position-y: 23%"
 			],
 			[
@@ -420,11 +418,9 @@
 				"div.left > span.right+span.left { float: left }"
 			],
 			[
-				".thisclass .left .myclass {background:#fff;}",
 				".thisclass .left .myclass {background:#fff;}"
 			],
 			[
-				".thisclass .left .myclass #myid {background:#fff;}",
 				".thisclass .left .myclass #myid {background:#fff;}"
 			]
 		]
@@ -440,11 +436,9 @@
 	"do not flip rules or properties with @noflip comments": {
 		"cases": [
 			[
-				"/* @noflip */ div { float: left; }",
 				"/* @noflip */ div { float: left; }"
 			],
 			[
-				"/* @noflip */ div, .notme { float: left; }",
 				"/* @noflip */ div, .notme { float: left; }"
 			],
 			[
@@ -496,19 +490,16 @@
 				"border-radius: 7px 8px"
 			],
 			[
-				"border-radius: 5px",
 				"border-radius: 5px"
 			]
 		]
 	},
-	"flip gradient notation": {
+	"do not flip gradient notation": {
 		"cases": [
 			[
-				"background-image: -moz-linear-gradient(#326cc1, #234e8c)",
 				"background-image: -moz-linear-gradient(#326cc1, #234e8c)"
 			],
 			[
-				"background-image: -webkit-gradient(linear, 100% 0%, 0% 0%, from(#666666), to(#ffffff))",
 				"background-image: -webkit-gradient(linear, 100% 0%, 0% 0%, from(#666666), to(#ffffff))"
 			]
 		]

@@ -11,19 +11,6 @@ var assert = require( 'assert' ),
 	cssjanus = require( '../lib/cssjanus' ),
 	tests = require( './data.json' );
 
-/**
- * Flips a stylesheet.
- *
- * @function
- * @param {String} code Stylesheet to flip
- * @param {Boolean} swapLtrRtlInUrl Swap "ltr" and "rtl" in CSS URLs
- * @param {Boolean} swapLeftRightInUrl Swap "left" and "right" in CSS URLs
- * @returns {String} Flipped stylesheet
- */
-function flip( code, swapLtrRtlInUrl, swapLeftRightInUrl ) {
-	return cssjanus.transform( code, swapLtrRtlInUrl, swapLeftRightInUrl );
-}
-
 var styles = {
     ok: [32, 39],
     error: [31, 39]
@@ -45,18 +32,38 @@ function applyStyle( text, style ) {
 }
 
 console.log( 'Testing CSSJanus...' );
+
 var failures = 0;
-var name, test, settings, i;
+var name, test, settings, i, input, output;
+
 for ( name in tests ) {
 	test = tests[name];
 	settings = test.settings || {};
+
 	try {
 		for ( i = 0; i < test.cases.length; i++ ) {
+			input = test.cases[i][0];
+
+			if ( test.cases[i][1] === undefined ) {
+				output = input;
+			} else {
+				assert(
+					test.cases[i][1] !== input,
+					'case #' + ( i + 1 ) + ' should not specify output if it matches the input'
+				);
+				output = test.cases[i][1];
+			}
+
 			assert.equal(
-				flip( test.cases[i][0], settings.swapLtrRtlInUrl, settings.swapLeftRightInUrl ),
-				test.cases[i][1] || test.cases[i][0]
+				cssjanus.transform(
+					input,
+					settings.swapLtrRtlInUrl,
+					settings.swapLeftRightInUrl
+				),
+				output
 			);
 		}
+
 		console.log( applyStyle( '  ✓ ' + name, 'ok' ) );
 	} catch ( e ) {
 		console.log( applyStyle( '  ✗ ' + name, 'error' ) );
