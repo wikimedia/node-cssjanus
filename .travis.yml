@@ -3,3 +3,7 @@ node_js:
   - "0.10"
 before_install:
   - npm install -g grunt-cli
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#wikimedia-dev"
