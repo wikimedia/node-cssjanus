@@ -31,31 +31,54 @@
 			]
 		]
 	},
+	"flip multi-value notation": {
+		"cases": [
+			[
+				".foo { padding: 1px; }"
+			],
+			[
+				".foo { padding: 1px 2px; }"
+			],
+			[
+				".foo { padding: 1px 2px 3px; }"
+			],
+			[
+				".foo { padding: 1px 2px 3px 4px; }",
+				".foo { padding: 1px 4px 3px 2px; }"
+			],
+			[
+				".foo { padding: 1px 2px 3px 4px 5px; }"
+			],
+			[
+				".foo { padding: 1px 2px 3px 4px 5px 6px; }"
+			]
+		]
+	},
 	"flip four value notation": {
 		"cases": [
 			[
-				"padding: .25em 0ex 0pt 15px",
-				"padding: .25em 15px 0pt 0ex"
+				".foo { padding: .25em 0ex 0pt 15px }",
+				".foo { padding: .25em 15px 0pt 0ex }"
 			],
 			[
-				"margin: 1px 2px 3px -4px",
-				"margin: 1px -4px 3px 2px"
+				".foo { margin: 1px 2px 3px -4px }",
+				".foo { margin: 1px -4px 3px 2px }"
 			],
 			[
-				"padding:0 0 .25em 15px",
-				"padding:0 15px .25em 0"
+				".foo { padding:0 0 .25em 15px }",
+				".foo { padding:0 15px .25em 0 }"
 			],
 			[
-				"padding: 1px 2% 3px 4.1grad",
-				"padding: 1px 4.1grad 3px 2%"
+				".foo { padding: 1px 2% 3px 4.1grad }",
+				".foo { padding: 1px 4.1grad 3px 2% }"
 			],
 			[
-				"padding: 1px auto 3px 2px",
-				"padding: 1px 2px 3px auto"
+				".foo { padding: 1px auto 3px 2px }",
+				".foo { padding: 1px 2px 3px auto }"
 			],
 			[
-				"padding: 1px auto 3px inherit",
-				"padding: 1px inherit 3px auto"
+				".foo { padding: 1px auto 3px inherit }",
+				".foo { padding: 1px inherit 3px auto }"
 			],
 			[
 				"#settings td p strong {}"
