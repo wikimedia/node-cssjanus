@@ -23,15 +23,130 @@
 			]
 		]
 	},
-	"flip absolute or relative position values": {
+	"flip position": {
 		"cases": [
 			[
-				"left: 10px",
-				"right: 10px"
+				".foo { left: 10px; }",
+				".foo { right: 10px; }"
+			],
+			[
+				".foo { left: 10px !important; }",
+				".foo { right: 10px !important; }"
 			]
 		]
 	},
-	"flip multi-value notation": {
+	"flip negative values": {
+		"cases": [
+			[
+				".foo { left:-1.5em; }",
+				".foo { right:-1.5em; }"
+			],
+			[
+				".foo { left:-.75em; }",
+				".foo { right:-.75em; }"
+			],
+			[
+				".foo { padding: 1px 2px 3px -4px; }",
+				".foo { padding: 1px -4px 3px 2px; }"
+			]
+		]
+	},
+	"flip four value notation": {
+		"cases": [
+			[
+				".foo { padding: .25em 0ex 0pt 15px; }",
+				".foo { padding: .25em 15px 0pt 0ex; }"
+			],
+			[
+				".foo { padding: 1px 2% 3px 4.1grad; }",
+				".foo { padding: 1px 4.1grad 3px 2%; }"
+			],
+			[
+				".foo { padding: 1px auto 3px 2px; }",
+				".foo { padding: 1px 2px 3px auto; }"
+			],
+			[
+				".foo { padding: 1.1px 2.2px 3.3px 4.4px; }",
+				".foo { padding: 1.1px 4.4px 3.3px 2.2px; }"
+			],
+			[
+				".foo { padding: 1px auto 3px inherit; }",
+				".foo { padding: 1px inherit 3px auto; }"
+			],
+			[
+				".foo{padding:1px 2px 3px 4px}",
+				".foo{padding:1px 4px 3px 2px}"
+			],
+			[
+				"  .foo  {  padding: 1px  2px   3px    4px     ;  }  ",
+				"  .foo  {  padding: 1px  4px   3px    2px     ;  }  "
+			],
+			[
+				"#settings td p strong {}"
+			],
+			[
+				".foo barpx 0 2% { opacity: 0; }"
+			],
+			[
+				".foo { -x-unknown: a b c d; }"
+			],
+			[
+				".foo { -x-unknown: 1px 2px 3px 4px; }"
+			],
+			[
+				".foo { -x-unknown: 1px 2px 3px 4px 5px; }"
+			]
+		]
+	},
+	"flip direction": {
+		"cases": [
+			[
+				".foo { direction: ltr; }",
+				".foo { direction: rtl; }"
+			],
+			[
+				"input { direction: rtl; }",
+				"input { direction: ltr; }"
+			],
+			[
+				"body { direction: rtl; }",
+				"body { direction: ltr; }"
+			],
+			[
+				"body { padding: 10px; direction: rtl; }",
+				"body { padding: 10px; direction: ltr; }"
+			],
+			[
+				".foo, body, input { direction: rtl; }",
+				".foo, body, input { direction: ltr; }"
+			],
+			[
+				"body { direction: rtl; } .myClass { direction: ltr; }",
+				"body { direction: ltr; } .myClass { direction: rtl; }"
+			],
+			[
+				"body{\n direction: rtl\n}",
+				"body{\n direction: ltr\n}"
+			]
+		]
+	},
+	"flip float": {
+		"cases": [
+			[
+				".foo { float: left; }",
+				".foo { float: right; }"
+			],
+			[
+				".foo { float: left !important; }",
+				".foo { float: right !important; }"
+			],
+			[
+				".foo { clear: left; }",
+				".foo { clear: right; }"
+			]
+		]
+	},
+	"flip padding": {
 		"cases": [
 			[
 				".foo { padding: 1px; }"
@@ -54,161 +169,307 @@
 			]
 		]
 	},
-	"flip four value notation": {
+	"flip padding-{edge}": {
 		"cases": [
 			[
-				".foo { padding: .25em 0ex 0pt 15px }",
-				".foo { padding: .25em 15px 0pt 0ex }"
-			],
-			[
-				".foo { margin: 1px 2px 3px -4px }",
-				".foo { margin: 1px -4px 3px 2px }"
-			],
-			[
-				".foo { padding:0 0 .25em 15px }",
-				".foo { padding:0 15px .25em 0 }"
-			],
-			[
-				".foo { padding: 1px 2% 3px 4.1grad }",
-				".foo { padding: 1px 4.1grad 3px 2% }"
-			],
-			[
-				".foo { padding: 1px auto 3px 2px }",
-				".foo { padding: 1px 2px 3px auto }"
-			],
-			[
-				".foo { padding: 1px auto 3px inherit }",
-				".foo { padding: 1px inherit 3px auto }"
-			],
-			[
-				".foo { border-color: red green blue white }",
-				".foo { border-color: red white blue green }"
-			],
-			[
-				".foo { border-color: red #f00 rgb(255, 0, 0) rgba(255, 0, 0, 0.5) }",
-				".foo { border-color: red rgba(255, 0, 0, 0.5) rgb(255, 0, 0) #f00 }"
-			],
-			[
-				".foo { border-color: red #f00 hsl(0, 100%, 50%) hsla(0, 100%, 50%, 0.5) }",
-				".foo { border-color: red hsla(0, 100%, 50%, 0.5) hsl(0, 100%, 50%) #f00 }"
-			],
-			[
-				"#settings td p strong {}"
+				".foo { padding-left: 0; }",
+				".foo { padding-right: 0; }"
 			]
 		]
 	},
-	"flip three value notation": {
+	"flip margin-{edge}": {
 		"cases": [
 			[
-				"margin: 1em 0 .25em"
-			],
-			[
-				"margin:-1.5em 0 -.75em"
+				".foo { margin-left: 0; }",
+				".foo { margin-right: 0; }"
 			]
 		]
 	},
-	"flip two value notation": {
+	"flip cursor": {
 		"cases": [
 			[
-				"padding: 1px 2px"
+				".foo { cursor: w-resize; }",
+				".foo { cursor: e-resize; }"
+			],
+			[
+				".foo { cursor: sw-resize; }",
+				".foo { cursor: se-resize; }"
+			],
+			[
+				".foo { cursor: nw-resize; }",
+				".foo { cursor: ne-resize; }"
 			]
 		]
 	},
-	"flip one value notation": {
+	"flip text-align": {
 		"cases": [
 			[
-				"padding: 1px"
-			]
-		]
-	},
-	"flip direction": {
-		"cases": [
-			[
-				"direction: ltr",
-				"direction: rtl"
-			],
-			[
-				"body { direction: rtl }",
-				"body { direction: ltr }"
-			],
-			[
-				"body { padding: 10px; direction: rtl; }",
-				"body { padding: 10px; direction: ltr; }"
-			],
-			[
-				"body { direction: rtl } .myClass { direction: ltr }",
-				"body { direction: ltr } .myClass { direction: rtl }"
-			],
-			[
-				"body{\n direction: rtl\n}",
-				"body{\n direction: ltr\n}"
-			]
-		]
-	},
-	"flip rules with more than one hyphen": {
-		"cases": [
-			[
-				"border-left-color: red",
-				"border-right-color: red"
-			]
-		]
-	},
-	"leave unknown property names alone": {
-		"cases": [
-			[
-				"alleft: 10px"
-			],
-			[
-				"alright: 10px"
-			],
-			[
-				"leftxx: 10px"
-			],
-			[
-				"rightxx: 10px"
-			]
-		]
-	},
-	"flip floats": {
-		"cases": [
-			[
-				"float: left",
-				"float: right"
+				".foo { text-align: left; }",
+				".foo { text-align: right; }"
 			]
 		]
 	},
 	"flip text-shadow": {
 		"cases": [
 			[
-				".foo { text-shadow: red 2px 0 }",
-				".foo { text-shadow: red -2px 0 }"
+				".foo { text-shadow: red 2px 0; }",
+				".foo { text-shadow: red -2px 0; }"
 			],
 			[
-				".foo { text-shadow: 2px 0 red }",
-				".foo { text-shadow: -2px 0 red }"
+				".foo { text-shadow: 2px 0 red; }",
+				".foo { text-shadow: -2px 0 red; }"
 			],
 			[
-				".foo { text-shadow: red 0 2px }"
+				".foo { text-shadow: red 0 2px; }"
 			]
 		]
 	},
 	"flip box-shadow": {
 		"cases": [
 			[
-				".foo { box-shadow: -6px 3px 8px 5px rgba(0, 0, 0, 0.25) }",
-				".foo { box-shadow: 6px 3px 8px 5px rgba(0, 0, 0, 0.25) }"
+				".foo { box-shadow: -6px 3px 8px 5px rgba(0, 0, 0, 0.25); }",
+				".foo { box-shadow: 6px 3px 8px 5px rgba(0, 0, 0, 0.25); }"
 			],
 			[
-				".foo { box-shadow: inset -6px 3px 8px 5px rgba(0, 0, 0, 0.25) }",
-				".foo { box-shadow: inset 6px 3px 8px 5px rgba(0, 0, 0, 0.25) }"
+				".foo { box-shadow: inset -6px 3px 8px 5px rgba(0, 0, 0, 0.25); }",
+				".foo { box-shadow: inset 6px 3px 8px 5px rgba(0, 0, 0, 0.25); }"
 			],
 			[
-				".foo { box-shadow: inset .5em 0 0 white }",
-				".foo { box-shadow: inset -.5em 0 0 white }"
+				".foo { box-shadow: inset .5em 0 0 white; }",
+				".foo { box-shadow: inset -.5em 0 0 white; }"
 			],
 			[
-				".foo { box-shadow: inset 0.5em 0 0 white }",
-				".foo { box-shadow: inset -0.5em 0 0 white }"
+				".foo { box-shadow: inset 0.5em 0 0 white; }",
+				".foo { box-shadow: inset -0.5em 0 0 white; }"
+			],
+			[
+				".foo { box-shadow: none; }"
+			],
+			[
+				".foo { -webkit-box-shadow: -1px 2px 3px 3px red; }",
+				".foo { -webkit-box-shadow: 1px 2px 3px 3px red; }"
+			],
+			[
+				".foo { -moz-box-shadow: -1px 2px 3px 3px red; }",
+				".foo { -moz-box-shadow: 1px 2px 3px 3px red; }"
+			],
+			[
+				".foo{box-shadow:-1px 2px 3px 3px red}",
+				".foo{box-shadow:1px 2px 3px 3px red}"
+			],
+			[
+				".foo  {  box-shadow:  -1px 2px 3px 3px red  ;  }",
+				".foo  {  box-shadow:  1px 2px 3px 3px red  ;  }"
+			]
+		]
+	},
+	"flip border-{edge}": {
+		"cases": [
+			[
+				".foo { border-left: 0; }",
+				".foo { border-right: 0; }"
+			],
+			[
+				".foo { border-left: 1px solid red; }",
+				".foo { border-right: 1px solid red; }"
+			]
+		]
+	},
+	"flip border-{edge}-color": {
+		"cases": [
+			[
+				".foo { border-left-color: red; }",
+				".foo { border-right-color: red; }"
+			]
+		]
+	},
+	"flip border-{edge}-style": {
+		"cases": [
+			[
+				".foo { border-left-style: red; }",
+				".foo { border-right-style: red; }"
+			]
+		]
+	},
+	"flip border-color": {
+		"cases": [
+			[
+				".foo { border-color: red green blue white; }",
+				".foo { border-color: red white blue green; }"
+			],
+			[
+				".foo { border-color: red #f00 rgb(255, 0, 0) rgba(255, 0, 0, 0.5); }",
+				".foo { border-color: red rgba(255, 0, 0, 0.5) rgb(255, 0, 0) #f00; }"
+			],
+			[
+				".foo { border-color: red #f00 hsl(0, 100%, 50%) hsla(0, 100%, 50%, 0.5); }",
+				".foo { border-color: red hsla(0, 100%, 50%, 0.5) hsl(0, 100%, 50%) #f00; }"
+			]
+		]
+	},
+	"flip border-width": {
+		"cases": [
+			[
+				".foo { border-width: 1px 2px 3px 4px; }",
+				".foo { border-width: 1px 4px 3px 2px; }"
+			]
+		]
+	},
+	"flip border-radius": {
+		"cases": [
+			[
+				".foo { border-radius: 1px; }"
+			],
+			[
+				".foo { border-radius: 1px 2px; }",
+				".foo { border-radius: 2px 1px; }"
+			],
+			[
+				".foo { border-radius: 1px 2px 3px 4px; }",
+				".foo { border-radius: 2px 1px 4px 3px; }"
+			]
+		]
+	},
+	"flip border-top-{edge}-radius": {
+		"cases": [
+			[
+				".foo { border-top-left-radius: 0; }",
+				".foo { border-top-right-radius: 0; }"
+			]
+		]
+	},
+	"flip border-bottom-{edge}-radius": {
+		"cases": [
+			[
+				".foo { border-bottom-left-radius: 0; }",
+				".foo { border-bottom-right-radius: 0; }"
+			]
+		]
+	},
+	"flip background-position keywords": {
+		"cases": [
+			[
+				".foo { background-position: left top; }",
+				".foo { background-position: right top; }"
+			],
+			[
+				".foo { background: url(/foo/bar.png) left top; }",
+				".foo { background: url(/foo/bar.png) right top; }"
+			],
+			[
+				".foo { background: url(/foo/bar.png) no-repeat left top; }",
+				".foo { background: url(/foo/bar.png) no-repeat right top; }"
+			],
+			[
+				".foo { background: #000 url(/foo/bar.png) no-repeat left top; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat right top; }"
+			],
+			[
+				".foo { background-position: left -5px; }",
+				".foo { background-position: right -5px; }"
+			]
+		]
+	},
+	"flip background-position percentages": {
+		"cases": [
+			[
+				".foo { background-position: 77% 40%; }",
+				".foo { background-position: 23% 40%; }"
+			],
+			[
+				".foo { background-position: 0% 100%; }",
+				".foo { background-position: 100% 100%; }"
+			],
+			[
+				".foo { background-position: 0% 100% !important; }",
+				".foo { background-position: 100% 100% !important; }"
+			],
+			[
+				".foo{background-position: 0% 100%}",
+				".foo{background-position: 100% 100%}"
+			],
+			[
+				".foo  {  background-position:  0% 100%  ;  }",
+				".foo  {  background-position:  100% 100%  ;  }"
+			]
+		]
+	},
+	"do not flip background-position non-percentages": {
+		"cases": [
+			[
+				".foo { background-position: 0 5px; }"
+			],
+			[
+				".foo { background-position: 10px 20px; }"
+			],
+			[
+				".foo { background-position: 10px 40%; }"
+			],
+			[
+				".foo { background-position: 10px 2.3%; }"
+			]
+		]
+	},
+	"flip background percentages": {
+		"cases": [
+			[
+				".foo { background: url(/foo/bar.png) 77% 40%; }",
+				".foo { background: url(/foo/bar.png) 23% 40%; }"
+			],
+			[
+				".foo { background: url(/foo/bar.png) no-repeat 77% 40%; }",
+				".foo { background: url(/foo/bar.png) no-repeat 23% 40%; }"
+			],
+			[
+				".foo { background: #000 url(/foo/bar.png) no-repeat 77% 40%; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat 23% 40%; }"
+			],
+			[
+				".foo { background: #000 url(/foo/bar.png) no-repeat 77% 40%; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat 23% 40%; }"
+			],
+			[
+				".foo { background: 77% 40%; } .bar { background: 0% 100%; }",
+				".foo { background: 23% 40%; } .bar { background: 100% 100%; }"
+			],
+			[
+				".foo { background: url(/foo/bar.png) 77% 40% !important; }",
+				".foo { background: url(/foo/bar.png) 23% 40% !important; }"
+			],
+			[
+				".foo{background:url(/foo/bar.png) 77% 40%}",
+				".foo{background:url(/foo/bar.png) 23% 40%}"
+			],
+			[
+				".foo  {  background:  url(/foo/bar.png) 77% 40%  ;  }",
+				".foo  {  background:  url(/foo/bar.png) 23% 40%  ;  }"
+			]
+		]
+	},
+	"flip background-position-x percentages": {
+		"cases": [
+			[
+				".foo { background-position-x: 77%; }",
+				".foo { background-position-x: 23%; }"
+			],
+			[
+				".foo { background-position-x: 77% !important; }",
+				".foo { background-position-x: 23% !important; }"
+			],
+			[
+				".foo{background-position-x:77%}",
+				".foo{background-position-x:23%}"
+			],
+			[
+				".foo  {  background-position-x:  77%  ;  }",
+				".foo  {  background-position-x:  23%  ;  }"
+			]
+		]
+	},
+	"do not flip background-position-y": {
+		"cases": [
+			[
+				".foo { background-position-y: 40%; }"
 			]
 		]
 	},
@@ -304,160 +565,72 @@
 			]
 		]
 	},
-	"flip padding": {
-		"cases": [
-			[
-				"padding-left: bar",
-				"padding-right: bar"
-			]
-		]
-	},
-	"flip margins": {
-		"cases": [
-			[
-				"margin-left: bar",
-				"margin-right: bar"
-			]
-		]
-	},
-	"flip borders": {
-		"cases": [
-			[
-				"border-left: bar",
-				"border-right: bar"
-			]
-		]
-	},
-	"flip cursors": {
-		"cases": [
-			[
-				"cursor: w-resize",
-				"cursor: e-resize"
-			],
-			[
-				"cursor: sw-resize",
-				"cursor: se-resize"
-			],
-			[
-				"cursor: nw-resize",
-				"cursor: ne-resize"
-			]
-		]
-	},
-	"flip keyword background positions": {
-		"cases": [
-			[
-				"background: url(/foo/bar.png) left top",
-				"background: url(/foo/bar.png) right top"
-			],
-			[
-				"background-position: left top",
-				"background-position: right top"
-			],
-			[
-				"background-position: left -5",
-				"background-position: right -5"
-			],
-			[
-				"background-position: left 5",
-				"background-position: right 5"
-			]
-		]
-	},
-	"flip percentage background positions": {
-		"cases": [
-			[
-				"background-position: 0% 40%",
-				"background-position: 100% 40%"
-			],
-			[
-				"background-position: 77% 0",
-				"background-position: 23% 0"
-			],
-			[
-				"background-position: 77% auto",
-				"background-position: 23% auto"
-			],
-			[
-				"background-position-x: 77%",
-				"background-position-x: 23%"
-			],
-			[
-				"background-position-y: 23%"
-			],
-			[
-				"background:url(../foo-bar_baz.2008.gif) no-repeat 25% 50%",
-				"background:url(../foo-bar_baz.2008.gif) no-repeat 75% 50%"
-			],
-			[
-				".test { background: 90% 20% } .test2 { background: 60% 30% }",
-				".test { background: 10% 20% } .test2 { background: 40% 30% }"
-			],
-			[
-				".test { background: 100% 20% } .test2 { background: 60% 30% }",
-				".test { background: 0% 20% } .test2 { background: 40% 30% }"
-			],
-			[
-				".foo { background: 90% 20% } .bar { background: 60% 30% }",
-				".foo { background: 10% 20% } .bar { background: 40% 30% }"
-			],
-			[
-				".foo { background: 100% 20% } .bar { background: 60% 30% }",
-				".foo { background: 0% 20% } .bar { background: 40% 30% }"
-			],
-			[
-				".foo { background: #777 } .bar{ margin: 0 5% 4% 0 }",
-				".foo { background: #777 } .bar{ margin: 0 0 4% 5% }"
-			],
-			[
-				".foo { background: #777; margin: 0 5% 4% 0 }",
-				".foo { background: #777; margin: 0 0 4% 5% }"
-			]
-		]
-	},
 	"leave class names alone": {
 		"cases": [
 			[
-				".column-left { float: left }",
-				".column-left { float: right }"
+				".x-left { width: 0; }"
 			],
 			[
-				"#bright-light { float: left }",
-				"#bright-light { float: right }"
+				"#bright-left { width: 0; }"
 			],
 			[
-				"a.left:hover { float: left }",
-				"a.left:hover { float: right }"
+				"div.left:hover { width: 0; }"
 			],
 			[
-				"#bright-left,\n.test-me { float: left }",
-				"#bright-left,\n.test-me { float: right }"
+				"#bright-left,\n.foo { width: 0; }"
 			],
 			[
-				"#bright-left, .test-me { float: left }",
-				"#bright-left, .test-me { float: right }"
+				"#bright-left, .foo { width: 0; }"
 			],
 			[
-				"div.leftpill, div.leftpillon {margin-left: 0 !important}",
-				"div.leftpill, div.leftpillon {margin-right: 0 !important}"
+				"div.leftxx, div.leftxx { width: 0; }"
 			],
 			[
-				"div.left > span.right+span.left { float: left }",
-				"div.left > span.right+span.left { float: right }"
+				"div.left > span.right+span.left { width: 0; }"
 			],
 			[
-				".thisclass .left .myclass {background:#fff;}"
+				".foo .left .bar { width: 0; }"
 			],
 			[
-				".thisclass .left .myclass #myid {background:#fff;}"
+				".foo .left .bar #myid { width: 0; }"
+			],
+			[
+				"foo-ltr[attr=x] { width: 0; }"
+			],
+			[
+				".a-foo.png { width: 0; }"
+			]
+		]
+	},
+	"leave unknown properties alone": {
+		"cases": [
+			[
+				".foo { xxleft: 10px; }"
+			],
+			[
+				".foo { xxright: 10px; }"
+			],
+			[
+				".foo { leftxx: 10px; }"
+			],
+			[
+				".foo { rightxx: 10px; }"
 			]
 		]
 	},
 	"flip multiple rules": {
 		"cases": [
 			[
-				"body{direction:ltr;float:left}.b2{direction:ltr;float:left}",
-				"body{direction:rtl;float:right}.b2{direction:rtl;float:right}"
+				"body { direction: ltr; float: left; } .foo { direction: ltr; float: left; }",
+				"body { direction: rtl; float: right; } .foo { direction: rtl; float: right; }"
+			]
+		]
+	},
+	"flip duplicate properties": {
+		"cases": [
+			[
+				".foo { float: left; float: right; float: left; }",
+				".foo { float: right; float: left; float: right; }"
 			]
 		]
 	},
@@ -482,8 +655,8 @@
 				"div { float: left; /* @noflip */ float: left; }"
 			],
 			[
-				"div\n{ float: right;\n/* @noflip */\n float: left;\n }",
-				"div\n{ float: left;\n/* @noflip */\n float: left;\n }"
+				"div\n{ float: right;\n/* @noflip */\n float: left;\n; }",
+				"div\n{ float: left;\n/* @noflip */\n float: left;\n; }"
 			],
 			[
 				"div\n{ float: right;\n/* @noflip */\n text-align: left\n }",
@@ -518,32 +691,13 @@
 			]
 		]
 	},
-	"flip border radius notation": {
-		"cases": [
-			[
-				"border-radius: 15px .25em 0ex 0pt",
-				"border-radius: .25em 15px 0pt 0ex"
-			],
-			[
-				"border-radius: 15px 10px 15px 0px",
-				"border-radius: 10px 15px 0px 15px"
-			],
-			[
-				"border-radius: 8px 7px",
-				"border-radius: 7px 8px"
-			],
-			[
-				"border-radius: 5px"
-			]
-		]
-	},
 	"do not flip gradient notation": {
 		"cases": [
 			[
-				"background-image: -moz-linear-gradient(#326cc1, #234e8c)"
+				".foo { background-image: -moz-linear-gradient(#326cc1, #234e8c); }"
 			],
 			[
-				"background-image: -webkit-gradient(linear, 100% 0%, 0% 0%, from(#666666), to(#ffffff))"
+				".foo { background-image: -webkit-gradient(linear, 100% 0%, 0% 0%, from(#666666), to(#ffffff)); }"
 			]
 		]
 	}
