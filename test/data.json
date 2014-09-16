@@ -500,6 +500,21 @@
 			[
 				"/* @noflip */\ndiv{float:left;text-align:left;}a{foo:right}",
 				"/* @noflip */\ndiv{float:left;text-align:left;}a{foo:left}"
+			],
+			[
+				"/* @noflip */ div.foo[bar*=baz] { left: 10px; float: left; }"
+			],
+			[
+				"/* @noflip */ div.foo[bar^=baz] { left: 10px; float: left; }"
+			],
+			[
+				"/* @noflip */ div.foo[bar~=baz] { left: 10px; float: left; }"
+			],
+			[
+				"/* @noflip */ div.foo[bar=baz] { left: 10px; float: left; }"
+			],
+			[
+				"/* @noflip */ div.foo[bar*='baz{quux'] { left: 10px; float: left; }"
 			]
 		]
 	},
