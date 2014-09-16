@@ -81,6 +81,18 @@
 				".foo { padding: 1px inherit 3px auto }"
 			],
 			[
+				".foo { border-color: red green blue white }",
+				".foo { border-color: red white blue green }"
+			],
+			[
+				".foo { border-color: red #f00 rgb(255, 0, 0) rgba(255, 0, 0, 0.5) }",
+				".foo { border-color: red rgba(255, 0, 0, 0.5) rgb(255, 0, 0) #f00 }"
+			],
+			[
+				".foo { border-color: red #f00 hsl(0, 100%, 50%) hsla(0, 100%, 50%, 0.5) }",
+				".foo { border-color: red hsla(0, 100%, 50%, 0.5) hsl(0, 100%, 50%) #f00 }"
+			],
+			[
 				"#settings td p strong {}"
 			]
 		]
