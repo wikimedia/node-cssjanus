@@ -2,32 +2,32 @@
 	"preserve comments": {
 		"cases": [
 			[
-				"/* left /* right */right: 10px",
-				"/* left /* right */left: 10px"
+				"/* left /* right */left: 10px",
+				"/* left /* right */right: 10px"
 			],
 			[
-				"/*left*//*left*/right: 10px",
-				"/*left*//*left*/left: 10px"
+				"/*left*//*left*/left: 10px",
+				"/*left*//*left*/right: 10px"
 			],
 			[
-				"/* Going right is cool */\n#test {right: 10px}",
-				"/* Going right is cool */\n#test {left: 10px}"
+				"/* Going right is cool */\n#test {left: 10px}",
+				"/* Going right is cool */\n#test {right: 10px}"
 			],
 			[
-				"/* padding-right 1 2 3 4 */\n#test {right: 10px}\n/*right*/",
-				"/* padding-right 1 2 3 4 */\n#test {left: 10px}\n/*right*/"
+				"/* padding-right 1 2 3 4 */\n#test {left: 10px}\n/*right*/",
+				"/* padding-right 1 2 3 4 */\n#test {right: 10px}\n/*right*/"
 			],
 			[
-				"/** Two line comment\n * left\n \\*/\n#test {right: 10px}",
-				"/** Two line comment\n * left\n \\*/\n#test {left: 10px}"
+				"/** Two line comment\n * left\n \\*/\n#test {left: 10px}",
+				"/** Two line comment\n * left\n \\*/\n#test {right: 10px}"
 			]
 		]
 	},
 	"flip absolute or relative position values": {
 		"cases": [
 			[
-				"right: 10px",
-				"left: 10px"
+				"left: 10px",
+				"right: 10px"
 			]
 		]
 	},
@@ -93,10 +93,6 @@
 				"direction: rtl"
 			],
 			[
-				"direction: rtl",
-				"direction: ltr"
-			],
-			[
 				"body { direction: rtl }",
 				"body { direction: ltr }"
 			],
@@ -117,10 +113,6 @@
 	"flip rules with more than one hyphen": {
 		"cases": [
 			[
-				"border-right-color: red",
-				"border-left-color: red"
-			],
-			[
 				"border-left-color: red",
 				"border-right-color: red"
 			]
@@ -129,10 +121,10 @@
 	"leave unknown property names alone": {
 		"cases": [
 			[
-				"alright: 10px"
+				"alleft: 10px"
 			],
 			[
-				"alleft: 10px"
+				"alright: 10px"
 			]
 		]
 	},
@@ -141,10 +133,6 @@
 			[
 				"float: left",
 				"float: right"
-			],
-			[
-				"float: right",
-				"float: left"
 			]
 		]
 	},
@@ -245,19 +233,11 @@
 			[
 				"padding-left: bar",
 				"padding-right: bar"
-			],
-			[
-				"padding-right: bar",
-				"padding-left: bar"
 			]
 		]
 	},
 	"flip margins": {
 		"cases": [
-			[
-				"margin-right: bar",
-				"margin-left: bar"
-			],
 			[
 				"margin-left: bar",
 				"margin-right: bar"
@@ -266,10 +246,6 @@
 	},
 	"flip borders": {
 		"cases": [
-			[
-				"border-right: bar",
-				"border-left: bar"
-			],
 			[
 				"border-left: bar",
 				"border-right: bar"
@@ -283,40 +259,20 @@
 				"cursor: e-resize"
 			],
 			[
-				"cursor: e-resize",
-				"cursor: w-resize"
-			],
-			[
 				"cursor: sw-resize",
 				"cursor: se-resize"
 			],
 			[
-				"cursor: se-resize",
-				"cursor: sw-resize"
-			],
-			[
 				"cursor: nw-resize",
 				"cursor: ne-resize"
-			],
-			[
-				"cursor: ne-resize",
-				"cursor: nw-resize"
 			]
 		]
 	},
 	"flip keyword background positions": {
 		"cases": [
 			[
-				"background: url(/foo/bar.png) right top",
-				"background: url(/foo/bar.png) left top"
-			],
-			[
 				"background: url(/foo/bar.png) left top",
 				"background: url(/foo/bar.png) right top"
-			],
-			[
-				"background-position: right top",
-				"background-position: left top"
 			],
 			[
 				"background-position: left top",
@@ -337,10 +293,6 @@
 			[
 				"background-position: 0% 40%",
 				"background-position: 100% 40%"
-			],
-			[
-				"background-position: 100% 40%",
-				"background-position: 0% 40%"
 			],
 			[
 				"background-position: 77% 0",
@@ -390,32 +342,32 @@
 	"leave class names alone": {
 		"cases": [
 			[
-				".column-left { float: right }",
-				".column-left { float: left }"
+				".column-left { float: left }",
+				".column-left { float: right }"
 			],
 			[
-				"#bright-light { float: right }",
-				"#bright-light { float: left }"
+				"#bright-light { float: left }",
+				"#bright-light { float: right }"
 			],
 			[
-				"a.left:hover { float: right }",
-				"a.left:hover { float: left }"
+				"a.left:hover { float: left }",
+				"a.left:hover { float: right }"
 			],
 			[
-				"#bright-left,\n.test-me { float: right }",
-				"#bright-left,\n.test-me { float: left }"
+				"#bright-left,\n.test-me { float: left }",
+				"#bright-left,\n.test-me { float: right }"
 			],
 			[
-				"#bright-left, .test-me { float: right }",
-				"#bright-left, .test-me { float: left }"
+				"#bright-left, .test-me { float: left }",
+				"#bright-left, .test-me { float: right }"
 			],
 			[
 				"div.leftpill, div.leftpillon {margin-left: 0 !important}",
 				"div.leftpill, div.leftpillon {margin-right: 0 !important}"
 			],
 			[
-				"div.left > span.right+span.left { float: right }",
-				"div.left > span.right+span.left { float: left }"
+				"div.left > span.right+span.left { float: left }",
+				"div.left > span.right+span.left { float: right }"
 			],
 			[
 				".thisclass .left .myclass {background:#fff;}"

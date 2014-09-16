@@ -5,7 +5,7 @@ module.exports = function ( grunt ) {
 			testData = require( '../../test/data.json' ),
 			failures = 0,
 			tests = 0,
-			name, test, settings, i, input, output;
+			name, test, settings, i, input, noop, output;
 
 		for ( name in testData ) {
 			tests++;
@@ -15,16 +15,8 @@ module.exports = function ( grunt ) {
 			try {
 				for ( i = 0; i < test.cases.length; i++ ) {
 					input = test.cases[i][0];
-
-					if ( test.cases[i][1] === undefined ) {
-						output = input;
-					} else {
-						assert(
-							test.cases[i][1] !== input,
-							'case #' + ( i + 1 ) + ' should not specify output if it matches the input'
-						);
-						output = test.cases[i][1];
-					}
+					noop = test.cases[i][1] === undefined;
+					output = noop ? input : test.cases[i][1];
 
 					assert.equal(
 						cssjanus.transform(
@@ -34,6 +26,25 @@ module.exports = function ( grunt ) {
 						),
 						output
 					);
+
+					if ( !noop ) {
+						// Round-trip
+						assert.equal(
+							cssjanus.transform(
+								output,
+								settings.swapLtrRtlInUrl,
+								settings.swapLeftRightInUrl
+							),
+							input
+						);
+
+						// Keep test data clean
+						assert(
+							test.cases[i][1] !== input,
+							'case #' + ( i + 1 ) + ' should not specify output if it matches the input'
+						);
+						output = test.cases[i][1];
+					}
 				}
 				grunt.verbose.write( name + '...' );
 				grunt.verbose.ok();
