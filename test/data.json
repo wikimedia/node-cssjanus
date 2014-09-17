@@ -327,6 +327,17 @@
 			[
 				".foo { border-radius: 1px 2px 3px 4px; }",
 				".foo { border-radius: 2px 1px 4px 3px; }"
+			],
+			[
+				".foo{border-radius:1px 2px 3px 4px}",
+				".foo{border-radius:2px 1px 4px 3px}"
+			],
+			[
+				".foo  {  border-radius:  1px 2px 3px 4px  ;  }",
+				".foo  {  border-radius:  2px 1px 4px 3px  ;  }"
+			],
+			[
+				".foo { border-radius: 1px 2px 3px 4px 5px; }"
 			]
 		]
 	},
