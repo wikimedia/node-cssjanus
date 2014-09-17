@@ -315,6 +315,14 @@
 			]
 		]
 	},
+	"flip border-style": {
+		"cases": [
+			[
+				".foo { border-style: none dotted dashed solid; }",
+				".foo { border-style: none solid dashed dotted; }"
+			]
+		]
+	},
 	"flip border-radius": {
 		"cases": [
 			[
