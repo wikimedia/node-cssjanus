@@ -396,8 +396,20 @@
 				".foo { background-position: 23% 40%; }"
 			],
 			[
+				".foo { background-position: 2.3% 40%; }",
+				".foo { background-position: 97.7% 40%; }"
+			],
+			[
+				".foo { background-position: 2.3210% 40%; }",
+				".foo { background-position: 97.6790% 40%; }"
+			],
+			[
 				".foo { background-position: 0% 100%; }",
 				".foo { background-position: 100% 100%; }"
+			],
+			[
+				".foo { background-position: 77% -5px; }",
+				".foo { background-position: 23% -5px; }"
 			],
 			[
 				".foo { background-position: 0% 100% !important; }",
@@ -434,6 +446,10 @@
 			[
 				".foo { background: url(/foo/bar.png) 77% 40%; }",
 				".foo { background: url(/foo/bar.png) 23% 40%; }"
+			],
+			[
+				".foo { background: url(/foo/bar.png) 77%; }",
+				".foo { background: url(/foo/bar.png) 23%; }"
 			],
 			[
 				".foo { background: url(/foo/bar.png) no-repeat 77% 40%; }",
