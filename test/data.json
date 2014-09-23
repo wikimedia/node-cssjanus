@@ -675,6 +675,9 @@
 				"/* @noflip */ div { float: left; }"
 			],
 			[
+				"/*! @noflip */ div { float: left; }"
+			],
+			[
 				"/* @noflip */ div, .notme { float: left; }"
 			],
 			[
