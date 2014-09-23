@@ -2,7 +2,7 @@
 
 # CSSJanus
 
-Converts CSS stylesheets between left-to-right and right-to-left. This is a JavaScript port for Node.js of [CSSJanus](https://code.google.com/p/cssjanus/), which is written in python.
+Converts CSS stylesheets between left-to-right and right-to-left. This is a JavaScript port for Node.js of [CSSJanus](https://code.google.com/p/cssjanus/).
 
 ## Install
 ```sh
@@ -17,14 +17,16 @@ var rtlCss = cssjanus.transform( ltrCss );
 
 ## Advanced usage
 
-``transform( css, swapLtrRtlInUrl, swapLeftRightInUrl )``
+```
+transform( css, swapLtrRtlInUrl, swapLeftRightInUrl )
+```
 
-* ``css`` (String) Stylesheet to transform
-* ``swapLtrRtlInUrl`` (Boolean) Swap 'ltr' and 'rtl' in URLs
-* ``swapLeftRightInUrl`` (Boolean) Swap 'left' and 'right' in URLs
+* `css` (String) Stylesheet to transform
+* `swapLtrRtlInUrl` (Boolean) Swap 'ltr' and 'rtl' in URLs
+* `swapLeftRightInUrl` (Boolean) Swap 'left' and 'right' in URLs
 
 ### Preventing flipping
-Use a ```/* @noflip */``` comment to protect a rule from being changed.
+Use a `/* @noflip */` comment to protect a rule from being changed.
 
 ```css
 .rule1 {
