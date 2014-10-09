@@ -74,6 +74,18 @@
 				".foo { padding: 1px inherit 3px auto; }"
 			],
 			[
+				".foo { padding: 1px 2px 3px 4px !important; }",
+				".foo { padding: 1px 4px 3px 2px !important; }"
+			],
+			[
+				".foo {padding:1px 2px 3px 4px !important}",
+				".foo {padding:1px 4px 3px 2px !important}"
+			],
+			[
+				".foo { padding: 1px 2px 3px 4px !important; color: red; }",
+				".foo { padding: 1px 4px 3px 2px !important; color: red; }"
+			],
+			[
 				".foo{padding:1px 2px 3px 4px}",
 				".foo{padding:1px 4px 3px 2px}"
 			],
