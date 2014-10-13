@@ -1,7 +1,7 @@
 module.exports = function ( grunt ) {
 	grunt.registerTask( 'unit', function () {
 		var assert = require( 'assert' ),
-			cssjanus = require( '../../lib/cssjanus' ),
+			cssjanus = require( '../../src/cssjanus' ),
 			testData = require( '../../test/data.json' ),
 			failures = 0,
 			tests = 0,

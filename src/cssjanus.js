@@ -1,3 +1,11 @@
+/*!
+ * Converts CSS stylesheets between left-to-right and right-to-left.
+ * https://github.com/cssjanus/cssjanus
+ *
+ * Copyright 2008 Google Inc.
+ * Copyright 2010 Trevor Parscal
+ */
+
 /**
  * Create a tokenizer object.
  *

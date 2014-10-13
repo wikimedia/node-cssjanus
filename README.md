@@ -1,8 +1,10 @@
-[![Build Status](https://travis-ci.org/cssjanus/node-cssjanus.svg?branch=master)](https://travis-ci.org/cssjanus/node-cssjanus) [![NPM version](https://badge.fury.io/js/cssjanus.svg)](http://badge.fury.io/js/cssjanus)
+[![Build Status](https://travis-ci.org/cssjanus/cssjanus.svg?branch=master)](https://travis-ci.org/cssjanus/cssjanus) [![NPM version](https://badge.fury.io/js/cssjanus.svg)](http://badge.fury.io/js/cssjanus)
 
 # CSSJanus
 
-Converts CSS stylesheets between left-to-right and right-to-left. This is a JavaScript port for Node.js of [CSSJanus](https://code.google.com/p/cssjanus/).
+Converts CSS stylesheets between left-to-right and right-to-left.
+
+Based the original [CSSJanus](https://code.google.com/p/cssjanus/) Google project.
 
 ## Install
 ```sh
@@ -40,6 +42,5 @@ Use a `/* @noflip */` comment to protect a rule from being changed.
 }
 ```
 
-### Additional Resources
-* [Interactive demo](http://cssjanus.commoner.com/)
-* [Demo video](http://google-opensource.blogspot.com/2008/03/cssjanus-helping-i18n-and-ltr-to-rtl.html)
+## See also
+* [Interactive demo](https://cssjanus.github.io)

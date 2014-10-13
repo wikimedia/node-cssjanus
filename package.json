@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git://github.com/cssjanus/cssjanus.git"
   },
-  "main": "./lib/cssjanus.js",
+  "main": "./src/cssjanus.js",
   "scripts": {
     "test": "grunt test"
   },

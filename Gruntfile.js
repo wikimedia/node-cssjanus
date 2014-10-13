@@ -10,7 +10,7 @@ module.exports = function ( grunt ) {
 			options: {
 				jshintrc: true
 			},
-			all: [ '*.js', '{build,lib,test}/**/*.js' ]
+			all: [ '*.js', '{build,src,test}/**/*.js' ]
 		},
 		jscs: {
 			all: '<%= jshint.all %>'
