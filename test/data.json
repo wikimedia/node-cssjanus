@@ -729,6 +729,79 @@
 			]
 		]
 	},
+	"do not flip rules or properties betwen @noflipStart and @noflipEnd comments": {
+		"cases": [
+			[
+				"/* @noflipStart *//* @noflipEnd */"
+			],
+			[
+				"/* @noflipStart */ div { float: left; } /* @noflipEnd */"
+			],
+			[
+				"/*! @noflipStart */ div { float: left; } /*! @noflipEnd */"
+			],
+			[
+				"/*    @noflipStart    */ div { float: left; } /*    @noflipEnd    */"
+			],
+			[
+				"/*!  @noflipStart  */ div { float: left; } /*!   @noflipEnd   */"
+			],
+			[
+				"/* @noflipStart */ div { float: left; } /* @noflipEnd */ div { float: right; }",
+				"/* @noflipStart */ div { float: left; } /* @noflipEnd */ div { float: left; }"
+			],
+			[
+				"/* @noflipStart */\ndiv { float: left; }/* @noflipEnd */\ndiv { float: right; }",
+				"/* @noflipStart */\ndiv { float: left; }/* @noflipEnd */\ndiv { float: left; }"
+			],
+			[
+				"div { float: right; /* @noflipStart */ float: left; }/* @noflipEnd */",
+				"div { float: left; /* @noflipStart */ float: left; }/* @noflipEnd */"
+			],
+			[
+				"div\n{ float: right;\n/* @noflipStart */\n float: left;\n; /* @noflipEnd */ }",
+				"div\n{ float: left;\n/* @noflipStart */\n float: left;\n; /* @noflipEnd */ }"
+			],
+			[
+				"div\n{ float: right;\n/* @noflipStart */\n text-align: left\n /* @noflipEnd */ }",
+				"div\n{ float: left;\n/* @noflipStart */\n text-align: left\n /* @noflipEnd */ }"
+			],
+			[
+				"div\n{ /* @noflipStart */\ntext-align: left;\n/* @noflipEnd */ float: right\n\t}",
+				"div\n{ /* @noflipStart */\ntext-align: left;\n/* @noflipEnd */ float: left\n\t}"
+			],
+			[
+				"/* @noflipStart */div{float:left;text-align:left;}/* @noflipEnd */div{float:right}",
+				"/* @noflipStart */div{float:left;text-align:left;}/* @noflipEnd */div{float:left}"
+			],
+			[
+				"/* @noflipStart */\ndiv{float:left;text-align:left;}/* @noflipEnd */a{foo:right}",
+				"/* @noflipStart */\ndiv{float:left;text-align:left;}/* @noflipEnd */a{foo:left}"
+			],
+			[
+				"/* @noflipStart */ div.foo[bar*=baz] { left: 10px; float: left; }/* @noflipEnd */"
+			],
+			[
+				"/* @noflipStart */ div.foo[bar^=baz] { left: 10px; float: left; }/* @noflipEnd */"
+			],
+			[
+				"/* @noflipStart */ div.foo[bar~=baz] { left: 10px; float: left; }/* @noflipEnd */"
+			],
+			[
+				"/* @noflipStart */ div.foo[bar=baz] { left: 10px; float: left; }/* @noflipEnd */"
+			],
+			[
+				"/* @noflipStart */ div.foo[bar*='baz{quux'] { left: 10px; float: left; }/* @noflipEnd */"
+			],
+			[
+				"/* @noflipStart */ div { float: left; } /* @noflipEnd */ div { float: left; } /* @noflipStart */ div { float: right; } /* @noflipEnd */",
+				"/* @noflipStart */ div { float: left; } /* @noflipEnd */ div { float: right; } /* @noflipStart */ div { float: right; } /* @noflipEnd */"
+			],
+			[
+				"/* @noflipStart */ div { float: left; } /* @noflipEnd */ /* @noflip */ div { float: left; } /* @noflipStart */ div { float: right; } /* @noflipEnd */"
+			]
+		]
+	},
 	"do not flip gradient notation": {
 		"cases": [
 			[

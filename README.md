@@ -42,5 +42,20 @@ Use a `/* @noflip */` comment to protect a rule from being changed.
 }
 ```
 
+Use matching `/* @noflipStart */` and `/* noflipEnd */` to protect a set of rules from being changed.
+
+```css
+/* @noflipStart */
+.rule1 {
+  /* Will be preserved as margin-left */
+  margin-left: 1em;
+}
+.rule2 {
+  /* Will be preserved as margin-left */
+  margin-left: 1em;
+}
+/* noflipEnd */
+```
+
 ## See also
 * [Interactive demo](https://cssjanus.github.io)

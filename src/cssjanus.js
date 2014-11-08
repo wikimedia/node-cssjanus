@@ -94,6 +94,7 @@ function CSSJanus() {
 		temporaryToken = '`TMP`',
 		noFlipSingleToken = '`NOFLIP_SINGLE`',
 		noFlipClassToken = '`NOFLIP_CLASS`',
+		noFlipMultipleToken = '`NOFLIP_MULTIPLE`',
 		commentToken = '`COMMENT`',
 		// Patterns
 		nonAsciiPattern = '[^\\u0020-\\u007e]',
@@ -106,6 +107,7 @@ function CSSJanus() {
 		nonLetterPattern = '(^|[^a-zA-Z])',
 		charsWithinSelectorPattern = '[^\\}]*?',
 		noFlipPattern = '\\/\\*\\!?\\s*@noflip\\s*\\*\\/',
+		noFlipMultiplePattern = '\\/\\*\\!?\\s*@noflipStart\\s*\\*\\/[\\s\\S]*?\\/?\\*\\!?\\s*@noflipEnd\\s*\\*\\/',
 		commentPattern = '\\/\\*[^*]*\\*+([^\\/*][^*]*\\*+)*\\/',
 		escapePattern = '(?:' + unicodePattern + '|\\\\[^\\r\\n\\f0-9a-f])',
 		nmstartPattern = '(?:[_a-z]|' + nonAsciiPattern + '|' + escapePattern + ')',
@@ -126,6 +128,7 @@ function CSSJanus() {
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
 		noFlipSingleRegExp = new RegExp( '(' + noFlipPattern + lookAheadNotOpenBracePattern + '[^;}]+;?)', 'gi' ),
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
+		noFlipMultipleRegExp = new RegExp( noFlipMultiplePattern, 'gi'),
 		directionLtrRegExp = new RegExp( '(' + directionPattern + ')ltr', 'gi' ),
 		directionRtlRegExp = new RegExp( '(' + directionPattern + ')rtl', 'gi' ),
 		leftRegExp = new RegExp( nonLetterPattern + '(left)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
@@ -246,16 +249,20 @@ function CSSJanus() {
 			// Tokenizers
 			var noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
 				noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken ),
+				noFlipMultipleTokenizer = new Tokenizer( noFlipMultipleRegExp,  noFlipMultipleToken ),
 				commentTokenizer = new Tokenizer( commentRegExp, commentToken );
+
 
 			// Tokenize
 			css = commentTokenizer.tokenize(
-				noFlipClassTokenizer.tokenize(
-					noFlipSingleTokenizer.tokenize(
-						// We wrap tokens in ` , not ~ like the original implementation does.
-						// This was done because ` is not a legal character in CSS and can only
-						// occur in URLs, where we escape it to %60 before inserting our tokens.
-						css.replace( '`', '%60' )
+				noFlipMultipleTokenizer.tokenize(
+					noFlipClassTokenizer.tokenize(
+						noFlipSingleTokenizer.tokenize(
+							// We wrap tokens in ` , not ~ like the original implementation does.
+							// This was done because ` is not a legal character in CSS and can only
+							// occur in URLs, where we escape it to %60 before inserting our tokens.
+							css.replace( '`', '%60' )
+						)
 					)
 				)
 			);
@@ -307,7 +314,9 @@ function CSSJanus() {
 			// Detokenize
 			css = noFlipSingleTokenizer.detokenize(
 				noFlipClassTokenizer.detokenize(
-					commentTokenizer.detokenize( css )
+					noFlipMultipleTokenizer.detokenize(
+						commentTokenizer.detokenize( css )
+					)
 				)
 			);
 
