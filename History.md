@@ -1,5 +1,8 @@
 # Release History
 
+## v1.1.1 / 2014-11-14
+* Support !important in four-value declarations (Matt Flaschen)
+
 ## v1.1.0 / 2014-09-23
 
 * Move repository to github.com/cssjanus (Timo Tijhof)
