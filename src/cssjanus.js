@@ -121,6 +121,7 @@ function CSSJanus() {
 		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'])*?{)',
 		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
+		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
 		// Regular expressions
 		temporaryTokenRegExp = new RegExp( '`TMP`', 'g' ),
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
@@ -136,12 +137,12 @@ function CSSJanus() {
 		rtlInUrlRegExp = new RegExp( nonLetterPattern + '(rtl)' + lookAheadForClosingParenPattern, 'gi' ),
 		cursorEastRegExp = new RegExp( nonLetterPattern + '([ns]?)e-resize', 'gi' ),
 		cursorWestRegExp = new RegExp( nonLetterPattern + '([ns]?)w-resize', 'gi' ),
-		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s*(?:!important\\s*)?[;}])', 'gi' ),
-		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s*(?:!important\\s*)?[;}])', 'gi' ),
+		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + suffixPattern, 'gi' ),
+		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + suffixPattern, 'gi' ),
 		bgHorizontalPercentageRegExp = new RegExp( '(background(?:-position)?\\s*:\\s*(?:[^:;}\\s]+\\s+)*?)(' + quantPattern + ')', 'gi' ),
 		bgHorizontalPercentageXRegExp = new RegExp( '(background-position-x\\s*:\\s*)(-?' + numPattern + '%)', 'gi' ),
 		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)' + signedQuantPattern + '(?:(?:\\s+' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' +
-					'(?:(?:(?:\\s*\\/\\s*)' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?', 'gi' ),
+					'(?:(?:(?:\\s*\\/\\s*)' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
 		boxShadowRegExp = new RegExp( '(box-shadow\\s*:\\s*(?:inset\\s*)?)' + signedQuantPattern, 'gi' ),
 		textShadow1RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
 		textShadow2RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' );
@@ -180,7 +181,11 @@ function CSSJanus() {
 	 * @return {string} Inverted property
 	 */
 	function calculateNewBorderRadius( match, pre ) {
-		var firstGroup = [], secondGroup = [], i, values;
+		var firstGroup = [], secondGroup = [], i, values, post = '';
+
+		if ( arguments[ arguments.length - 3 ] ) {
+			post = arguments[ arguments.length - 3 ];
+		}
 
 		for ( i = 2; i <= 5; i++ ) {
 			if ( arguments[i] ) {
@@ -200,7 +205,7 @@ function CSSJanus() {
 			values = flipBorderRadiusValues( firstGroup );
 		}
 
-		return pre + values;
+		return pre + values + post;
 	}
 
 	/**
