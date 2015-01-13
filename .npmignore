@@ -1,0 +1,6 @@
+.js*
+.npmignore
+.travis.yml
+build
+test
+Gruntfile.js

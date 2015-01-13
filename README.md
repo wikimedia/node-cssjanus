@@ -1,8 +1,10 @@
-[![Build Status](https://travis-ci.org/cssjanus/cssjanus.svg?branch=master)](https://travis-ci.org/cssjanus/cssjanus) [![NPM version](https://badge.fury.io/js/cssjanus.svg)](http://badge.fury.io/js/cssjanus)
+[![Build Status](https://travis-ci.org/cssjanus/cssjanus.svg?branch=master)](https://travis-ci.org/cssjanus/cssjanus) [![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus)
 
 # CSSJanus
 
-Converts CSS stylesheets between left-to-right and right-to-left. This is a JavaScript port for Node.js of [CSSJanus](https://code.google.com/p/cssjanus/), which is written in python.
+Converts CSS stylesheets between left-to-right and right-to-left.
+
+Based the original [CSSJanus](https://code.google.com/p/cssjanus/) Google project.
 
 ## Install
 ```sh
@@ -17,14 +19,16 @@ var rtlCss = cssjanus.transform( ltrCss );
 
 ## Advanced usage
 
-``transform( css, swapLtrRtlInUrl, swapLeftRightInUrl )``
+```
+transform( css, swapLtrRtlInUrl, swapLeftRightInUrl )
+```
 
-* ``css`` (String) Stylesheet to transform
-* ``swapLtrRtlInUrl`` (Boolean) Swap 'ltr' and 'rtl' in URLs
-* ``swapLeftRightInUrl`` (Boolean) Swap 'left' and 'right' in URLs
+* `css` (String) Stylesheet to transform
+* `swapLtrRtlInUrl` (Boolean) Swap 'ltr' and 'rtl' in URLs
+* `swapLeftRightInUrl` (Boolean) Swap 'left' and 'right' in URLs
 
 ### Preventing flipping
-Use a ```/* @noflip */``` comment to protect a rule from being changed.
+Use a `/* @noflip */` comment to protect a rule from being changed.
 
 ```css
 .rule1 {
@@ -38,6 +42,5 @@ Use a ```/* @noflip */``` comment to protect a rule from being changed.
 }
 ```
 
-### Additional Resources
-* [Interactive demo](http://cssjanus.commoner.com/)
-* [Demo video](http://google-opensource.blogspot.com/2008/03/cssjanus-helping-i18n-and-ltr-to-rtl.html)
+## See also
+* [Interactive demo](https://cssjanus.github.io)

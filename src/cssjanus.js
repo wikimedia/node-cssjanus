@@ -1,3 +1,11 @@
+/*!
+ * Converts CSS stylesheets between left-to-right and right-to-left.
+ * https://github.com/cssjanus/cssjanus
+ *
+ * Copyright 2008 Google Inc.
+ * Copyright 2010 Trevor Parscal
+ */
+
 /**
  * Create a tokenizer object.
  *
@@ -47,16 +55,17 @@ function Tokenizer( regex, token ) {
 		 * @param {string} str String to tokenize
 		 * @return {string} Tokenized string
 		 */
-		'tokenize': function( str ) {
+		tokenize: function ( str ) {
 			return str.replace( regex, tokenizeCallback );
 		},
+
 		/**
 		 * Restores tokens to their original values.
 		 *
 		 * @param {string} str String previously run through tokenize()
 		 * @return {string} Original string
 		 */
-		'detokenize': function( str ) {
+		detokenize: function ( str ) {
 			return str.replace( new RegExp( '(' + token + ')', 'g' ), detokenizeCallback );
 		}
 	};
@@ -105,10 +114,11 @@ function CSSJanus() {
 		quantPattern = numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?',
 		signedQuantPattern = '((?:-?' + quantPattern + ')|(?:inherit|auto))',
 		fourNotationQuantPropsPattern = '((?:margin|padding|border-width)\\s*:\\s*)',
-		fourNotationColorPropsPattern = '(-color\\s*:\\s*)',
-		colorPattern = '(#?' + nmcharPattern + '+)',
+		fourNotationColorPropsPattern = '((?:-color|border-style)\\s*:\\s*)',
+		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%-]+\\))',
 		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*',
-		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\))*?{)',
+		lookAheadNotLetterPattern = '(?![a-zA-Z])',
+		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'])*?{)',
 		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		// Regular expressions
@@ -118,20 +128,23 @@ function CSSJanus() {
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
 		directionLtrRegExp = new RegExp( '(' + directionPattern + ')ltr', 'gi' ),
 		directionRtlRegExp = new RegExp( '(' + directionPattern + ')rtl', 'gi' ),
-		leftRegExp = new RegExp( nonLetterPattern + '(left)' + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
-		rightRegExp = new RegExp( nonLetterPattern + '(right)' + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
+		leftRegExp = new RegExp( nonLetterPattern + '(left)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
+		rightRegExp = new RegExp( nonLetterPattern + '(right)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
 		leftInUrlRegExp = new RegExp( nonLetterPattern + '(left)' + lookAheadForClosingParenPattern, 'gi' ),
 		rightInUrlRegExp = new RegExp( nonLetterPattern + '(right)' + lookAheadForClosingParenPattern, 'gi' ),
 		ltrInUrlRegExp = new RegExp( nonLetterPattern + '(ltr)' + lookAheadForClosingParenPattern, 'gi' ),
 		rtlInUrlRegExp = new RegExp( nonLetterPattern + '(rtl)' + lookAheadForClosingParenPattern, 'gi' ),
 		cursorEastRegExp = new RegExp( nonLetterPattern + '([ns]?)e-resize', 'gi' ),
 		cursorWestRegExp = new RegExp( nonLetterPattern + '([ns]?)w-resize', 'gi' ),
-		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern, 'gi' ),
-		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern, 'gi' ),
-		bgHorizontalPercentageRegExp = new RegExp( '(background(?:-position)?\\s*:\\s*[^%:;}]*?)(-?' + numPattern + ')(%\\s*(?:' + quantPattern + '|' + identPattern + '))', 'gi' ),
-		bgHorizontalPercentageXRegExp = new RegExp( '(background-position-x\\s*:\\s*)(-?' + numPattern + ')(%)', 'gi' ),
+		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s*(?:!important\\s*)?[;}])', 'gi' ),
+		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s*(?:!important\\s*)?[;}])', 'gi' ),
+		bgHorizontalPercentageRegExp = new RegExp( '(background(?:-position)?\\s*:\\s*(?:[^:;}\\s]+\\s+)*?)(' + quantPattern + ')', 'gi' ),
+		bgHorizontalPercentageXRegExp = new RegExp( '(background-position-x\\s*:\\s*)(-?' + numPattern + '%)', 'gi' ),
 		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)' + signedQuantPattern + '(?:(?:\\s+' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' +
-			'(?:(?:(?:\\s*\\/\\s*)' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?', 'gi' );
+					'(?:(?:(?:\\s*\\/\\s*)' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?', 'gi' ),
+		boxShadowRegExp = new RegExp( '(box-shadow\\s*:\\s*(?:inset\\s*)?)' + signedQuantPattern, 'gi' ),
+		textShadow1RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
+		textShadow2RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' );
 
 	/**
 	 * Invert the horizontal value of a background position property.
@@ -140,11 +153,22 @@ function CSSJanus() {
 	 * @param {string} match Matched property
 	 * @param {string} pre Text before value
 	 * @param {string} value Horizontal value
-	 * @param {string} post Text after value
 	 * @return {string} Inverted property
 	 */
-	function calculateNewBackgroundPosition( match, pre, value, post ) {
-		return pre + ( 100 - Number( value ) ) + post;
+	function calculateNewBackgroundPosition( match, pre, value ) {
+		var idx, len;
+		if ( value.slice( -1 ) === '%' ) {
+			idx = value.indexOf( '.' );
+			if ( idx !== -1 ) {
+				// Two off, one for the "%" at the end, one for the dot itself
+				len = value.length - idx - 2;
+				value = 100 - parseFloat( value );
+				value = value.toFixed( len ) + '%';
+			} else {
+				value = 100 - parseFloat( value ) + '%';
+			}
+		}
+		return pre + value;
 	}
 
 	/**
@@ -189,20 +213,60 @@ function CSSJanus() {
 	function flipBorderRadiusValues( values ) {
 		switch ( values.length ) {
 			case 4:
-				values = [values[1], values[0], values[3], values[2]];
+				values = [ values[1], values[0], values[3], values[2] ];
 				break;
 			case 3:
-				values = [values[1], values[0], values[1], values[2]];
+				values = [ values[1], values[0], values[1], values[2] ];
 				break;
 			case 2:
-				values = [values[1], values[0]];
+				values = [ values[1], values[0] ];
 				break;
 			case 1:
-				values = [values[0]];
+				values = [ values[0] ];
 				break;
 		}
 
 		return values.join( ' ' );
+	}
+
+	/**
+	 * Flip the sign of a CSS value, possibly with a unit.
+	 *
+	 * We can't just negate the value with unary minus due to the units.
+	 *
+	 * @private
+	 * @param {string} value
+	 * @return {string}
+	 */
+	function flipSign( value ) {
+		if ( parseFloat( value ) === 0 ) {
+			// Don't mangle zeroes
+			return value;
+		}
+
+		if ( value[0] === '-' ) {
+			return value.slice( 1 );
+		}
+
+		return '-' + value;
+	}
+
+	/**
+	 * @private
+	 * @param {string} match
+	 * @return {string}
+	 */
+	function calculateNewShadow( match, property, offset ) {
+		return property + flipSign( offset );
+	}
+
+	/**
+	 * @private
+	 * @param {string} match
+	 * @return {string}
+	 */
+	function calculateNewFourTextShadow( match, property, color, space, offset ) {
+		return property + color + space + flipSign( offset );
 	}
 
 	return {
@@ -214,7 +278,7 @@ function CSSJanus() {
 		 * @param {boolean} swapLeftRightInUrl Swap 'left' and 'right' in URLs
 		 * @return {string} Transformed stylesheet
 		 */
-		transform: function( css, swapLtrRtlInUrl, swapLeftRightInUrl ) {
+		transform: function ( css, swapLtrRtlInUrl, swapLeftRightInUrl ) {
 			// Tokenizers
 			var noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
 				noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken ),
@@ -242,7 +306,7 @@ function CSSJanus() {
 			}
 			if ( swapLeftRightInUrl ) {
 				// Replace 'left' with 'right' and vice versa in background URLs
-				 css = css
+				css = css
 					.replace( leftInUrlRegExp, '$1' + temporaryToken )
 					.replace( rightInUrlRegExp, '$1left' )
 					.replace( temporaryTokenRegExp, 'right' );
@@ -264,10 +328,14 @@ function CSSJanus() {
 				.replace( temporaryTokenRegExp, 'w-resize' )
 				// Border radius
 				.replace( borderRadiusRegExp, calculateNewBorderRadius )
+				// Shadows
+				.replace( boxShadowRegExp, calculateNewShadow )
+				.replace( textShadow1RegExp, calculateNewFourTextShadow )
+				.replace( textShadow2RegExp, calculateNewShadow )
 				// Swap the second and fourth parts in four-part notation rules
 				// like padding: 1px 2px 3px 4px;
-				.replace( fourNotationQuantRegExp, '$1$2$3$8$5$6$7$4' )
-				.replace( fourNotationColorRegExp, '$1$2$3$8$5$6$7$4' )
+				.replace( fourNotationQuantRegExp, '$1$2$3$8$5$6$7$4$9' )
+				.replace( fourNotationColorRegExp, '$1$2$3$8$5$6$7$4$9' )
 				// Flip horizontal background percentages
 				.replace( bgHorizontalPercentageRegExp, calculateNewBackgroundPosition )
 				.replace( bgHorizontalPercentageXRegExp, calculateNewBackgroundPosition );
@@ -296,10 +364,10 @@ var cssjanus = new CSSJanus();
  * This function is a static wrapper around the transform method of an instance of CSSJanus.
  *
  * @param {string} css Stylesheet to transform
- * @param {boolean} swapLtrRtlInUrl Swap 'ltr' and 'rtl' in URLs
- * @param {boolean} swapLeftRightInUrl Swap 'left' and 'right' in URLs
+ * @param {boolean} [swapLtrRtlInUrl=false] Swap 'ltr' and 'rtl' in URLs
+ * @param {boolean} [swapLeftRightInUrl=false] Swap 'left' and 'right' in URLs
  * @return {string} Transformed stylesheet
  */
-exports.transform = function( css, swapLtrRtlInUrl, swapLeftRightInUrl ) {
+exports.transform = function ( css, swapLtrRtlInUrl, swapLeftRightInUrl ) {
 	return cssjanus.transform( css, swapLtrRtlInUrl, swapLeftRightInUrl );
 };
