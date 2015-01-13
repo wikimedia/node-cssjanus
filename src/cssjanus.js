@@ -121,6 +121,7 @@ function CSSJanus() {
 		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'])*?{)',
 		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
+		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
 		// Regular expressions
 		temporaryTokenRegExp = new RegExp( '`TMP`', 'g' ),
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
@@ -136,11 +137,12 @@ function CSSJanus() {
 		rtlInUrlRegExp = new RegExp( nonLetterPattern + '(rtl)' + lookAheadForClosingParenPattern, 'gi' ),
 		cursorEastRegExp = new RegExp( nonLetterPattern + '([ns]?)e-resize', 'gi' ),
 		cursorWestRegExp = new RegExp( nonLetterPattern + '([ns]?)w-resize', 'gi' ),
-		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s*(?:!important\\s*)?[;}])', 'gi' ),
-		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s*(?:!important\\s*)?[;}])', 'gi' ),
+		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + suffixPattern, 'gi' ),
+		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + suffixPattern, 'gi' ),
 		bgHorizontalPercentageRegExp = new RegExp( '(background(?:-position)?\\s*:\\s*(?:[^:;}\\s]+\\s+)*?)(' + quantPattern + ')', 'gi' ),
 		bgHorizontalPercentageXRegExp = new RegExp( '(background-position-x\\s*:\\s*)(-?' + numPattern + '%)', 'gi' ),
-		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)([^;}]*)', 'gi' ),
+		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)' + signedQuantPattern + '(?:(?:\\s+' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' +
+					'(?:(?:(?:\\s*\\/\\s*)' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
 		boxShadowRegExp = new RegExp( '(box-shadow\\s*:\\s*(?:inset\\s*)?)' + signedQuantPattern, 'gi' ),
 		textShadow1RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
 		textShadow2RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' );
@@ -176,21 +178,60 @@ function CSSJanus() {
 	 * @private
 	 * @param {string} match Matched property
 	 * @param {string} pre Text before value
-	 * @param {string} values Border radius values
 	 * @return {string} Inverted property
 	 */
-	function calculateNewBorderRadius( match, pre, values ) {
-		var numValues = values.trim().split( /\s+/g ).length;
-		switch ( numValues ) {
+	function calculateNewBorderRadius( match, pre ) {
+		var firstGroup = [], secondGroup = [], i, values, post = '';
+
+		if ( arguments[ arguments.length - 3 ] ) {
+			post = arguments[ arguments.length - 3 ];
+		}
+
+		for ( i = 2; i <= 5; i++ ) {
+			if ( arguments[i] ) {
+				firstGroup.push( arguments[i] );
+			}
+		}
+
+		for ( i = 6; i <= 9; i++ ) {
+			if ( arguments[i] ) {
+				secondGroup.push( arguments[i] );
+			}
+		}
+
+		if ( secondGroup.length ) {
+			values = flipBorderRadiusValues( firstGroup ) + ' / ' + flipBorderRadiusValues( secondGroup );
+		} else {
+			values = flipBorderRadiusValues( firstGroup );
+		}
+
+		return pre + values + post;
+	}
+
+	/**
+	 * Invert a set of border radius values.
+	 *
+	 * @private
+	 * @param {array} values Matched values
+	 * @return {string} Inverted values
+	 */
+	function flipBorderRadiusValues( values ) {
+		switch ( values.length ) {
 			case 4:
-				values = values.replace( /^(\S+)(\s*)(\S+)(\s*)(\S+)(\s*)(\S+)/, '$3$2$1$4$7$6$5' );
+				values = [ values[1], values[0], values[3], values[2] ];
 				break;
 			case 3:
+				values = [ values[1], values[0], values[1], values[2] ];
+				break;
 			case 2:
-				values = values.replace( /^(\S+)(\s*)(\S+)/, '$3$2$1' );
+				values = [ values[1], values[0] ];
+				break;
+			case 1:
+				values = [ values[0] ];
 				break;
 		}
-		return pre + values;
+
+		return values.join( ' ' );
 	}
 
 	/**
