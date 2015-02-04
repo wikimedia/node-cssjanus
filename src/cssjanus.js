@@ -179,26 +179,23 @@ function CSSJanus() {
 	 * @private
 	 * @param {string} match Matched property
 	 * @param {string} pre Text before value
+	 * @param {string} firstGroup1
+	 * @param {string|undefined} firstGroup2
+	 * @param {string|undefined} firstGroup3
+	 * @param {string|undefined} firstGroup4
+	 * @param {string|undefined} secondGroup1
+	 * @param {string|undefined} secondGroup2
+	 * @param {string|undefined} secondGroup3
+	 * @param {string|undefined} secondGroup4
+	 * @param {string} post Text after value
 	 * @return {string} Inverted property
 	 */
 	function calculateNewBorderRadius( match, pre ) {
-		var firstGroup = [], secondGroup = [], i, values, post = '';
-
-		if ( arguments[ arguments.length - 3 ] ) {
-			post = arguments[ arguments.length - 3 ];
-		}
-
-		for ( i = 2; i <= 5; i++ ) {
-			if ( arguments[i] ) {
-				firstGroup.push( arguments[i] );
-			}
-		}
-
-		for ( i = 6; i <= 9; i++ ) {
-			if ( arguments[i] ) {
-				secondGroup.push( arguments[i] );
-			}
-		}
+		var values,
+			args = [].slice.call( arguments ),
+			firstGroup = args.slice( 2, 6 ).filter( function ( val ) { return val; } ),
+			secondGroup = args.slice( 6, 10 ).filter( function ( val ) { return val; } ),
+			post = args[ 10 ] || '';
 
 		if ( secondGroup.length ) {
 			values = flipBorderRadiusValues( firstGroup ) + ' / ' + flipBorderRadiusValues( secondGroup );
