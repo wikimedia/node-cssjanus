@@ -9,14 +9,14 @@ module.exports = function ( grunt ) {
 
 		for ( name in testData ) {
 			tests++;
-			test = testData[name];
+			test = testData[ name ];
 			settings = test.settings || {};
 
 			try {
 				for ( i = 0; i < test.cases.length; i++ ) {
-					input = test.cases[i][0];
-					noop = test.cases[i][1] === undefined;
-					output = noop ? input : test.cases[i][1];
+					input = test.cases[ i ][ 0 ];
+					noop = test.cases[ i ][ 1 ] === undefined;
+					output = noop ? input : test.cases[ i ][ 1 ];
 
 					assert.equal(
 						cssjanus.transform(
@@ -40,10 +40,10 @@ module.exports = function ( grunt ) {
 
 						// Keep test data clean
 						assert(
-							test.cases[i][1] !== input,
+							test.cases[ i ][ 1 ] !== input,
 							'case #' + ( i + 1 ) + ' should not specify output if it matches the input'
 						);
-						output = test.cases[i][1];
+						output = test.cases[ i ][ 1 ];
 					}
 				}
 				grunt.verbose.write( name + '...' );

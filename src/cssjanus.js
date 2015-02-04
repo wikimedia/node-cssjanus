@@ -45,7 +45,7 @@ function Tokenizer( regex, token ) {
 	 * @returns {string} Original matched string to restore
 	 */
 	function detokenizeCallback() {
-		return matches[index++];
+		return matches[ index++ ];
 	}
 
 	return {
@@ -216,16 +216,16 @@ function CSSJanus() {
 	function flipBorderRadiusValues( values ) {
 		switch ( values.length ) {
 			case 4:
-				values = [ values[1], values[0], values[3], values[2] ];
+				values = [ values[ 1 ], values[ 0 ], values[ 3 ], values[ 2 ] ];
 				break;
 			case 3:
-				values = [ values[1], values[0], values[1], values[2] ];
+				values = [ values[ 1 ], values[ 0 ], values[ 1 ], values[ 2 ] ];
 				break;
 			case 2:
-				values = [ values[1], values[0] ];
+				values = [ values[ 1 ], values[ 0 ] ];
 				break;
 			case 1:
-				values = [ values[0] ];
+				values = [ values[ 0 ] ];
 				break;
 		}
 
@@ -247,7 +247,7 @@ function CSSJanus() {
 			return value;
 		}
 
-		if ( value[0] === '-' ) {
+		if ( value[ 0 ] === '-' ) {
 			return value.slice( 1 );
 		}
 
