@@ -1,5 +1,9 @@
 # Release History
 
+## v1.1.2 / 2015-02-03
+
+* Support !importand and slash in border-radius values (Dominik Schilling)
+
 ## v1.1.1 / 2014-11-19
 
 * Support !important in four-value declarations (Matthew Flaschen)
