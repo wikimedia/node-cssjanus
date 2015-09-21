@@ -5,7 +5,7 @@ module.exports = function ( grunt ) {
 			testData = require( '../../test/data.json' ),
 			failures = 0,
 			tests = 0,
-			name, test, settings, i, input, noop, output;
+			name, test, settings, i, input, noop, output, tblrOutput, tbrlOutput;
 
 		for ( name in testData ) {
 			tests++;
@@ -17,6 +17,8 @@ module.exports = function ( grunt ) {
 					input = test.cases[ i ][ 0 ];
 					noop = test.cases[ i ][ 1 ] === undefined;
 					output = noop ? input : test.cases[ i ][ 1 ];
+					tblrOutput = test.cases[ 2 ] === undefined ? input : test.cases[ 2 ];
+					tbrlOutput = test.cases[ 3 ] === undefined ? tblrOutput : test.cases[ 3 ];
 
 					assert.equal(
 						cssjanus.transform(
@@ -28,7 +30,7 @@ module.exports = function ( grunt ) {
 					);
 
 					if ( !noop ) {
-						// Round-trip
+						// Round-trip right-to-left
 						assert.equal(
 							cssjanus.transform(
 								output,
@@ -45,6 +47,28 @@ module.exports = function ( grunt ) {
 						);
 						output = test.cases[ i ][ 1 ];
 					}
+					
+					assert.equal(
+						cssjanus.transform(
+							input,
+							settings.swapLtrRtlInUrl,
+							settings.swapLeftRightInUrl,
+							'lr-tb',
+							'tb-lr'
+						),
+						tblrOutput
+					);
+					
+					assert.equal(
+						cssjanus.transform(
+							input,
+							settings.swapLtrRtlInUrl,
+							settings.swapLeftRightInUrl,
+							'lr-tb',
+							'tb-rl'
+						),
+						tbrlOutput
+					);
 				}
 				grunt.verbose.write( name + '...' );
 				grunt.verbose.ok();
