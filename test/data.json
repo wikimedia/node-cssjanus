@@ -3,23 +3,28 @@
 		"cases": [
 			[
 				"/* left /* right */left: 10px",
-				"/* left /* right */right: 10px"
+				"/* left /* right */right: 10px",
+				"/* left /* right */top: 10px"
 			],
 			[
 				"/*left*//*left*/left: 10px",
-				"/*left*//*left*/right: 10px"
+				"/*left*//*left*/right: 10px",
+				"/*left*//*left*/top: 10px"
 			],
 			[
 				"/* Going right is cool */\n#test {left: 10px}",
-				"/* Going right is cool */\n#test {right: 10px}"
+				"/* Going right is cool */\n#test {right: 10px}",
+				"/* Going right is cool */\n#test {top: 10px}"
 			],
 			[
 				"/* padding-right 1 2 3 4 */\n#test {left: 10px}\n/*right*/",
-				"/* padding-right 1 2 3 4 */\n#test {right: 10px}\n/*right*/"
+				"/* padding-right 1 2 3 4 */\n#test {right: 10px}\n/*right*/",
+				"/* padding-right 1 2 3 4 */\n#test {top: 10px}\n/*right*/"
 			],
 			[
 				"/** Two line comment\n * left\n \\*/\n#test {left: 10px}",
-				"/** Two line comment\n * left\n \\*/\n#test {right: 10px}"
+				"/** Two line comment\n * left\n \\*/\n#test {right: 10px}",
+				"/** Two line comment\n * left\n \\*/\n#test {top: 10px}"
 			]
 		]
 	},
@@ -27,11 +32,13 @@
 		"cases": [
 			[
 				".foo { left: 10px; }",
-				".foo { right: 10px; }"
+				".foo { right: 10px; }",
+				".foo { top: 10px; }"
 			],
 			[
 				".foo { left: 10px !important; }",
-				".foo { right: 10px !important; }"
+				".foo { right: 10px !important; }",
+				".foo { top: 10px !important; }"
 			]
 		]
 	},
@@ -39,15 +46,19 @@
 		"cases": [
 			[
 				".foo { left:-1.5em; }",
-				".foo { right:-1.5em; }"
+				".foo { right:-1.5em; }",
+				".foo { top:-1.5em; }"
 			],
 			[
 				".foo { left:-.75em; }",
-				".foo { right:-.75em; }"
+				".foo { right:-.75em; }",
+				".foo { top:-.75em; }"
 			],
 			[
 				".foo { padding: 1px 2px 3px -4px; }",
-				".foo { padding: 1px -4px 3px 2px; }"
+				".foo { padding: 1px -4px 3px 2px; }",
+				".foo { padding: -4px 3px 2px 1px; }",
+				".foo { padding: -4px 1px 2px 3px; }"
 			]
 		]
 	},
@@ -55,43 +66,63 @@
 		"cases": [
 			[
 				".foo { padding: .25em 0ex 0pt 15px; }",
-				".foo { padding: .25em 15px 0pt 0ex; }"
+				".foo { padding: .25em 15px 0pt 0ex; }",
+				".foo { padding: 15px 0pt 0ex .25em; }",
+				".foo { padding: 15px .25em 0ex 0pt; }"
 			],
 			[
 				".foo { padding: 1px 2% 3px 4.1grad; }",
-				".foo { padding: 1px 4.1grad 3px 2%; }"
+				".foo { padding: 1px 4.1grad 3px 2%; }",
+				".foo { padding: 4.1grad 3px 2% 1px; }",
+				".foo { padding: 4.1grad 1px 2% 3px; }"
 			],
 			[
 				".foo { padding: 1px auto 3px 2px; }",
-				".foo { padding: 1px 2px 3px auto; }"
+				".foo { padding: 1px 2px 3px auto; }",
+				".foo { padding: 2px 3px auto 1px; }",
+				".foo { padding: 2px 1px auto 3px; }"
 			],
 			[
 				".foo { padding: 1.1px 2.2px 3.3px 4.4px; }",
-				".foo { padding: 1.1px 4.4px 3.3px 2.2px; }"
+				".foo { padding: 1.1px 4.4px 3.3px 2.2px; }",
+				".foo { padding: 4.4px 3.3px 2.2px 1.1px; }",
+				".foo { padding: 4.4px 1.1px 2.2px 3.3px; }"
 			],
 			[
 				".foo { padding: 1px auto 3px inherit; }",
-				".foo { padding: 1px inherit 3px auto; }"
+				".foo { padding: 1px inherit 3px auto; }",
+				".foo { padding: inherit 3px auto 1px; }",
+				".foo { padding: inherit 1px auto 3px; }"
 			],
 			[
 				".foo { padding: 1px 2px 3px 4px !important; }",
-				".foo { padding: 1px 4px 3px 2px !important; }"
+				".foo { padding: 1px 4px 3px 2px !important; }",
+				".foo { padding: 4px 3px 2px 1px !important; }",
+				".foo { padding: 4px 1px 2px 3px !important; }"
 			],
 			[
 				".foo {padding:1px 2px 3px 4px !important}",
-				".foo {padding:1px 4px 3px 2px !important}"
+				".foo {padding:1px 4px 3px 2px !important}",
+				".foo {padding:4px 3px 2px 1px !important}",
+				".foo {padding:4px 1px 2px 3px !important}"
 			],
 			[
 				".foo { padding: 1px 2px 3px 4px !important; color: red; }",
-				".foo { padding: 1px 4px 3px 2px !important; color: red; }"
+				".foo { padding: 1px 4px 3px 2px !important; color: red; }",
+				".foo { padding: 4px 3px 2px 1px !important; color: red; }",
+				".foo { padding: 4px 1px 2px 3px !important; color: red; }"
 			],
 			[
 				".foo{padding:1px 2px 3px 4px}",
-				".foo{padding:1px 4px 3px 2px}"
+				".foo{padding:1px 4px 3px 2px}",
+				".foo{padding:4px 3px 2px 1px}",
+				".foo{padding:4px 1px 2px 3px}"
 			],
 			[
 				"  .foo  {  padding: 1px  2px   3px    4px     ;  }  ",
-				"  .foo  {  padding: 1px  4px   3px    2px     ;  }  "
+				"  .foo  {  padding: 1px  4px   3px    2px     ;  }  ",
+				"  .foo  {  padding: 4px  3px   2px    1px     ;  }  ",
+				"  .foo  {  padding: 4px  1px   2px    3px     ;  }  "
 			],
 			[
 				"#settings td p strong {}"
@@ -107,6 +138,47 @@
 			],
 			[
 				".foo { -x-unknown: 1px 2px 3px 4px 5px; }"
+			]
+		]
+	},
+	"flip three value notation": {
+		"cases": [
+			[
+				".foo { padding: 1px 2px 3px; }",
+				,
+				".foo { padding: 2px 3px 2px 1px; }",
+				".foo { padding: 2px 1px 2px 3px; }"
+			],
+			[
+				".foo { padding: 1px 2px 3px !important; }",
+				,
+				".foo { padding: 2px 3px 2px 1px !important; }",
+				".foo { padding: 2px 1px 2px 3px !important; }"
+			],
+			[
+				".foo { padding: 1px 2px 3px !important; color: red; }",
+				,
+				".foo { padding: 2px 3px 2px 1px !important; color: red; }",
+				".foo { padding: 2px 1px 2px 3px !important; color: red; }"
+			]
+		]
+	},
+	"flip two value notation": {
+		"cases": [
+			[
+				".foo { padding: 1px 2px; }",
+				,
+				".foo { padding: 2px 1px; }"
+			],
+			[
+				".foo { padding: 1px 2px !important; }",
+				,
+				".foo { padding: 2px 1px !important; }"
+			],
+			[
+				".foo { margin: 1px 2px !important; color: red; }",
+				,
+				".foo { margin: 2px 1px !important; color: red; }"
 			]
 		]
 	},
@@ -142,6 +214,22 @@
 			]
 		]
 	},
+	"flip writing modes" : {
+		"cases": [
+			[
+				"div { -webkit-writing-mode: horizontal-tb; }",
+				,
+				"div { -webkit-writing-mode: vertical-lr; }",
+				"div { -webkit-writing-mode: vertical-rl; }"
+			],
+			[
+				"div { writing-mode: lr-tb; }",
+				"div { writing-mode: rl-tb; }",
+				"div { writing-mode: tb-lr; }",
+				"div { writing-mode: tb-rl; }"
+			]
+		]
+	},
 	"flip float": {
 		"cases": [
 			[
@@ -164,14 +252,21 @@
 				".foo { padding: 1px; }"
 			],
 			[
-				".foo { padding: 1px 2px; }"
+				".foo { padding: 1px 2px; }",
+				,
+				".foo { padding: 2px 1px; }"
 			],
 			[
-				".foo { padding: 1px 2px 3px; }"
+				".foo { padding: 1px 2px 3px; }",
+				,
+				".foo { padding: 2px 3px 2px 1px; }",
+				".foo { padding: 2px 1px 2px 3px; }"
 			],
 			[
 				".foo { padding: 1px 2px 3px 4px; }",
-				".foo { padding: 1px 4px 3px 2px; }"
+				".foo { padding: 1px 4px 3px 2px; }",
+				".foo { padding: 4px 3px 2px 1px; }",
+				".foo { padding: 4px 1px 2px 3px; }"
 			],
 			[
 				".foo { padding: 1px 2px 3px 4px 5px; }"
@@ -185,6 +280,13 @@
 		"cases": [
 			[
 				".foo { padding-left: 0; }",
+				".foo { padding-right: 0; }",
+				".foo { padding-top: 0; }"
+			],
+			[
+				".foo { padding-top: 0; }",
+				,
+				".foo { padding-left: 0; }",
 				".foo { padding-right: 0; }"
 			]
 		]
@@ -193,7 +295,14 @@
 		"cases": [
 			[
 				".foo { margin-left: 0; }",
-				".foo { margin-right: 0; }"
+				".foo { margin-right: 0; }",
+				".foo { margin-top: 0; }"
+			],
+			[
+				".foo { margin-bottom: 0; }",
+				,
+				".foo { margin-right: 0; }",
+				".foo { margin-left: 0; }"
 			]
 		]
 	},
@@ -201,15 +310,36 @@
 		"cases": [
 			[
 				".foo { cursor: w-resize; }",
-				".foo { cursor: e-resize; }"
+				".foo { cursor: e-resize; }",
+				".foo { cursor: n-resize; }"
 			],
 			[
 				".foo { cursor: sw-resize; }",
-				".foo { cursor: se-resize; }"
+				".foo { cursor: se-resize; }",
+				".foo { cursor: ne-resize; }",
+				".foo { cursor: nw-resize; }"
 			],
 			[
 				".foo { cursor: nw-resize; }",
+				".foo { cursor: ne-resize; }",
+				,
 				".foo { cursor: ne-resize; }"
+			],
+			[
+				".foo { cursor: nesw-resize; }",
+				".foo { cursor: nwse-resize; }",
+				,
+				".foo { cursor: nwse-resize; }"
+			],
+			[
+				".foo { cursor: col-resize; }",
+				,
+				".foo { cursor: row-resize; }"
+			],
+			[
+				".foo { cursor: text; }",
+				,
+				".foo { cursor: vertical-text; }"
 			]
 		]
 	},
@@ -225,14 +355,19 @@
 		"cases": [
 			[
 				".foo { text-shadow: red 2px 0; }",
-				".foo { text-shadow: red -2px 0; }"
+				".foo { text-shadow: red -2px 0; }",
+				".foo { text-shadow: red 0 2px; }"
 			],
 			[
 				".foo { text-shadow: 2px 0 red; }",
-				".foo { text-shadow: -2px 0 red; }"
+				".foo { text-shadow: -2px 0 red; }",
+				".foo { text-shadow: 0 2px red; }"
 			],
 			[
-				".foo { text-shadow: red 0 2px; }"
+				".foo { text-shadow: red 0 2px; }",
+				,
+				".foo { text-shadow: red 2px 0; }",
+				".foo { text-shadow: red -2px 0; }"
 			]
 		]
 	},
@@ -240,38 +375,69 @@
 		"cases": [
 			[
 				".foo { box-shadow: -6px 3px 8px 5px rgba(0, 0, 0, 0.25); }",
-				".foo { box-shadow: 6px 3px 8px 5px rgba(0, 0, 0, 0.25); }"
+				".foo { box-shadow: 6px 3px 8px 5px rgba(0, 0, 0, 0.25); }",
+				".foo { box-shadow: 3px -6px 8px 5px rgba(0, 0, 0, 0.25); }",
+				".foo { box-shadow: -3px -6px 8px 5px rgba(0, 0, 0, 0.25); }"
 			],
 			[
 				".foo { box-shadow: inset -6px 3px 8px 5px rgba(0, 0, 0, 0.25); }",
-				".foo { box-shadow: inset 6px 3px 8px 5px rgba(0, 0, 0, 0.25); }"
+				".foo { box-shadow: inset 6px 3px 8px 5px rgba(0, 0, 0, 0.25); }",
+				".foo { box-shadow: inset 3px -6px 8px 5px rgba(0, 0, 0, 0.25); }",
+				".foo { box-shadow: inset -3px -6px 8px 5px rgba(0, 0, 0, 0.25); }"
 			],
 			[
 				".foo { box-shadow: inset .5em 0 0 white; }",
-				".foo { box-shadow: inset -.5em 0 0 white; }"
+				".foo { box-shadow: inset -.5em 0 0 white; }",
+				".foo { box-shadow: inset 0 .5em 0 white; }"
 			],
 			[
 				".foo { box-shadow: inset 0.5em 0 0 white; }",
-				".foo { box-shadow: inset -0.5em 0 0 white; }"
+				".foo { box-shadow: inset -0.5em 0 0 white; }",
+				".foo { box-shadow: inset 0 0.5em 0 white; }"
 			],
 			[
 				".foo { box-shadow: none; }"
 			],
 			[
 				".foo { -webkit-box-shadow: -1px 2px 3px 3px red; }",
-				".foo { -webkit-box-shadow: 1px 2px 3px 3px red; }"
+				".foo { -webkit-box-shadow: 1px 2px 3px 3px red; }",
+				".foo { -webkit-box-shadow: 2px -1px 3px 3px red; }",
+				".foo { -webkit-box-shadow: -2px -1px 3px 3px red; }"
 			],
 			[
 				".foo { -moz-box-shadow: -1px 2px 3px 3px red; }",
-				".foo { -moz-box-shadow: 1px 2px 3px 3px red; }"
+				".foo { -moz-box-shadow: 1px 2px 3px 3px red; }",
+				".foo { -moz-box-shadow: 2px -1px 3px 3px red; }",
+				".foo { -moz-box-shadow: -2px -1px 3px 3px red; }"
 			],
 			[
 				".foo{box-shadow:-1px 2px 3px 3px red}",
-				".foo{box-shadow:1px 2px 3px 3px red}"
+				".foo{box-shadow:1px 2px 3px 3px red}",
+				".foo{box-shadow:2px -1px 3px 3px red}",
+				".foo{box-shadow:-2px -1px 3px 3px red}"
 			],
 			[
 				".foo  {  box-shadow:  -1px 2px 3px 3px red  ;  }",
-				".foo  {  box-shadow:  1px 2px 3px 3px red  ;  }"
+				".foo  {  box-shadow:  1px 2px 3px 3px red  ;  }",
+				".foo  {  box-shadow:  2px -1px 3px 3px red  ;  }",
+				".foo  {  box-shadow:  -2px -1px 3px 3px red  ;  }"
+			],
+			[ 
+				"div { box-shadow: 1px 2px blue, inset red 1px 2px; }", 
+				"div { box-shadow: -1px 2px blue, inset red -1px 2px; }", 
+				"div { box-shadow: 2px 1px blue, inset red 2px 1px; }",
+				"div { box-shadow: -2px 1px blue, inset red -2px 1px; }"
+			],
+			[ 
+				"div { box-shadow: hsl(120, 100%, 50%) 1px 2px; }",
+				"div { box-shadow: hsl(120, 100%, 50%) -1px 2px; }", 
+				"div { box-shadow: hsl(120, 100%, 50%) 2px 1px; }",
+				"div { box-shadow: hsl(120, 100%, 50%) -2px 1px; }"
+			],
+			[ 
+				"@supports ( box-shadow: 1px ) { .foo { padding: 1px 2px; } }", 
+				,
+				"@supports ( box-shadow: 1px ) { .foo { padding: 2px 1px; } }"
 			]
 		]
 	},
@@ -279,11 +445,13 @@
 		"cases": [
 			[
 				".foo { border-left: 0; }",
-				".foo { border-right: 0; }"
+				".foo { border-right: 0; }",
+				".foo { border-top: 0; }"
 			],
 			[
 				".foo { border-left: 1px solid red; }",
-				".foo { border-right: 1px solid red; }"
+				".foo { border-right: 1px solid red; }",
+				".foo { border-top: 1px solid red; }"
 			]
 		]
 	},
@@ -291,7 +459,8 @@
 		"cases": [
 			[
 				".foo { border-left-color: red; }",
-				".foo { border-right-color: red; }"
+				".foo { border-right-color: red; }",
+				".foo { border-top-color: red; }"
 			]
 		]
 	},
@@ -299,7 +468,17 @@
 		"cases": [
 			[
 				".foo { border-left-style: red; }",
-				".foo { border-right-style: red; }"
+				".foo { border-right-style: red; }",
+				".foo { border-top-style: red; }"
+			]
+		]
+	},
+	"flip border-{edge}-width": {
+		"cases": [
+			[
+				".foo { border-left-width: 0; }",
+				".foo { border-right-width: 0; }",
+				".foo { border-top-width: 0; }"
 			]
 		]
 	},
@@ -307,15 +486,21 @@
 		"cases": [
 			[
 				".foo { border-color: red green blue white; }",
-				".foo { border-color: red white blue green; }"
+				".foo { border-color: red white blue green; }",
+				".foo { border-color: white blue green red; }",
+				".foo { border-color: white red green blue; }"
 			],
 			[
 				".foo { border-color: red #f00 rgb(255, 0, 0) rgba(255, 0, 0, 0.5); }",
-				".foo { border-color: red rgba(255, 0, 0, 0.5) rgb(255, 0, 0) #f00; }"
+				".foo { border-color: red rgba(255, 0, 0, 0.5) rgb(255, 0, 0) #f00; }",
+				".foo { border-color: rgba(255, 0, 0, 0.5) rgb(255, 0, 0) #f00 red; }",
+				".foo { border-color: rgba(255, 0, 0, 0.5) red #f00 rgb(255, 0, 0); }"
 			],
 			[
 				".foo { border-color: red #f00 hsl(0, 100%, 50%) hsla(0, 100%, 50%, 0.5); }",
-				".foo { border-color: red hsla(0, 100%, 50%, 0.5) hsl(0, 100%, 50%) #f00; }"
+				".foo { border-color: red hsla(0, 100%, 50%, 0.5) hsl(0, 100%, 50%) #f00; }",
+				".foo { border-color: hsla(0, 100%, 50%, 0.5) hsl(0, 100%, 50%) #f00 red; }",
+				".foo { border-color: hsla(0, 100%, 50%, 0.5) red #f00 hsl(0, 100%, 50%); }"
 			]
 		]
 	},
@@ -323,7 +508,9 @@
 		"cases": [
 			[
 				".foo { border-width: 1px 2px 3px 4px; }",
-				".foo { border-width: 1px 4px 3px 2px; }"
+				".foo { border-width: 1px 4px 3px 2px; }",
+				".foo { border-width: 4px 3px 2px 1px; }",
+				".foo { border-width: 4px 1px 2px 3px; }"
 			]
 		]
 	},
@@ -331,7 +518,9 @@
 		"cases": [
 			[
 				".foo { border-style: none dotted dashed solid; }",
-				".foo { border-style: none solid dashed dotted; }"
+				".foo { border-style: none solid dashed dotted; }",
+				".foo { border-style: solid dashed dotted none; }",
+				".foo { border-style: solid none dotted dashed; }"
 			]
 		]
 	},
@@ -342,56 +531,84 @@
 			],
 			[
 				".foo { border-radius: 1px 2px; }",
+				".foo { border-radius: 2px 1px; }",
+				,
 				".foo { border-radius: 2px 1px; }"
 			],
 			[
 				".foo { border-radius: 1px 2px 3px 4px; }",
-				".foo { border-radius: 2px 1px 4px 3px; }"
+				".foo { border-radius: 2px 1px 4px 3px; }",
+				".foo { border-radius: 1px 4px 3px 2px; }",
+				".foo { border-radius: 4px 1px 2px 3px; }"
 			],
 			[
 				".foo{border-radius:1px 2px 3px 4px}",
-				".foo{border-radius:2px 1px 4px 3px}"
+				".foo{border-radius:2px 1px 4px 3px}",
+				".foo{border-radius:1px 4px 3px 2px}",
+				".foo{border-radius:4px 1px 2px 3px}"
 			],
 			[
-				".foo{ border-radius: 10px / 20px }"
+				".foo{ border-radius: 10px / 20px }",
+				,
+				".foo{ border-radius: 20px / 10px }"
 			],
 			[
 				".foo{ border-radius: 15px / 0 20px }",
-				".foo{ border-radius: 15px / 20px 0 }"
+				".foo{ border-radius: 15px / 20px 0 }",
+				".foo{ border-radius: 0 20px / 15px }",
+				".foo{ border-radius: 20px 0 / 15px }"
 			],
 			[
 				".foo{ border-radius: 1px 2px 3px 4px / 5px 6px 7px 8px }",
-				".foo{ border-radius: 2px 1px 4px 3px / 6px 5px 8px 7px }"
+				".foo{ border-radius: 2px 1px 4px 3px / 6px 5px 8px 7px }",
+				".foo{ border-radius: 5px 8px 7px 6px / 1px 4px 3px 2px }",
+				".foo{ border-radius: 8px 5px 6px 7px / 4px 1px 2px 3px }"
 			],
 			[
 				".foo{ border-radius: 0 !important }"
 			],
 			[
 				".foo{ border-radius:  1px 2px 3px 4px  !important; }",
-				".foo{ border-radius:  2px 1px 4px 3px  !important; }"
+				".foo{ border-radius:  2px 1px 4px 3px  !important; }",
+				".foo{ border-radius:  1px 4px 3px 2px  !important; }",
+				".foo{ border-radius:  4px 1px 2px 3px  !important; }"
 			],
 			[
 				".foo  {  border-radius:  1px 2px 3px 4px  ;  }",
-				".foo  {  border-radius:  2px 1px 4px 3px  ;  }"
+				".foo  {  border-radius:  2px 1px 4px 3px  ;  }",
+				".foo  {  border-radius:  1px 4px 3px 2px  ;  }",
+				".foo  {  border-radius:  4px 1px 2px 3px  ;  }"
 			],
 			[
 				".foo { border-radius: 1px 2px 3px 4px 5px; }"
 			]
 		]
 	},
-	"flip border-top-{edge}-radius": {
+	"flip border-{edge}-{edge}-radius": {
 		"cases": [
 			[
 				".foo { border-top-left-radius: 0; }",
+				".foo { border-top-right-radius: 0; }",
+				,
 				".foo { border-top-right-radius: 0; }"
-			]
-		]
-	},
-	"flip border-bottom-{edge}-radius": {
-		"cases": [
+			],
 			[
 				".foo { border-bottom-left-radius: 0; }",
-				".foo { border-bottom-right-radius: 0; }"
+				".foo { border-bottom-right-radius: 0; }",
+				".foo { border-top-right-radius: 0; }",
+				".foo { border-top-left-radius: 0; }"
+			],
+			[
+				".foo { border-bottom-left-radius: 1px 2px; }",
+				".foo { border-bottom-right-radius: 1px 2px; }",
+				".foo { border-top-right-radius: 2px 1px; }",
+				".foo { border-top-left-radius: 2px 1px; }"
+			],
+			[
+				".foo { transition: border-top-left-radius 1s; }", 
+				".foo { transition: border-top-right-radius 1s; }",
+				,
+				".foo { transition: border-top-right-radius 1s; }"
 			]
 		]
 	},
@@ -399,23 +616,38 @@
 		"cases": [
 			[
 				".foo { background-position: left top; }",
+				".foo { background-position: right top; }",
+				,
 				".foo { background-position: right top; }"
 			],
 			[
 				".foo { background: url(/foo/bar.png) left top; }",
+				".foo { background: url(/foo/bar.png) right top; }",
+				,
 				".foo { background: url(/foo/bar.png) right top; }"
 			],
 			[
 				".foo { background: url(/foo/bar.png) no-repeat left top; }",
+				".foo { background: url(/foo/bar.png) no-repeat right top; }",
+				,
 				".foo { background: url(/foo/bar.png) no-repeat right top; }"
 			],
 			[
 				".foo { background: #000 url(/foo/bar.png) no-repeat left top; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat right top; }",
+				,
 				".foo { background: #000 url(/foo/bar.png) no-repeat right top; }"
 			],
 			[
 				".foo { background-position: left -5px; }",
-				".foo { background-position: right -5px; }"
+				".foo { background-position: right -5px; }",
+				".foo { background-position: -5px top; }"
+			],
+			[
+				".foo { background-position: left 5% top 10%; }",
+				".foo { background-position: right 5% top 10%; }",
+				".foo { background-position: left 10% top 5%; }",
+				".foo { background-position: right 10% top 5%; }"
 			]
 		]
 	},
@@ -423,118 +655,366 @@
 		"cases": [
 			[
 				".foo { background-position: 77% 40%; }",
-				".foo { background-position: 23% 40%; }"
+				".foo { background-position: 23% 40%; }",
+				".foo { background-position: 40% 77%; }",
+				".foo { background-position: 60% 77%; }"
 			],
 			[
 				".foo { background-position: 2.3% 40%; }",
-				".foo { background-position: 97.7% 40%; }"
+				".foo { background-position: 97.7% 40%; }",
+				".foo { background-position: 40% 2.3%; }",
+				".foo { background-position: 60% 2.3%; }"
 			],
 			[
 				".foo { background-position: 2.3210% 40%; }",
-				".foo { background-position: 97.6790% 40%; }"
+				".foo { background-position: 97.6790% 40%; }",
+				".foo { background-position: 40% 2.3210%; }",
+				".foo { background-position: 60% 2.3210%; }"
 			],
 			[
 				".foo { background-position: 0% 100%; }",
-				".foo { background-position: 100% 100%; }"
+				".foo { background-position: 100% 100%; }",
+				".foo { background-position: 100% 0%; }",
+				".foo { background-position: 0% 0%; }"
 			],
 			[
 				".foo { background-position: 77% -5px; }",
-				".foo { background-position: 23% -5px; }"
+				".foo { background-position: 23% -5px; }",
+				".foo { background-position: -5px 77%; }"
 			],
 			[
 				".foo { background-position: 0% 100% !important; }",
-				".foo { background-position: 100% 100% !important; }"
+				".foo { background-position: 100% 100% !important; }",
+				".foo { background-position: 100% 0% !important; }",
+				".foo { background-position: 0% 0% !important; }"
 			],
 			[
 				".foo{background-position: 0% 100%}",
-				".foo{background-position: 100% 100%}"
+				".foo{background-position: 100% 100%}",
+				".foo{background-position: 100% 0%}",
+				".foo{background-position: 0% 0%}"
 			],
 			[
 				".foo  {  background-position:  0% 100%  ;  }",
-				".foo  {  background-position:  100% 100%  ;  }"
+				".foo  {  background-position:  100% 100%  ;  }",
+				".foo  {  background-position:  100% 0%  ;  }",
+				".foo  {  background-position:  0% 0%  ;  }"
+			],
+			[
+				".foo  {  background-position:  0% 100%  ;  }",
+				".foo  {  background-position:  100% 100%  ;  }",
+				".foo  {  background-position:  100% 0%  ;  }",
+				".foo  {  background-position:  0% 0%  ;  }"
+			],
+			[
+				"div { background-position: left 15% top 25%; }",
+				"div { background-position: right 15% top 25%; }",
+				"div { background-position: left 25% top 15%; }",
+				"div { background-position: right 25% top 15%; }"
+			],
+			[
+				"div { background-position: left 15%; }", 
+				"div { background-position: right 15%; }", 
+				"div { background-position: 15% top; }",
+				"div { background-position: 85% top; }"
+			],
+			[
+				"div { background-position: center 15%; }", 
+				, 
+				"div { background-position: 15% center; }",
+				"div { background-position: 85% center; }"
 			]
 		]
 	},
 	"do not flip background-position non-percentages": {
 		"cases": [
 			[
-				".foo { background-position: 0 5px; }"
+				".foo { background-position: 0 5px; }",
+				,
+				".foo { background-position: 5px 0; }",
 			],
 			[
-				".foo { background-position: 10px 20px; }"
+				".foo { background-position: 10px 20px; }",
+				,
+				".foo { background-position: 20px 10px; }"
 			],
 			[
-				".foo { background-position: 10px 40%; }"
+				".foo { background-position: 10px 40%; }",
+				,
+				".foo { background-position: 40% 10px; }",
+				".foo { background-position: 60% 10px; }"
 			],
 			[
-				".foo { background-position: 10px 2.3%; }"
+				".foo { background-position: 10px 2.3%; }",
+				,
+				".foo { background-position: 2.3% 10px; }",
+				".foo { background-position: 97.7% 10px; }"
 			]
 		]
 	},
-	"flip background percentages": {
+	"flip background percentages, sizes, repeats": {
 		"cases": [
 			[
 				".foo { background: url(/foo/bar.png) 77% 40%; }",
-				".foo { background: url(/foo/bar.png) 23% 40%; }"
+				".foo { background: url(/foo/bar.png) 23% 40%; }",
+				".foo { background: url(/foo/bar.png) 40% 77%; }",
+				".foo { background: url(/foo/bar.png) 60% 77%; }"
 			],
 			[
 				".foo { background: url(/foo/bar.png) 77%; }",
-				".foo { background: url(/foo/bar.png) 23%; }"
+				".foo { background: url(/foo/bar.png) 23%; }",
+				".foo { background: url(/foo/bar.png) center 77%; }"
 			],
 			[
-				".foo { background: url(/foo/bar.png) no-repeat 77% 40%; }",
-				".foo { background: url(/foo/bar.png) no-repeat 23% 40%; }"
+				".foo { background: url(/foo/bar.png) repeat-x 77% 40%; }",
+				".foo { background: url(/foo/bar.png) repeat-x 23% 40%; }",
+				".foo { background: url(/foo/bar.png) repeat-y 40% 77%; }",
+				".foo { background: url(/foo/bar.png) repeat-y 60% 77%; }"
 			],
 			[
 				".foo { background: #000 url(/foo/bar.png) no-repeat 77% 40%; }",
-				".foo { background: #000 url(/foo/bar.png) no-repeat 23% 40%; }"
+				".foo { background: #000 url(/foo/bar.png) no-repeat 23% 40%; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat 40% 77%; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat 60% 77%; }"
 			],
 			[
-				".foo { background: #000 url(/foo/bar.png) no-repeat 77% 40%; }",
-				".foo { background: #000 url(/foo/bar.png) no-repeat 23% 40%; }"
+				".foo { background: #000 url(/foo/bar.png) no-repeat 77% 40%, url(/baz.png) 10% 20%; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat 23% 40%, url(/baz.png) 90% 20%; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat 40% 77%, url(/baz.png) 20% 10%; }",
+				".foo { background: #000 url(/foo/bar.png) no-repeat 60% 77%, url(/baz.png) 80% 10%; }"
+			],
+			[
+				".foo { background: rgb( 0, 0, 0 ) url(/foo/bar.png) no-repeat 77% 40%; }",
+				".foo { background: rgb( 0, 0, 0 ) url(/foo/bar.png) no-repeat 23% 40%; }",
+				".foo { background: rgb( 0, 0, 0 ) url(/foo/bar.png) no-repeat 40% 77%; }",
+				".foo { background: rgb( 0, 0, 0 ) url(/foo/bar.png) no-repeat 60% 77%; }"
 			],
 			[
 				".foo { background: 77% 40%; } .bar { background: 0% 100%; }",
-				".foo { background: 23% 40%; } .bar { background: 100% 100%; }"
+				".foo { background: 23% 40%; } .bar { background: 100% 100%; }",
+				".foo { background: 40% 77%; } .bar { background: 100% 0%; }",
+				".foo { background: 60% 77%; } .bar { background: 0% 0%; }"
 			],
 			[
 				".foo { background: url(/foo/bar.png) 77% 40% !important; }",
-				".foo { background: url(/foo/bar.png) 23% 40% !important; }"
+				".foo { background: url(/foo/bar.png) 23% 40% !important; }",
+				".foo { background: url(/foo/bar.png) 40% 77% !important; }",
+				".foo { background: url(/foo/bar.png) 60% 77% !important; }"
 			],
 			[
 				".foo{background:url(/foo/bar.png) 77% 40%}",
-				".foo{background:url(/foo/bar.png) 23% 40%}"
+				".foo{background:url(/foo/bar.png) 23% 40%}",
+				".foo{background:url(/foo/bar.png) 40% 77%}",
+				".foo{background:url(/foo/bar.png) 60% 77%}"
 			],
 			[
 				".foo  {  background:  url(/foo/bar.png) 77% 40%  ;  }",
-				".foo  {  background:  url(/foo/bar.png) 23% 40%  ;  }"
+				".foo  {  background:  url(/foo/bar.png) 23% 40%  ;  }",
+				".foo  {  background:  url(/foo/bar.png) 40% 77%  ;  }",
+				".foo  {  background:  url(/foo/bar.png) 60% 77%  ;  }"
+			],
+			[
+				".foo { background: url(/foo/bar.png) repeat no-repeat 77% 40%; }",
+				".foo { background: url(/foo/bar.png) repeat no-repeat 23% 40%; }",
+				".foo { background: url(/foo/bar.png) no-repeat repeat 40% 77%; }",
+				".foo { background: url(/foo/bar.png) no-repeat repeat 60% 77%; }"
+			],
+			[
+				".foo { background: url(/foo/bar.png) 77% 40%,10% 20% url(/foo/bar.png); }",
+				".foo { background: url(/foo/bar.png) 23% 40%,90% 20% url(/foo/bar.png); }",
+				".foo { background: url(/foo/bar.png) 40% 77%,20% 10% url(/foo/bar.png); }",
+				".foo { background: url(/foo/bar.png) 60% 77%,80% 10% url(/foo/bar.png); }"
+			],
+			[
+				"div { background: url( http://example.com/foo.png ) 10% 20%; }", 
+				"div { background: url( http://example.com/foo.png ) 90% 20%; }",
+				"div { background: url( http://example.com/foo.png ) 20% 10%; }",
+				"div { background: url( http://example.com/foo.png ) 80% 10%; }"
+			],
+			[
+				"div { background: url( /foo/bar.png ) 1em / 2em 3em; }",
+				,
+				"div { background: url( /foo/bar.png ) center 1em / 3em 2em; }"
+			],
+			[
+				"div { background-repeat: repeat-x, repeat no-repeat; }",
+				,
+				"div { background-repeat: repeat-y, no-repeat repeat; }"
+			],
+			[
+				"div { background-size: 40% 50%; }",
+				,
+				"div { background-size: 50% 40%; }"
+			],
+			[
+				"@supports ( background-position: foo ) and ( padding: 1% 2px ) { .bar { padding: 2px; } }"
 			]
 		]
 	},
-	"flip background-position-x percentages": {
+	"flip background-position-x/y percentages": {
 		"cases": [
 			[
 				".foo { background-position-x: 77%; }",
-				".foo { background-position-x: 23%; }"
+				".foo { background-position-x: 23%; }",
+				".foo { background-position-y: 77%; }"
+			],
+			[
+				".foo { background-position-x: 60%, 77%; }",
+				".foo { background-position-x: 40%, 23%; }",
+				".foo { background-position-y: 60%, 77%; }"
 			],
 			[
 				".foo { background-position-x: 77% !important; }",
-				".foo { background-position-x: 23% !important; }"
+				".foo { background-position-x: 23% !important; }",
+				".foo { background-position-y: 77% !important; }"
 			],
 			[
 				".foo{background-position-x:77%}",
-				".foo{background-position-x:23%}"
+				".foo{background-position-x:23%}",
+				".foo{background-position-y:77%}"
 			],
 			[
 				".foo  {  background-position-x:  77%  ;  }",
-				".foo  {  background-position-x:  23%  ;  }"
+				".foo  {  background-position-x:  23%  ;  }",
+				".foo  {  background-position-y:  77%  ;  }"
+			],
+			[
+				".foo { background-position-y: 40%; }",
+				,
+				".foo { background-position-x: 40%; }",
+				".foo { background-position-x: 60%; }"
 			]
 		]
 	},
-	"do not flip background-position-y": {
+	"flip border-images": {
 		"cases": [
 			[
-				".foo { background-position-y: 40%; }"
+				"div { border-image: url( /foo/bar.png ) 10% 20%; }",
+				,
+				"div { border-image: url( /foo/bar.png ) 20% 10%; }"
+			],
+			[
+				"div { border-image: url( /foo/bar.png ) 10% 20% 30% 40% / 50% 60% 70% 80%; }", 
+				"div { border-image: url( /foo/bar.png ) 10% 40% 30% 20% / 50% 80% 70% 60%; }", 
+				"div { border-image: url( /foo/bar.png ) 40% 30% 20% 10% / 80% 70% 60% 50%; }", 
+				"div { border-image: url( /foo/bar.png ) 40% 10% 20% 30% / 80% 50% 60% 70%; }"
+			],
+			[
+				"div { border-image: url( /foo/bar.png ) 10% 20% 30% 40% / 50% 60% 70% 80% / 9px 10px 11px 12px; }",
+				"div { border-image: url( /foo/bar.png ) 10% 40% 30% 20% / 50% 80% 70% 60% / 9px 12px 11px 10px; }",
+				"div { border-image: url( /foo/bar.png ) 40% 30% 20% 10% / 80% 70% 60% 50% / 12px 11px 10px 9px; }",
+				"div { border-image: url( /foo/bar.png ) 40% 10% 20% 30% / 80% 50% 60% 70% / 12px 9px 10px 11px; }"
+			],
+			[
+				"div { border-image: url( /foo/bar.png ) repeat round 10% 20% fill 30% 40% / 50% 60% 70% 80% / 9px 10px 11px 12px; }", 
+				"div { border-image: url( /foo/bar.png ) repeat round 10% 40% fill 30% 20% / 50% 80% 70% 60% / 9px 12px 11px 10px; }", 
+				"div { border-image: url( /foo/bar.png ) round repeat 40% 30% fill 20% 10% / 80% 70% 60% 50% / 12px 11px 10px 9px; }",
+				"div { border-image: url( /foo/bar.png ) round repeat 40% 10% fill 20% 30% / 80% 50% 60% 70% / 12px 9px 10px 11px; }"
+			],
+			[
+				"div { border-image: url( /foo/bar.png ) 10% 20% 30% 40% fill // 1px 2px 3px 4px; }",
+				"div { border-image: url( /foo/bar.png ) 10% 40% 30% 20% fill // 1px 4px 3px 2px; }",
+				"div { border-image: url( /foo/bar.png ) 40% 30% 20% 10% fill // 4px 3px 2px 1px; }",
+				"div { border-image: url( /foo/bar.png ) 40% 10% 20% 30% fill // 4px 1px 2px 3px; }"
+			],
+			[
+				"div { border-image-slice: 10% 20% fill 30% 40%; }",
+				"div { border-image-slice: 10% 40% fill 30% 20%; }",
+				"div { border-image-slice: 40% 30% fill 20% 10%; }",
+				"div { border-image-slice: 40% 10% fill 20% 30%; }"
+			],
+			[
+				"div { border-image-width: 1px 2px 3px; }",
+				,
+				"div { border-image-width: 2px 3px 2px 1px; }",
+				"div { border-image-width: 2px 1px 2px 3px; }"
+			],
+			[
+				"div { border-image-outset: 1px 2px; }",
+				,
+				"div { border-image-outset: 2px 1px; }"
+			],
+			[
+				"div { border-image-outset: 1px; }"
+			],
+			[
+				"div { border-image-repeat: round space; }",
+				,
+				"div { border-image-repeat: space round; }"
+			],
+			[
+				"div { border-image: url(/foo-12.png) 1px 2px 3px; }",
+				,
+				"div { border-image: url(/foo-12.png) 2px 3px 2px 1px; }",
+				"div { border-image: url(/foo-12.png) 2px 1px 2px 3px; }"
+			],
+		]
+	},
+	"rotate simple vertical/horizontal properties": {
+		"cases": [
+			[
+				"div { resize: vertical; }",
+				,
+				"div { resize: horizontal; }"
+			],
+			[
+				"div { overflow-y: hidden; }",
+				,
+				"div { overflow-x: hidden; }"
+			],
+			[
+				"div { height: 2px; }",
+				,
+				"div { width: 2px; }"
+			],
+			[
+				"div { max-width: 2px; }",
+				,
+				"div { max-height: 2px; }"
+			],
+			[
+				"div { min-height: 2px; }",
+				,
+				"div { min-width: 2px; }"
+			],
+			[
+				"div { transition: height 1s, min-width 200ms; }",
+				,
+				"div { transition: width 1s, min-height 200ms; }"
+			],
+			[
+				"div { transition: background-position-x 1s; }",
+				,
+				"div { transition: background-position-y 1s; }"
+			],
+			[
+				"scroll-snap-points-x: repeat(400px);",
+				,
+				"scroll-snap-points-y: repeat(400px);"
+			]
+		]
+	},
+	"rotate media queries": {
+		"cases": [
+			[
+				"@media (max-width: 600px) { a { color: red; } }",
+				,
+				"@media (max-height: 600px) { a { color: red; } }"
+			],
+			[
+				"@media (orientation: landscape) { a { color: red; } }",
+				,
+				"@media (orientation: portrait) { a { color: red; } }"
+			],
+			[
+				"@media (min-width: 600px) { a { color: red; } }",
+				,
+				"@media (min-height: 600px) { a { color: red; } }"
+			],
+			[
+				"@media (min-aspect-ratio: 15 / 10 ) { a { color: red; } }",
+				,
+				"@media (min-aspect-ratio: 10 / 15 ) { a { color: red; } }"
 			]
 		]
 	},
@@ -567,7 +1047,8 @@
 			],
 			[
 				"background: url(/foo/bar-rtl.png); right: 10px",
-				"background: url(/foo/bar-rtl.png); left: 10px"
+				"background: url(/foo/bar-rtl.png); left: 10px",
+				"background: url(/foo/bar-rtl.png); bottom: 10px"
 			],
 			[
 				"background: url(/foo/bar-right.png); direction: ltr",
@@ -575,7 +1056,20 @@
 			],
 			[
 				"background: url(/foo/bar-rtl_right.png);right:10px; direction: ltr",
-				"background: url(/foo/bar-rtl_right.png);left:10px; direction: rtl"
+				"background: url(/foo/bar-rtl_right.png);left:10px; direction: rtl",
+				"background: url(/foo/bar-rtl_right.png);bottom:10px; direction: ltr"
+			],
+			[
+				".foo { background: url(/bar-lr-tb.png); }"
+			],
+			[
+				".foo { background: url(/bar-horizontal-tb.png); }"
+			],
+			[
+				".foo { background: url(/bar-horizontal-inline.png); }"
+			],
+			[
+				".foo { background: url(/bar-lr-inline.png); }"
 			]
 		]
 	},
@@ -587,11 +1081,13 @@
 		"cases": [
 			[
 				"background: url(/foo/bar-right.png)",
-				"background: url(/foo/bar-left.png)"
+				"background: url(/foo/bar-left.png)",
+				"background: url(/foo/bar-bottom.png)"
 			],
 			[
 				"background: url(/foo/right-bar.png)",
-				"background: url(/foo/left-bar.png)"
+				"background: url(/foo/left-bar.png)",
+				"background: url(/foo/bottom-bar.png)"
 			],
 			[
 				"url(\"http://www.blogger.com/img/triangle_rtl.gif\")",
@@ -607,7 +1103,8 @@
 			],
 			[
 				"background: url(/foo/bar.right.png)",
-				"background: url(/foo/bar.left.png)"
+				"background: url(/foo/bar.left.png)",
+				"background: url(/foo/bar.bottom.png)"
 			],
 			[
 				"background: url(/foo/bright.png)"
@@ -618,52 +1115,80 @@
 			],
 			[
 				"background: url(/foo/bar-ltr.png); right: 10px",
-				"background: url(/foo/bar-rtl.png); left: 10px"
+				"background: url(/foo/bar-rtl.png); left: 10px",
+				"background: url(/foo/bar-ltr.png); bottom: 10px",
 			],
 			[
 				"background: url(/foo/bar-left.png); direction: ltr",
-				"background: url(/foo/bar-right.png); direction: rtl"
+				"background: url(/foo/bar-right.png); direction: rtl",
+				"background: url(/foo/bar-top.png); direction: ltr"
 			],
 			[
 				"background: url(/foo/bar-ltr_left.png);right:10px; direction: ltr",
-				"background: url(/foo/bar-rtl_right.png);left:10px; direction: rtl"
+				"background: url(/foo/bar-rtl_right.png);left:10px; direction: rtl",
+				"background: url(/foo/bar-ltr_top.png);bottom:10px; direction: ltr"
+			],
+			[
+				".foo { background: url(/bar-lr-tb.png); }",
+				".foo { background: url(/bar-rl-tb.png); }",
+				".foo { background: url(/bar-tb-lr.png); }",
+				".foo { background: url(/bar-tb-rl.png); }"
+			],
+			[
+				".foo { background: url(/bar-horizontal-tb.png); }",
+				,
+				".foo { background: url(/bar-vertical-lr.png); }",
+				".foo { background: url(/bar-vertical-rl.png); }"
+			],
+			[
+				".foo { background: url(/bar-horizontal-inline.png); }",
+				,
+				".foo { background: url(/bar-vertical-inline.png); }"
+			],
+			[
+				".foo { background: url(/bar-lr-inline.png); }",
+				".foo { background: url(/bar-rl-inline.png); }",
+				".foo { background: url(/bar-tb-inline.png); }"
 			]
 		]
 	},
 	"leave class names alone": {
 		"cases": [
 			[
-				".x-left { width: 0; }"
+				".x-left { color: red; }"
 			],
 			[
-				"#bright-left { width: 0; }"
+				"#bright-left { color: red; }"
 			],
 			[
-				"div.left:hover { width: 0; }"
+				"div.left:hover { color: red; }"
 			],
 			[
-				"#bright-left,\n.foo { width: 0; }"
+				"#bright-left,\n.foo { color: red; }"
 			],
 			[
-				"#bright-left, .foo { width: 0; }"
+				"#bright-left, .foo { color: red; }"
 			],
 			[
-				"div.leftxx, div.leftxx { width: 0; }"
+				"div.leftxx, div.leftxx { color: red; }"
 			],
 			[
-				"div.left > span.right+span.left { width: 0; }"
+				"div.left > span.right+span.left { color: red; }"
 			],
 			[
-				".foo .left .bar { width: 0; }"
+				".foo .left .bar { color: red; }"
 			],
 			[
-				".foo .left .bar #myid { width: 0; }"
+				".foo .left .bar #myid { color: red; }"
 			],
 			[
-				"foo-ltr[attr=x] { width: 0; }"
+				"foo-ltr[attr=x] { color: red; }"
 			],
 			[
-				".a-foo.png { width: 0; }"
+				".a-foo.png { color: red; }"
+			],
+			[
+				'[class*="span"].pull-right,.row-fluid [class*="span"].pull-right { color: red; }'
 			]
 		]
 	},
@@ -740,7 +1265,8 @@
 			],
 			[
 				"/* @noflip */\ndiv{float:left;text-align:left;}a{foo:right}",
-				"/* @noflip */\ndiv{float:left;text-align:left;}a{foo:left}"
+				"/* @noflip */\ndiv{float:left;text-align:left;}a{foo:left}",
+				"/* @noflip */\ndiv{float:left;text-align:left;}a{foo:bottom}"
 			],
 			[
 				"/* @noflip */ div.foo[bar*=baz] { left: 10px; float: left; }"
@@ -756,6 +1282,31 @@
 			],
 			[
 				"/* @noflip */ div.foo[bar*='baz{quux'] { left: 10px; float: left; }"
+			]
+		]
+	},
+	"do not flip logical or nondirectional properties ": {
+		"cases": [
+			[
+				"div { vertical-align: text-top; }"
+			],
+			[
+				"div { vertical-align: top; }"
+			],
+			[
+				"div { text-orientation: sideways-right; }"
+			],
+			[
+				"div { line-height: 1px; }"
+			],
+			[
+				"div { logical-width: 2px; }"
+			],
+			[
+				"div { background-image: url(/foo-height.png); }"
+			],
+			[
+				"div { border-width: 3px; }"
 			]
 		]
 	},
