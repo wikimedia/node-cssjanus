@@ -15,10 +15,10 @@ module.exports = function ( grunt ) {
 			try {
 				for ( i = 0; i < test.cases.length; i++ ) {
 					input = test.cases[ i ][ 0 ];
-					noop = test.cases[ i ][ 1 ] === undefined;
+					noop = !test.cases[ i ][ 1 ];
 					output = noop ? input : test.cases[ i ][ 1 ];
-					tblrOutput = test.cases[ 2 ] === undefined ? input : test.cases[ 2 ];
-					tbrlOutput = test.cases[ 3 ] === undefined ? tblrOutput : test.cases[ 3 ];
+					tblrOutput = test.cases[ 2 ] || input;
+					tbrlOutput = test.cases[ 3 ] || tblrOutput;
 
 					assert.equal(
 						cssjanus.transform(
