@@ -17,8 +17,8 @@ module.exports = function ( grunt ) {
 					input = test.cases[ i ][ 0 ];
 					noop = !test.cases[ i ][ 1 ];
 					output = noop ? input : test.cases[ i ][ 1 ];
-					tblrOutput = test.cases[ 2 ] || input;
-					tbrlOutput = test.cases[ 3 ] || tblrOutput;
+					tblrOutput = test.cases[ i ][ 2 ] || input;
+					tbrlOutput = test.cases[ i ][ 3 ] || tblrOutput;
 
 					assert.equal(
 						cssjanus.transform(
