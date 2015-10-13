@@ -1,6 +1,7 @@
 {
 	// Enforcing
 	"bitwise": false,
+	"elision": true,
 	"eqeqeq": true,
 	"freeze": true,
 	"latedef": true,
