@@ -349,23 +349,21 @@ function CSSJanus() {
 			if ( quarterTurned ) {
 				textChanges[ "background-position-y" ] = "background-position-x";
 				textChanges[ "background-position-x" ] = "background-position-y";
-				textChanges[ "repeat-x" ] = "repeat-y";
-				textChanges[ "repeat-y" ] = "repeat-x";
-				textChanges[ "horizontal" ] = "vertical";
-				textChanges[ "vertical" ] = "horizontal";
-				textChanges[ "text" ] = "vertical-text";
+				textChanges.horizontal = "vertical";
+				textChanges.vertical = "horizontal";
+				textChanges.text = "vertical-text";
 				textChanges[ "vertical-text" ] = "text";
-				textChanges[ "col-resize" ] = "row-resize";
 				textChanges[ "row-resize" ] = "col-resize";
-				textChanges[ "height" ] = "width";
-				textChanges[ "width" ] = "height";
-				textChanges[ "landscape" ] = "portrait";
-				textChanges[ "portrait" ] = "landscape";
+				textChanges[ "col-resize" ] = "row-resize";
+				textChanges.width = "height";
+				textChanges.height = "width";
+				textChanges.landscape = "portrait";
+				textChanges.portrait = "landscape";
 			}
 			
 			if ( dirFlipped ) {
-				textChanges[ 'ltr' ] = 'rtl';
-				textChanges[ 'rtl' ] = 'ltr';
+				textChanges.ltr = 'rtl';
+				textChanges.rtl = 'ltr';
 			}
 			
 			function fourNotation( match, pre, q1, s1, q2, s2, q3, s3, q4, s4 ) {
