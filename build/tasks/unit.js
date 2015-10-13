@@ -47,7 +47,7 @@ module.exports = function ( grunt ) {
 						);
 						output = test.cases[ i ][ 1 ];
 					}
-					
+
 					assert.equal(
 						cssjanus.transform(
 							input,
@@ -58,7 +58,7 @@ module.exports = function ( grunt ) {
 						),
 						tblrOutput
 					);
-					
+
 					assert.equal(
 						cssjanus.transform(
 							input,
