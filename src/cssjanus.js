@@ -6,6 +6,8 @@
  * Copyright 2010 Trevor Parscal
  */
 
+var cssjanus;
+
 /**
  * Create a tokenizer object.
  *
@@ -30,7 +32,7 @@ function Tokenizer( regex, token ) {
 	 *
 	 * @private
 	 * @param {string} match Matched string
-	 * @returns {string} Token to leave in the matched string's place
+	 * @return {string} Token to leave in the matched string's place
 	 */
 	function tokenizeCallback( match ) {
 		matches.push( match );
@@ -42,7 +44,7 @@ function Tokenizer( regex, token ) {
 	 *
 	 * @private
 	 * @param {string} token Matched token
-	 * @returns {string} Original matched string to restore
+	 * @return {string} Original matched string to restore
 	 */
 	function detokenizeCallback() {
 		return matches[ index++ ];
@@ -177,39 +179,6 @@ function CSSJanus() {
 	 * Invert a set of border radius values.
 	 *
 	 * @private
-	 * @param {string} match Matched property
-	 * @param {string} pre Text before value
-	 * @param {string} firstGroup1
-	 * @param {string|undefined} firstGroup2
-	 * @param {string|undefined} firstGroup3
-	 * @param {string|undefined} firstGroup4
-	 * @param {string|undefined} secondGroup1
-	 * @param {string|undefined} secondGroup2
-	 * @param {string|undefined} secondGroup3
-	 * @param {string|undefined} secondGroup4
-	 * @param {string} post Text after value
-	 * @return {string} Inverted property
-	 */
-	function calculateNewBorderRadius( match, pre ) {
-		var values,
-			args = [].slice.call( arguments ),
-			firstGroup = args.slice( 2, 6 ).filter( function ( val ) { return val; } ),
-			secondGroup = args.slice( 6, 10 ).filter( function ( val ) { return val; } ),
-			post = args[ 10 ] || '';
-
-		if ( secondGroup.length ) {
-			values = flipBorderRadiusValues( firstGroup ) + ' / ' + flipBorderRadiusValues( secondGroup );
-		} else {
-			values = flipBorderRadiusValues( firstGroup );
-		}
-
-		return pre + values + post;
-	}
-
-	/**
-	 * Invert a set of border radius values.
-	 *
-	 * @private
 	 * @param {Array} values Matched values
 	 * @return {string} Inverted values
 	 */
@@ -230,6 +199,39 @@ function CSSJanus() {
 		}
 
 		return values.join( ' ' );
+	}
+
+	/**
+	 * Invert a set of border radius values.
+	 *
+	 * @private
+	 * @param {string} match Matched property
+	 * @param {string} pre Text before value
+	 * @param {string} [firstGroup1]
+	 * @param {string} [firstGroup2]
+	 * @param {string} [firstGroup3]
+	 * @param {string} [firstGroup4]
+	 * @param {string} [secondGroup1]
+	 * @param {string} [secondGroup2]
+	 * @param {string} [secondGroup3]
+	 * @param {string} [secondGroup4]
+	 * @param {string} [post] Text after value
+	 * @return {string} Inverted property
+	 */
+	function calculateNewBorderRadius( match, pre ) {
+		var values,
+			args = [].slice.call( arguments ),
+			firstGroup = args.slice( 2, 6 ).filter( function ( val ) { return val; } ),
+			secondGroup = args.slice( 6, 10 ).filter( function ( val ) { return val; } ),
+			post = args[ 10 ] || '';
+
+		if ( secondGroup.length ) {
+			values = flipBorderRadiusValues( firstGroup ) + ' / ' + flipBorderRadiusValues( secondGroup );
+		} else {
+			values = flipBorderRadiusValues( firstGroup );
+		}
+
+		return pre + values + post;
 	}
 
 	/**
@@ -357,7 +359,7 @@ function CSSJanus() {
 
 /* Initialization */
 
-var cssjanus = new CSSJanus();
+cssjanus = new CSSJanus();
 
 /* Exports */
 
