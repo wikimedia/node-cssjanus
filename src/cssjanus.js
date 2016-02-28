@@ -6,6 +6,8 @@
  * Copyright 2010 Trevor Parscal
  */
 
+var cssjanus;
+
 /**
  * Create a tokenizer object.
  *
@@ -30,7 +32,7 @@ function Tokenizer( regex, token ) {
 	 *
 	 * @private
 	 * @param {string} match Matched string
-	 * @returns {string} Token to leave in the matched string's place
+	 * @return {string} Token to leave in the matched string's place
 	 */
 	function tokenizeCallback( match ) {
 		matches.push( match );
@@ -42,7 +44,7 @@ function Tokenizer( regex, token ) {
 	 *
 	 * @private
 	 * @param {string} token Matched token
-	 * @returns {string} Original matched string to restore
+	 * @return {string} Original matched string to restore
 	 */
 	function detokenizeCallback() {
 		return matches[ index++ ];
@@ -177,6 +179,32 @@ function CSSJanus() {
 	 * Invert a set of border radius values.
 	 *
 	 * @private
+	 * @param {Array} values Matched values
+	 * @return {string} Inverted values
+	 */
+	function flipBorderRadiusValues( values ) {
+		switch ( values.length ) {
+			case 4:
+				values = [ values[ 1 ], values[ 0 ], values[ 3 ], values[ 2 ] ];
+				break;
+			case 3:
+				values = [ values[ 1 ], values[ 0 ], values[ 1 ], values[ 2 ] ];
+				break;
+			case 2:
+				values = [ values[ 1 ], values[ 0 ] ];
+				break;
+			case 1:
+				values = [ values[ 0 ] ];
+				break;
+		}
+
+		return values.join( ' ' );
+	}
+
+	/**
+	 * Invert a set of border radius values.
+	 *
+	 * @private
 	 * @param {string} match Matched property
 	 * @param {string} pre Text before value
 	 * @param {string} firstGroup1
@@ -204,32 +232,6 @@ function CSSJanus() {
 		}
 
 		return pre + values + post;
-	}
-
-	/**
-	 * Invert a set of border radius values.
-	 *
-	 * @private
-	 * @param {Array} values Matched values
-	 * @return {string} Inverted values
-	 */
-	function flipBorderRadiusValues( values ) {
-		switch ( values.length ) {
-			case 4:
-				values = [ values[ 1 ], values[ 0 ], values[ 3 ], values[ 2 ] ];
-				break;
-			case 3:
-				values = [ values[ 1 ], values[ 0 ], values[ 1 ], values[ 2 ] ];
-				break;
-			case 2:
-				values = [ values[ 1 ], values[ 0 ] ];
-				break;
-			case 1:
-				values = [ values[ 0 ] ];
-				break;
-		}
-
-		return values.join( ' ' );
 	}
 
 	/**
@@ -357,7 +359,7 @@ function CSSJanus() {
 
 /* Initialization */
 
-var cssjanus = new CSSJanus();
+cssjanus = new CSSJanus();
 
 /* Exports */
 
