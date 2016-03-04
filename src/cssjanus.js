@@ -43,7 +43,6 @@ function Tokenizer( regex, token ) {
 	 * Get a match.
 	 *
 	 * @private
-	 * @param {string} token Matched token
 	 * @return {string} Original matched string to restore
 	 */
 	function detokenizeCallback() {
