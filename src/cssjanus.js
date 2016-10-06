@@ -327,7 +327,7 @@ function CSSJanus() {
 				noFlipClassTokenizer,
 				commentTokenizer,
 				i;
-			
+
 			// Default values
 			sourceDir = sourceDir || 'lr-tb';
 			targetDir = targetDir || 'rl-tb';
