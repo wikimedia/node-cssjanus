@@ -191,7 +191,7 @@ function CSSJanus() {
 	 *
 	 * @private
 	 * @param {string} dir
-	 * @return {array}
+	 * @return {Array}
 	 */
 	function orientationArray( dir ) {
 		return dir.split( '-' ).map( function ( dir ) {
@@ -279,13 +279,14 @@ function CSSJanus() {
 
 	/**
 	 * @private
-	 * @param {object} pointMap
-	 * @param {array} array
+	 * @param {Object} pointMap
+	 * @param {Array} array
 	 * @param {boolean} turned Whether transformation is such that a three-point value would become four-point.
 	 * @return {string}
 	 */
 	function processFourNotationArray( pointMap, array, turned ) {
 		function fourNotationMap( val, index, all ) {
+			var d;
 			if ( index & 1 ) {
 				// If turned, add a space to fit the duplicate final value.
 				return val || ( ( index === 5 && turned && all[ 4 ] ) ? ' ' : '' );
@@ -293,7 +294,7 @@ function CSSJanus() {
 				if ( !val ) {
 					return ( index === 6 && turned && all[ 4 ] ) ? all[ pointMap[ index / 2 ] * 2 ] : '';
 				} else {
-					var d = ( index / 2 );
+					d = ( index / 2 );
 					return ( all[ pointMap[ d ] * 2 ] || all[ ( pointMap[ d ] * 2 ) ^ 4 ] || all[ 0 ] );
 				}
 			}
@@ -313,6 +314,20 @@ function CSSJanus() {
 		 * @return {string} Transformed stylesheet
 		 */
 		transform: function ( css, transformDirInUrl, transformEdgeInUrl, sourceDir, targetDir ) {
+			var source,
+				target,
+				map,
+				cornersMap,
+				textChanges,
+				dirFlipped,
+				quarterTurned,
+				cornersFlipped,
+				reflected,
+				noFlipSingleTokenizer,
+				noFlipClassTokenizer,
+				commentTokenizer,
+				i;
+			
 			// Default values
 			sourceDir = sourceDir || 'lr-tb';
 			targetDir = targetDir || 'rl-tb';
@@ -321,25 +336,24 @@ function CSSJanus() {
 				return css;
 			}
 
-			var source = orientationArray( sourceDir ),
-				target = orientationArray( targetDir ),
-				map = {},
-				cornersMap = {},
-				textChanges = { '': '', undefined: '' },
-				// Determine if direction (ltr/rtl) is flipped.
-				dirFlipped = ( ( source[ 0 ] ^ target[ 0 ] ) % 3 ) !== 0,
-				// Determine if rotated 90deg or 270deg, with or without mirroring.
-				// That is, whether height and width are swapped.
-				quarterTurned = ( source[ 0 ] & 1 ) !== ( target[ 0 ] & 1 ),
-				// Determine whether corner axes (ne/sw, nw/se) remain constant.
-				cornersFlipped = ( source[ 0 ] + source[ 1 ] ) % 3 !== ( target[ 0 ] + target[ 1 ] ) % 3,
-				// Actually flipped, as opposed to just rotated.
-				reflected = ( ( source[ 0 ] - source[ 1 ] ) & 3 ) !== ( ( target[ 0 ] - target[ 1 ] ) & 3 ),
-				// Tokenizers
-				noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
-				noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken ),
-				commentTokenizer = new Tokenizer( commentRegExp, commentToken ),
-				i;
+			source = orientationArray( sourceDir );
+			target = orientationArray( targetDir );
+			map = {};
+			cornersMap = {};
+			textChanges = { '': '', undefined: '' };
+			// Determine if direction (ltr/rtl) is flipped.
+			dirFlipped = ( ( source[ 0 ] ^ target[ 0 ] ) % 3 ) !== 0;
+			// Determine if rotated 90deg or 270deg, with or without mirroring.
+			// That is, whether height and width are swapped.
+			quarterTurned = ( source[ 0 ] & 1 ) !== ( target[ 0 ] & 1 );
+			// Determine whether corner axes (ne/sw, nw/se) remain constant.
+			cornersFlipped = ( source[ 0 ] + source[ 1 ] ) % 3 !== ( target[ 0 ] + target[ 1 ] ) % 3;
+			// Actually flipped, as opposed to just rotated.
+			reflected = ( ( source[ 0 ] - source[ 1 ] ) & 3 ) !== ( ( target[ 0 ] - target[ 1 ] ) & 3 );
+			// Tokenizers
+			noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken );
+			noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken );
+			commentTokenizer = new Tokenizer( commentRegExp, commentToken );
 
 			for ( i = 0; i < 4; i++ ) {
 				map[ target[ i & 1 ] ^ ( i & 2 ) ] = source[ i & 1 ] ^ ( i & 2 );
