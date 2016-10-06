@@ -6,6 +6,8 @@
  * Copyright 2010 Trevor Parscal
  */
 
+var cssjanus;
+
 /**
  * Create a tokenizer object.
  *
@@ -30,7 +32,7 @@ function Tokenizer( regex, token ) {
 	 *
 	 * @private
 	 * @param {string} match Matched string
-	 * @returns {string} Token to leave in the matched string's place
+	 * @return {string} Token to leave in the matched string's place
 	 */
 	function tokenizeCallback( match ) {
 		matches.push( match );
@@ -41,8 +43,7 @@ function Tokenizer( regex, token ) {
 	 * Get a match.
 	 *
 	 * @private
-	 * @param {string} token Matched token
-	 * @returns {string} Original matched string to restore
+	 * @return {string} Original matched string to restore
 	 */
 	function detokenizeCallback() {
 		return matches[ index++ ];
@@ -567,7 +568,7 @@ function CSSJanus() {
 
 /* Initialization */
 
-var cssjanus = new CSSJanus();
+cssjanus = new CSSJanus();
 
 /* Exports */
 
