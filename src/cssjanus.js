@@ -146,8 +146,9 @@ function CSSJanus() {
 		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)' + signedQuantPattern + '(?:(?:\\s+' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' +
 			'(?:(?:(?:\\s*\\/\\s*)' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
 		boxShadowRegExp = new RegExp( '(box-shadow\\s*:\\s*(?:inset\\s*)?)' + signedQuantPattern, 'gi' ),
-		textShadow1RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
-		textShadow2RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' );
+		textShadow1RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern + '(\\s*)' + colorPattern, 'gi' ),
+		textShadow2RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
+		textShadow3RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' );
 
 	/**
 	 * Invert the horizontal value of a background position property.
@@ -335,7 +336,8 @@ function CSSJanus() {
 				// Shadows
 				.replace( boxShadowRegExp, calculateNewShadow )
 				.replace( textShadow1RegExp, calculateNewFourTextShadow )
-				.replace( textShadow2RegExp, calculateNewShadow )
+				.replace( textShadow2RegExp, calculateNewFourTextShadow )
+				.replace( textShadow3RegExp, calculateNewShadow )
 				// Swap the second and fourth parts in four-part notation rules
 				// like padding: 1px 2px 3px 4px;
 				.replace( fourNotationQuantRegExp, '$1$2$3$8$5$6$7$4$9' )

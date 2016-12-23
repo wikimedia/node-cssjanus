@@ -224,12 +224,24 @@
 	"flip text-shadow": {
 		"cases": [
 			[
-				".foo { text-shadow: red 2px 0; }",
-				".foo { text-shadow: red -2px 0; }"
+				".foo { text-shadow: 1px 2px 3px red; }",
+				".foo { text-shadow: -1px 2px 3px red; }"
 			],
 			[
-				".foo { text-shadow: 2px 0 red; }",
-				".foo { text-shadow: -2px 0 red; }"
+				".foo { text-shadow: red 1px 2px 3px; }",
+				".foo { text-shadow: red -1px 2px 3px; }"
+			],
+			[
+				".foo { text-shadow: 1px 2px red; }",
+				".foo { text-shadow: -1px 2px red; }"
+			],
+			[
+				".foo { text-shadow: red 1px 2px; }",
+				".foo { text-shadow: red -1px 2px; }"
+			],
+			[
+				".foo { text-shadow: 1px 2px; }",
+				".foo { text-shadow: -1px 2px; }"
 			],
 			[
 				".foo { text-shadow: red 0 2px; }"
