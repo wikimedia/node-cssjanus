@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 module.exports = function ( grunt ) {
 	grunt.registerTask( 'unit', function () {
 		var assert = require( 'assert' ),
