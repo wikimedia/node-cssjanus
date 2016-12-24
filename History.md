@@ -1,5 +1,9 @@
 # Release History
 
+## v1.1.3 / 2016-12-23
+
+* Do not flip offset-y in text-shadow, even when color isn't as first value (Ed Sanders)
+
 ## v1.1.2 / 2015-02-03
 
 * Support !important and slash in border-radius values (Dominik Schilling)
