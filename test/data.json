@@ -364,6 +364,36 @@
 				".foo { text-shadow: 0 2px red; }"
 			],
 			[
+				".foo { text-shadow: 1px 2px 3px red; }",
+				".foo { text-shadow: -1px 2px 3px red; }",
+				".foo { text-shadow: 2px 1px 3px red; }",
+				".foo { text-shadow: -2px 1px 3px red; }"
+			],
+			[
+				".foo { text-shadow: red 1px 2px 3px; }",
+				".foo { text-shadow: red -1px 2px 3px; }",
+				".foo { text-shadow: red 2px 1px 3px; }",
+				".foo { text-shadow: red -2px 1px 3px; }"
+			],
+			[
+				".foo { text-shadow: 1px 2px red; }",
+				".foo { text-shadow: -1px 2px red; }",
+				".foo { text-shadow: 2px 1px red; }",
+				".foo { text-shadow: -2px 1px red; }"
+			],
+			[
+				".foo { text-shadow: red 1px 2px; }",
+				".foo { text-shadow: red -1px 2px; }",
+				".foo { text-shadow: red 2px 1px; }",
+				".foo { text-shadow: red -2px 1px; }"
+			],
+			[
+				".foo { text-shadow: 1px 2px; }",
+				".foo { text-shadow: -1px 2px; }",
+				".foo { text-shadow: 2px 1px; }",
+				".foo { text-shadow: -2px 1px; }"
+			],
+			[
 				".foo { text-shadow: red 0 2px; }",
 				null,
 				".foo { text-shadow: red 2px 0; }",
