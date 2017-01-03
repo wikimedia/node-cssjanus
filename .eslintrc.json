@@ -1,0 +1,6 @@
+{
+	"extends": "wikimedia",
+	"env": {
+		"node": true
+	}
+}

@@ -259,6 +259,8 @@ function CSSJanus() {
 	/**
 	 * @private
 	 * @param {string} match
+	 * @param {string} property
+	 * @param {string} offset
 	 * @return {string}
 	 */
 	function calculateNewShadow( match, property, offset ) {
@@ -268,6 +270,10 @@ function CSSJanus() {
 	/**
 	 * @private
 	 * @param {string} match
+	 * @param {string} property
+	 * @param {string} color
+	 * @param {string} space
+	 * @param {string} offset
 	 * @return {string}
 	 */
 	function calculateNewFourTextShadow( match, property, color, space, offset ) {
