@@ -108,7 +108,7 @@ function CSSJanus() {
 		// Patterns
 		nonAsciiPattern = '[^\\u0020-\\u007e]',
 		unicodePattern = '(?:(?:\\[0-9a-f]{1,6})(?:\\r\\n|\\s)?)',
-		numPattern = '(?:[0-9]*\\.[0-9]+|[0-9]+)',
+		numPattern = '(?:[0-9]*\\.[0-9]+|[0-9]+)(?:[eE][-+]?[0-9+])?',
 		unitPattern = '(?:em|ex|px|cm|mm|in|pt|pc|deg|rad|grad|ms|s|hz|khz|%)',
 		directionPattern = 'direction\\s*:\\s*',
 		urlSpecialCharsPattern = '[!#$%&*-~]',
@@ -121,8 +121,9 @@ function CSSJanus() {
 		nmstartPattern = '(?:[_a-z]|' + nonAsciiPattern + '|' + escapePattern + ')',
 		nmcharPattern = '(?:[_a-z0-9-]|' + nonAsciiPattern + '|' + escapePattern + ')',
 		identPattern = '-?' + nmstartPattern + nmcharPattern + '*',
-		quantPattern = numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?',
-		signedQuantPattern = '((?:-?' + quantPattern + ')|(?:inherit|auto))',
+		quantPattern = '[-+]?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?',
+		posQuantPattern = '\\+?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?',
+		signedQuantPattern = '((?:' + quantPattern + ')|(?:inherit|auto))',
 		fourNotationQuantPropsPattern = '((?:margin|padding|border-width|border-image-width|border-image-outset)\\s*:\\s*)',
 		fourNotationColorPropsPattern = '((?:border-color|border-style)\\s*:\\s*)',
 		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%-]+\\))',
@@ -150,21 +151,21 @@ function CSSJanus() {
 		// Background-positions.
 		bgRegExp = new RegExp( '(background(?:-position)?)(\\s*:\\s*)([^;{}]+)', 'gi' ),
 		bgXYRegExp = new RegExp( '(background-position-[xy])(?:(\\s*:\\s*)([^;{}]+)' + suffixPattern + ')?', 'gi' ),
-		bgPositionValuesRegExp = new RegExp(
+		positionValuesRegExp = new RegExp(
 			'(^|\\s|,)' +
-			'((' + edgesPattern + '(?:\\s+-?' + quantPattern + '(?=\\s+' + edgesPattern + '))?)|-?' + quantPattern + ')' +
-			'(?:(\\s+)((' + edgesPattern + '(?:\\s+-?' + quantPattern + ')?)|-?' + quantPattern + '))?' +
-			'(?:(\\s*\\/\\s*)(' + quantPattern + ')(\\s+)(' + quantPattern + '))?' + // background-size
+			'((' + edgesPattern + '(?:\\s+' + quantPattern + '(?=\\s+' + edgesPattern + '))?)|' + quantPattern + ')' +
+			'(?:(\\s+)((' + edgesPattern + '(?:\\s+' + quantPattern + ')?)|' + quantPattern + '))?' +
+			'(?:(\\s*\\/\\s*)(' + posQuantPattern + ')(\\s+)(' + posQuantPattern + '))?' + // background-size
 			'(?![^()]*\\))' +
 			lookAheadNotClosingParenPattern, 'gi' ),
 		bgPositionSingleValueRegExp = new RegExp(
 			'(^|\\s|,)' +
-			'(-?' + numPattern + '%)' +
+			'([-+]?' + numPattern + '%)' +
 			lookAheadNotClosingParenPattern, 'gi' ),
 		bgRepeatRegExp = new RegExp( '(background-repeat\\s*:\\s*)([A-z-, ]+)' + suffixPattern ),
 		bgRepeatValueRegExp = new RegExp( '(?:repeat-[xy]|((?:no-)?repeat|space|round)(\\s+)((?:no-)?repeat|space|round))' + lookAheadNotClosingParenPattern, 'gi' ),
 		bgSizeRegExp = new RegExp( '(background-size\\s*:\\s*)([^;{}]+)' ),
-		bgSizeValueRegExp = new RegExp( '(auto|' + quantPattern + ')(\\s+)(auto|' + quantPattern + ')', 'gi' ),
+		bgSizeValueRegExp = new RegExp( '(auto|' + posQuantPattern + ')(\\s+)(auto|' + posQuantPattern + ')', 'gi' ),
 		borderImageRegExp = new RegExp( '(border-image(?:-slice)?\\s*:\\s*[^;}]*?)' +
 			signedQuantPattern + '(?:(\\s+(?:fill\\s+)?)' + signedQuantPattern + '(?:(\\s+(?:fill\\s+)?)' + signedQuantPattern + '(?:(\\s+(?:fill\\s+)?)' + signedQuantPattern + ')?)?)?' +
 			'(?:((?:\\s+fill)?\\s*/\\s*)(?:' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + ')?)?)?)?' +
@@ -175,9 +176,17 @@ function CSSJanus() {
 		// border-radius: <length or percentage>{1,4} [optional: / <length or percentage>{1,4} ]
 		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)' + signedQuantPattern + '(?:(?:(\\s+)' + signedQuantPattern + ')(?:(\\s+)' + signedQuantPattern + ')?(?:(\\s+)' + signedQuantPattern + ')?)?' +
 			'(?:(?:(\\s*\\/\\s*)' + signedQuantPattern + ')(?:(\\s+)' + signedQuantPattern + ')?(?:(\\s+)' + signedQuantPattern + ')?(?:(\\s+)' + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
-		borderRadiusCornerRegExp = new RegExp( 'border-(left|right)-(top|bottom)-radius(?:(\\s*:\\s*)(' + quantPattern + ')(\\s+)(' + quantPattern + '))?' + lookAheadNotOpenBracePattern + lookAheadNotClosingParenPattern, 'gi' ),
+		borderRadiusCornerRegExp = new RegExp( 'border-(left|right)-(top|bottom)-radius(?:(\\s*:\\s*)(' + posQuantPattern + ')(\\s+)(' + posQuantPattern + '))?' + lookAheadNotOpenBracePattern + lookAheadNotClosingParenPattern, 'gi' ),
 		shadowRegExp = new RegExp( '((?:box|text)-shadow\\s*:\\s*)([^;{}]+)', 'gi' ),
 		shadowValueRegExp = new RegExp( signedQuantPattern + '(\\s+)' + signedQuantPattern + '([^,;}]*)', 'gi' ),
+		transformRegExp = new RegExp( '(transform\\s*:\\s*)([^;{}]+)' + suffixPattern, 'gi' ),
+		transformFunctionRegExp = new RegExp( '((?:rotate|translate|skew|scale|matrix)(?:x|y|z|3d)?)(\\(\\s*)([^\\)]*?)(\\s*\\))', 'gi' ),
+		transformOriginRegExp = new RegExp( '(transform-origin\\s*:\\s*)' +
+			'(?=((?:top|bottom)\\s+' + quantPattern + '|' + quantPattern + '\\s+(?:left|right))?)' +
+			'(?=((?:left|right)\\s+' + quantPattern + '|' + quantPattern + '\\s+(?:top|bottom))?)' +
+			'(' + edgesPattern + '(?=\\s+' + quantPattern + ')|' + quantPattern + ')' +
+			'(?:(\\s+)(' + edgesPattern + '|' + quantPattern + '))?', 'gi' ),
+		perspectiveOriginRegExp = new RegExp( '(perspective-origin\\s*:\\s*)([^;{}]+)', 'gi' ),
 		sizeRegExp = new RegExp( '(max-|min-|[^-a-z])(height|width)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
 		writingModeRegExp = new RegExp( '(writing-mode\\s*:\\s*)(tb|bt|rl|lr|horizontal|vertical)-(tb|bt|rl|lr)', 'gi' ),
 		resizeRegExp = new RegExp( '(resize\\s*:\\s*)(horizontal|vertical)', 'gi' ),
@@ -200,12 +209,12 @@ function CSSJanus() {
 	}
 
 	/**
-	 * Invert the value of a background position property.
+	 * Invert the value of a property with a value of the CSS datatype "position".
 	 *
 	 * @private
 	 * @param {string} value
 	 */
-	function flipBackgroundPositionValue( value ) {
+	function flipPositionValue( value ) {
 		var idx, len;
 		if ( value.slice( -1 ) === '%' ) {
 			idx = value.indexOf( '.' );
@@ -240,7 +249,7 @@ function CSSJanus() {
 			return value.slice( 1 );
 		}
 
-		return '-' + value;
+		return '-' + ( value[ 0 ] === '+' ? value.slice( 1 ) : value );
 	}
 
 	/**
@@ -318,15 +327,17 @@ function CSSJanus() {
 				target,
 				map,
 				cornersMap,
-				textChanges,
 				dirFlipped,
 				quarterTurned,
 				cornersFlipped,
 				reflected,
+				flipX,
+				flipY,
 				noFlipSingleTokenizer,
 				noFlipClassTokenizer,
 				commentTokenizer,
-				i;
+				i,
+				swapText;
 
 			// Default values
 			sourceDir = sourceDir || 'lr-tb';
@@ -340,7 +351,6 @@ function CSSJanus() {
 			target = orientationArray( targetDir );
 			map = {};
 			cornersMap = {};
-			textChanges = { '': '', undefined: '' };
 			// Determine if direction (ltr/rtl) is flipped.
 			dirFlipped = ( ( source[ 0 ] ^ target[ 0 ] ) % 3 ) !== 0;
 			// Determine if rotated 90deg or 270deg, with or without mirroring.
@@ -359,31 +369,60 @@ function CSSJanus() {
 				map[ target[ i & 1 ] ^ ( i & 2 ) ] = source[ i & 1 ] ^ ( i & 2 );
 				cornersMap[ target[ i & 1 ] ^ ( i & 2 ) ] = ( ( ( source[ i & 1 ] ^ ( i & 2 ) ) + reflected ) & 3 );
 			}
-			for ( i = 0; i < 4; i++ ) {
-				textChanges[ sides[ map[ i ] ] ] = sides[ i ];
-				textChanges[ cursors[ map[ i ] ] ] = cursors[ i ];
-				textChanges[ wmDirs[ map[ i ] ] ] = wmDirs[ i ];
-			}
 
-			if ( quarterTurned ) {
-				textChanges[ 'background-position-y' ] = 'background-position-x';
-				textChanges[ 'background-position-x' ] = 'background-position-y';
-				textChanges.horizontal = 'vertical';
-				textChanges.vertical = 'horizontal';
-				textChanges.text = 'vertical-text';
-				textChanges[ 'vertical-text' ] = 'text';
-				textChanges[ 'row-resize' ] = 'col-resize';
-				textChanges[ 'col-resize' ] = 'row-resize';
-				textChanges.width = 'height';
-				textChanges.height = 'width';
-				textChanges.landscape = 'portrait';
-				textChanges.portrait = 'landscape';
-			}
+			// Whether X/Y properties should be flipped (pre-rotation, if applicable).
+			flipX = ( map[ 3 ] === 1 || map[ 0 ] === 1 );
+			flipY = ( map[ 2 ] === 0 || map[ 1 ] === 0 );
 
-			if ( dirFlipped ) {
-				textChanges.ltr = 'rtl';
-				textChanges.rtl = 'ltr';
-			}
+			swapText = ( function () {
+				var textChanges = {};
+
+				for ( i = 0; i < 4; i++ ) {
+					textChanges[ sides[ map[ i ] ] ] = sides[ i ];
+					textChanges[ cursors[ map[ i ] ] ] = cursors[ i ];
+					textChanges[ wmDirs[ map[ i ] ] ] = wmDirs[ i ];
+				}
+
+				if ( quarterTurned ) {
+					textChanges[ 'background-position-y' ] = 'background-position-x';
+					textChanges[ 'background-position-x' ] = 'background-position-y';
+					textChanges.scaley = 'scalex';
+					textChanges.scalex = 'scaley';
+					textChanges.skewy = 'skewx';
+					textChanges.skewx = 'skewy';
+					textChanges.rotatey = 'rotatex';
+					textChanges.rotatex = 'rotatey';
+					textChanges.translatey = 'translatex';
+					textChanges.translatex = 'translatey';
+					textChanges.horizontal = 'vertical';
+					textChanges.vertical = 'horizontal';
+					textChanges.text = 'vertical-text';
+					textChanges[ 'vertical-text' ] = 'text';
+					textChanges[ 'row-resize' ] = 'col-resize';
+					textChanges[ 'col-resize' ] = 'row-resize';
+					textChanges.width = 'height';
+					textChanges.height = 'width';
+					textChanges.landscape = 'portrait';
+					textChanges.portrait = 'landscape';
+				}
+
+				if ( dirFlipped ) {
+					textChanges.ltr = 'rtl';
+					textChanges.rtl = 'ltr';
+				}
+
+				/**
+				 * Transform certain property names and values, ex "width" -> "height".
+				 *
+				 * @param {string} text Text to be transformed.
+				 * @return {string}
+				 */
+				return function swapText( text ) {
+					// CSS property names are case insensitive.
+					var lcText = text && text.toLowerCase();
+					return textChanges[ lcText ] || text || '';
+				};
+			} )();
 
 			function fourNotation( match, pre, q1, s1, q2, s2, q3, s3, q4, s4 ) {
 				return pre + processFourNotationArray( map, [].slice.call( arguments, 2, 9 ), quarterTurned ) + s4;
@@ -394,6 +433,45 @@ function CSSJanus() {
 					processFourNotationArray( map, [].slice.call( arguments,  2,  9 ), quarterTurned ) + ( arguments[ 9 ] || '' ) +
 					processFourNotationArray( map, [].slice.call( arguments, 10, 17 ), quarterTurned ) + ( arguments[ 17 ] || '' ) +
 					processFourNotationArray( map, [].slice.call( arguments, 18, 25 ), quarterTurned );
+			}
+
+			function positionFormat( val ) {
+				return val.replace( positionValuesRegExp, function ( match, pre, xPos, xEdge, space1, yPos, yEdge, slash, sizeX, sizeSpace, sizeY ) {
+					// Edge offsets are not supported in IE8, so don't switch to it unless it was already being used.
+					var position;
+					if ( !xEdge || !yEdge ) {
+						// There are quantities that are not edge-offsets.
+						if ( !yPos ) {
+							// Only one value given.
+							if ( quarterTurned && !xEdge ) {
+								// Only the horizontal value was provided, and we're converting it to vertical.
+								// Default new horizontal to "center".
+								yPos = 'center';
+								space1 = ' ';
+							} else {
+								yPos = space1 = '';
+							}
+						} else {
+							if ( !yEdge && ( map[ 2 ] === 0 || map[ 1 ] === 0 ) ) {
+								yPos = flipPositionValue( yPos );
+							}
+						}
+						if ( !xEdge && ( map[ 3 ] === 1 || map[ 0 ] === 1 ) ) {
+							xPos = flipPositionValue( xPos );
+						}
+					}
+
+					position = quarterTurned ?
+						yPos + space1 + xPos :
+						xPos + space1 + yPos;
+
+					return pre + position +
+						( sizeY ?
+							slash + ( quarterTurned ?
+								sizeY + sizeSpace + sizeX :
+								sizeX + sizeSpace + sizeY ) :
+							'' );
+				} );
 			}
 
 			// Tokenize
@@ -418,36 +496,36 @@ function CSSJanus() {
 					//   tb-inline, bt-inline, lr-inline, rl-inline, horizontal-inline, vertical-inline,
 
 					return pre + dir.split( '-' ).map( function ( val ) {
-						return textChanges[ val ] || val;
+						return swapText( val );
 					} ).join( '-' );
 				} );
 			}
 			if ( transformEdgeInUrl ) {
 				// Replace 'left', 'top', 'right', and 'bottom' with the appropriate side in background URLs
 				css = css.replace( edgeInUrlRegExp, function ( match, pre, edge ) {
-					return pre + textChanges[ edge ];
+					return pre + swapText( edge );
 				} );
 			}
 
 			// Transform rules
 			css = css
 				// Flip rules like left: , padding-right: , etc.
-				.replace( sidesRegExp, function ( match, prefix, norotate, suppressChange, side ) {
-					return norotate ?
-						prefix + norotate +
+				.replace( sidesRegExp, function ( match, prefix, dontRotate, suppressChange, side ) {
+					return dontRotate ?
+						prefix + dontRotate +
 							( !suppressChange && dirFlipped && ( side === 'right' ? 'left' : ( side === 'left' && 'right' ) ) || side )
 						:
-						prefix + textChanges[ side ];
+						prefix + swapText( side );
 				} )
 				// Transform North/East/South/West in rules like cursor: nw-resize;
 				.replace( cursorRegExp, function ( match, pre, ns, ew, nesw, otherCursor ) {
 					return pre + (
 						otherCursor ?
-							( textChanges[ otherCursor ] || otherCursor )
+							swapText( otherCursor )
 							:
 							( nesw ?
 								( cornersFlipped ? nesw === 'sw' ? 'nwse' : 'nesw' : ns + ew + nesw ) :
-								textChanges[ quarterTurned ? ew : ns ] + textChanges[ quarterTurned ? ns : ew ]
+								swapText( quarterTurned ? ew : ns ) + swapText( quarterTurned ? ns : ew )
 							) + '-resize'
 					);
 				} )
@@ -476,62 +554,192 @@ function CSSJanus() {
 						val = val.replace( bgRepeatValueRegExp, backgroundTwoPointSwap );
 					}
 
-					return ( textChanges[ prop ] || prop ) + space + val.replace( bgPositionValuesRegExp, function ( match, pre, xPos, xEdge, space1, yPos, yEdge, slash, sizeX, sizeSpace, sizeY ) {
-						// Edge offsets are not supported in IE8, so don't switch to it unless it was already being used.
-						var position;
-						if ( !xEdge || !yEdge ) {
-							// There are quantities that are not edge-offsets.
-							if ( !yPos ) {
-								// Only one value given.
-								if ( quarterTurned && !xEdge ) {
-									// Only the horizontal value was provided, and we're converting it to vertical.
-									// Default new horizontal to "center".
-									yPos = 'center';
-									space1 = ' ';
-								} else {
-									yPos = space1 = '';
-								}
-							} else {
-								if ( !yEdge && ( map[ 2 ] === 0 || map[ 1 ] === 0 ) ) {
-									yPos = flipBackgroundPositionValue( yPos );
-								}
-							}
-							if ( !xEdge && ( map[ 3 ] === 1 || map[ 0 ] === 1 ) ) {
-								xPos = flipBackgroundPositionValue( xPos );
-							}
-						}
-
-						position = quarterTurned ?
-							yPos + space1 + xPos :
-							xPos + space1 + yPos;
-
-						return pre + position +
-							( sizeY ?
-								slash + ( quarterTurned ?
-									sizeY + sizeSpace + sizeX :
-									sizeX + sizeSpace + sizeY ) :
-								'' );
-					} );
+					return swapText( prop ) + space + positionFormat( val );
 				} )
 				// Background-position-x and background-position-y
 				.replace( bgXYRegExp, function ( match, prop, space, val, suffix ) {
-					return ( textChanges[ prop ] || prop ) + ( space ? space + val.replace( bgPositionSingleValueRegExp, function ( match, pre, position ) {
-						if ( prop === 'background-position-x' ?
-							( map[ 3 ] === 1 || map[ 0 ] === 1 ) :
-							( map[ 2 ] === 0 || map[ 1 ] === 0 )
-						) {
-							position = flipBackgroundPositionValue( position );
-						}
+					return (
+						// When switching between horizontal and vertical writing, replace
+						// background-position-x with -y and vice versa.
+						swapText( prop ) +
+						// If there's a value, transform it. (No value if in transition statement.)
+						( space ? space + val.replace( bgPositionSingleValueRegExp, function ( match, pre, position ) {
+							if ( prop === 'background-position-x' ?
+								flipX :
+								flipY
+							) {
+								position = flipPositionValue( position );
+							}
 
-						return pre + position;
-					} ) + suffix : '' );
+							return pre + position;
+						} ) + suffix : '' )
+					);
 				} )
 
 				// Border images
 				.replace( borderImageRegExp, borderImages )
+				// Transforms
+				.replace( transformRegExp, function ( match, prop, value, suffix ) {
+					return prop + value.replace( transformFunctionRegExp,
+						function ( match, prop, start, value, end ) {
+							var lcProp = prop.toLowerCase(),
+								newProp = swapText( prop ),
+								fallbackFirstArg,
+								isR3d,
+								vals = value.split( /\s*,\s*/g ),
+								n;
+
+							switch ( lcProp ) {
+								case 'rotate3d':
+									isR3d = true;
+									if ( vals.length !== 4 ) {
+										// Wrong number of arguments, leave it alone.
+										return match;
+									}
+									if ( reflected ) {
+										vals[ 2 ] = flipSign( vals[ 2 ] );
+									}
+									/* falls through */
+								case 'translate':
+								case 'translate3d':
+								case 'skew':
+								case 'skewx':
+								case 'skewy':
+									// Flip/swap first two args
+									fallbackFirstArg = '0';
+
+									if ( lcProp.indexOf( 'skew' ) === 0 ) {
+										// skew, skewx, skewy.
+										if ( flipX ^ flipY ) {
+											vals[ 0 ] = flipSign( vals[ 0 ] );
+											if ( lcProp === 'skew' ) {
+												if ( vals[ 1 ] ) {
+													vals[ 1 ] = flipSign( vals[ 1 ] );
+												}
+											}
+										}
+										if ( lcProp !== 'skew' ) {
+											// skewx and skewy have only one argument, no need to
+											// continue on to the swap of vals[ 0 ] and vals[ 1 ].
+											break;
+										}
+									} else {
+										// rotate3d, translate, and translate3d.
+										// Order is backward for rotate3d.
+										// [ 0 ] is _around_ the X axis, meaning only relevant when
+										// the Y axis changes, [ 1 ] is around Y, thus only flipped
+										// when flipX === true. Also, r3d goes around X and Y in
+										// different directions, so quarterTurned requires another
+										// flip back sometimes.
+										if ( isR3d ? flipY ^ quarterTurned : flipX ) {
+											vals[ 0 ] = flipSign( vals[ 0 ] );
+										}
+										if ( isR3d ? flipX ^ quarterTurned : flipY && vals[ 1 ] ) {
+											vals[ 1 ] = flipSign( vals[ 1 ] );
+										}
+									}
+
+									/* falls through */
+								case 'scale':
+								case 'scale3d':
+									// Just swap first two args
+
+									// scale( 1 ) is null, as opposed to translate( 0 )
+									fallbackFirstArg = fallbackFirstArg || '1';
+
+									if ( quarterTurned ) {
+										vals[ 0 ] = [ vals[ 1 ], vals[ 1 ] = vals[ 0 ] ][ 0 ] || fallbackFirstArg;
+									}
+									break;
+								case 'rotate':
+								case 'rotatez':
+									// Just flip, if reflected === true
+									if ( reflected === true ) {
+										vals[ 0 ] = flipSign( vals[ 0 ] );
+									}
+									break;
+								case 'translatex':
+								case 'translatey':
+									if ( prop.slice( -1 ) === 'x' ? flipX : flipY ) {
+										vals[ 0 ] = flipSign( vals[ 0 ] );
+									}
+									break;
+								case 'rotatex':
+								case 'rotatey':
+									if ( ( ( prop.slice( -1 ) === 'x' ) ? flipY : flipX ) ^ quarterTurned ) {
+										vals[ 0 ] = flipSign( vals[ 0 ] );
+									}
+									break;
+								case 'skewx':
+								case 'skewy':
+									if ( flipX ^ flipY ) {
+										vals[ 0 ] = flipSign( vals[ 0 ] );
+									}
+									break;
+								case 'matrix':
+									n = vals.slice( 0 );
+									// Flip translation.
+									if ( flipX ) {
+										n[ 4 ] = flipSign( n[ 4 ] );
+									}
+									if ( flipY ) {
+										n[ 5 ] = flipSign( n[ 5 ] );
+									}
+									if ( quarterTurned ) {
+										// Swap scale dimensions
+										n[ 0 ] = vals[ 3 ];
+										n[ 3 ] = vals[ 0 ];
+										// Swap translate directions.
+										n[ 1 ] = [ n[ 2 ], n[ 2 ] = n[ 1 ] ][ 0 ];
+										n[ 4 ] = [ n[ 5 ], n[ 5 ] = n[ 4 ] ][ 0 ];
+									}
+									// Flip skew values.
+									if ( flipX ^ flipY ) {
+										n[ 1 ] = flipSign( n[ 1 ] );
+										n[ 2 ] = flipSign( n[ 2 ] );
+									}
+
+									vals = n;
+									break;
+							}
+
+							return newProp + start + vals.join( ', ' ) + end;
+						}
+					) + suffix;
+				} )
+				.replace( transformOriginRegExp, function ( match, prop, reverseOrder, reverseOrderQT, v1, space, v2 ) {
+					var temp,
+						isReverseOrder = quarterTurned ? reverseOrderQT : reverseOrder,
+						x = isReverseOrder ? v2 : v1,
+						y = isReverseOrder ? v1 : v2;
+
+					if ( flipX ) {
+						x = flipPositionValue( x );
+					}
+					if ( flipY && y ) {
+						y = flipPositionValue( y );
+					}
+					if ( quarterTurned ) {
+						temp = y;
+						y = x;
+						x = temp;
+					}
+
+					return prop + ( isReverseOrder ?
+						( y ? y + space : 'center ' ) + x :
+						( x ? x + ( y ? space + y : '' ) : 'center ' + y )
+					);
+				} )
+				.replace( perspectiveOriginRegExp, function ( match, prop, val ) {
+					return prop + positionFormat( val );
+				} )
 				// Writing mode
 				.replace( writingModeRegExp, function ( match, prop, inline, block ) {
-					return prop + ( textChanges[ inline ] || inline ) + '-' + ( textChanges[ block ] || block );
+					return prop +
+						// Inline direction
+						swapText( inline ) + '-' +
+						// Block direction
+						swapText( block );
 				} );
 
 			if ( dirFlipped ) {
@@ -544,13 +752,13 @@ function CSSJanus() {
 			if ( quarterTurned ) {
 				css = css
 					.replace( resizeRegExp, function ( match, prop, value ) {
-						return prop + ( textChanges[ value ] || value );
+						return prop + swapText( value );
 					} )
 					.replace( xyPropRegExp, function ( match, prop, value ) {
 						return prop + '-' + ( value === 'x' ? 'y' : 'x' );
 					} )
 					.replace( sizeRegExp, function ( match, prefix, prop ) {
-						return prefix + textChanges[ prop ];
+						return prefix + swapText( prop );
 					} )
 					.replace( bgRepeatRegExp, function ( match, prop, value, suffix ) {
 						return prop + value.replace( bgRepeatValueRegExp, backgroundTwoPointSwap ) + suffix;
@@ -560,8 +768,8 @@ function CSSJanus() {
 					} )
 					.replace( mediaQueryRegExp, function ( match, prop, value, suffix ) {
 						return prop + value.replace( mediaFeatureRegExp, function ( match, prop, space, value, slash, vPixels ) {
-							return ( textChanges[ prop ] || prop ) + space +
-								( slash ? vPixels + slash + value : ( textChanges[ value ] || value ) );
+							return swapText( prop ) + space +
+								( slash ? vPixels + slash + value : swapText( value ) );
 						} ) + suffix;
 					} )
 					.replace( borderImageRepeatRegExp, '$1$4$3$2' )

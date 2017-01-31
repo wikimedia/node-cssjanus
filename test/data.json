@@ -95,6 +95,12 @@
 				".foo { padding: inherit 1px auto 3px; }"
 			],
 			[
+				".foo { margin: -1.25e2em +1ex 5E-1px .15e+1px; }",
+				".foo { margin: -1.25e2em .15e+1px 5E-1px +1ex; }",
+				".foo { margin: .15e+1px 5E-1px +1ex -1.25e2em; }",
+				".foo { margin: .15e+1px -1.25e2em +1ex 5E-1px; }"
+			],
+			[
 				".foo { padding: 1px 2px 3px 4px !important; }",
 				".foo { padding: 1px 4px 3px 2px !important; }",
 				".foo { padding: 4px 3px 2px 1px !important; }",
@@ -1021,6 +1027,152 @@
 				"scroll-snap-points-x: repeat(400px);",
 				null,
 				"scroll-snap-points-y: repeat(400px);"
+			]
+		]
+	},
+	"transforms": {
+		"cases": [
+			[
+				"div { transform: rotate( 40deg ); }",
+				"div { transform: rotate( -40deg ); }",
+				"div { transform: rotate( -40deg ); }",
+				"div { transform: rotate( 40deg ); }"
+			],
+			[
+				"div { transform: scale( 1.2, 2 ); }",
+				null,
+				"div { transform: scale( 2, 1.2 ); }"
+			],
+			[
+				"div { transform: rotatex( 10deg ); }",
+				null,
+				"div { transform: rotatey( -10deg ); }",
+				"div { transform: rotatey( 10deg ); }"
+			],
+			[
+				"div { transform: rotatey( 10deg ); }",
+				"div { transform: rotatey( -10deg ); }",
+				"div { transform: rotatex( -10deg ); }"
+			],
+			[
+				"div { transform: rotatez( 10deg ) translate( 10px, 20px ); }",
+				"div { transform: rotatez( -10deg ) translate( -10px, 20px ); }",
+				"div { transform: rotatez( -10deg ) translate( 20px, 10px ); }",
+				"div { transform: rotatez( 10deg ) translate( -20px, 10px ); }"
+			],
+			[
+				"div { transform: rotate3d( 1, 2, 3, 20deg ) translate3d( 10px, 20px, 0 ); }",
+				"div { transform: rotate3d( 1, -2, -3, 20deg ) translate3d( -10px, 20px, 0 ); }",
+				"div { transform: rotate3d( -2, -1, -3, 20deg ) translate3d( 20px, 10px, 0 ); }",
+				"div { transform: rotate3d( -2, 1, 3, 20deg ) translate3d( -20px, 10px, 0 ); }"
+			],
+			[
+				"div { transform: translatex( 10em ); }",
+				"div { transform: translatex( -10em ); }",
+				"div { transform: translatey( 10em ); }"
+			],
+			[
+				"div { transform: translatey( 10px ); }",
+				null,
+				"div { transform: translatex( 10px ); }",
+				"div { transform: translatex( -10px ); }"
+			],
+			[
+				"div { transform: skewx( 5deg ) scale3d( 1.2, 0.8, 1 ); }",
+				"div { transform: skewx( -5deg ) scale3d( 1.2, 0.8, 1 ); }",
+				"div { transform: skewy( 5deg ) scale3d( 0.8, 1.2, 1 ); }",
+				"div { transform: skewy( -5deg ) scale3d( 0.8, 1.2, 1 ); }"
+			],
+			[
+				"div { transform: scalex( 2 ); }",
+				null,
+				"div { transform: scaley( 2 ); }"
+			],
+			[
+				"div { transform: skewy( 5deg ); }",
+				"div { transform: skewy( -5deg ); }",
+				"div { transform: skewx( 5deg ); }",
+				"div { transform: skewx( -5deg ); }"
+			],
+			[
+				"div { transform: skew( 5deg, 10deg ); }",
+				"div { transform: skew( -5deg, -10deg ); }",
+				"div { transform: skew( 10deg, 5deg ); }",
+				"div { transform: skew( -10deg, -5deg ); }"
+			],
+			[
+				"div { transform: matrix( 1.2, 0.1, 0.3, 0.8, 50, 20 ); }",
+				"div { transform: matrix( 1.2, -0.1, -0.3, 0.8, -50, 20 ); }",
+				"div { transform: matrix( 0.8, 0.3, 0.1, 1.2, 20, 50 ); }",
+				"div { transform: matrix( 0.8, -0.3, -0.1, 1.2, -20, 50 ); }"
+			],
+			[
+				"div { transform-origin: 10% 20% 0; }",
+				"div { transform-origin: 90% 20% 0; }",
+				"div { transform-origin: 20% 10% 0; }",
+				"div { transform-origin: 80% 10% 0; }"
+			],
+			[
+				"div { transform-origin: left 20% 0; }",
+				"div { transform-origin: right 20% 0; }",
+				"div { transform-origin: 20% top 0; }",
+				"div { transform-origin: 80% top 0; }"
+			],
+			[
+				"div { transform-origin: 10% top 0; }",
+				"div { transform-origin: 90% top 0; }",
+				"div { transform-origin: left 10% 0; }",
+				"div { transform-origin: right 10% 0; }"
+			],
+			[
+				"div { transform-origin: 20% left 0; }",
+				"div { transform-origin: 20% right 0; }",
+				"div { transform-origin: top 20% 0; }",
+				"div { transform-origin: top 80% 0; }"
+			],
+			[
+				"div { transform-origin: top 20%; }",
+				"div { transform-origin: top 80%; }",
+				"div { transform-origin: 20% left; }",
+				"div { transform-origin: 20% right; }"
+			],
+			[
+				"div { transform-origin: 20%; }",
+				"div { transform-origin: 80%; }",
+				"div { transform-origin: center 20%; }"
+			],
+			[
+				"div { transform-origin: left top; }",
+				"div { transform-origin: right top; }",
+				"div { transform-origin: top left; }",
+				"div { transform-origin: top right; }"
+			],
+			[
+				"div { transform-origin: left; }",
+				"div { transform-origin: right; }",
+				"div { transform-origin: top; }"
+			]
+		]
+	},
+	"perspective-origin": {
+		"cases": [
+			[
+				"div { perspective-origin: left top; }",
+				"div { perspective-origin: right top; }",
+				"div { perspective-origin: left top; }",
+				"div { perspective-origin: right top; }"
+			],
+			[
+				"div { perspective-origin: left 10%; }",
+				"div { perspective-origin: right 10%; }",
+				"div { perspective-origin: 10% top; }",
+				"div { perspective-origin: 90% top; }"
+			],
+			[
+				"div { perspective-origin: 10% 20%; }",
+				"div { perspective-origin: 90% 20%; }",
+				"div { perspective-origin: 20% 10%; }",
+				"div { perspective-origin: 80% 10%; }"
 			]
 		]
 	},
