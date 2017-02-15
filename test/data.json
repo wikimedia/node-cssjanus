@@ -25,6 +25,11 @@
 				"/** Two line comment\n * left\n \\*/\n#test {left: 10px}",
 				"/** Two line comment\n * left\n \\*/\n#test {right: 10px}",
 				"/** Two line comment\n * left\n \\*/\n#test {top: 10px}"
+			],
+			[
+				"#test/*Comments*/{/*inside*/padding/*the*/:/*CSS*/1px/*rules*/2px/*.*/}",
+				null,
+				"#test/*Comments*/{/*inside*/padding/*the*/:/*CSS*/2px/*rules*/1px/*.*/}"
 			]
 		]
 	},
@@ -986,6 +991,116 @@
 			]
 		]
 	},
+	"flip calc values": {
+		"cases": [
+			[
+				".foo { padding: 1px 2% 3em calc( 4px + 4% ); }",
+				".foo { padding: 1px calc( 4px + 4% ) 3em 2%; }",
+				".foo { padding: calc( 4px + 4% ) 3em 2% 1px; }",
+				".foo { padding: calc( 4px + 4% ) 1px 2% 3em; }"
+			],
+			[
+				".foo { margin: 1px calc( 4 * ( 4px + 4% ) ); }",
+				null,
+				".foo { margin: calc( 4 * ( 4px + 4% ) ) 1px; }"
+			],
+			[
+				".foo { padding: 1px calc( 2px * 2 ) 3%; }",
+				null,
+				".foo { padding: calc( 2px * 2 ) 3% calc( 2px * 2 ) 1px; }",
+				".foo { padding: calc( 2px * 2 ) 1px calc( 2px * 2 ) 3%; }"
+			],
+			[
+				".foo { transform: translatex( calc( 5px * 2 + 3% ) ); }",
+				".foo { transform: translatex( calc( -5px * 2 + -3% ) ); }",
+				".foo { transform: translatey( calc( 5px * 2 + 3% ) ); }"
+			],
+			[
+				".foo { transform: translatex( -moz-calc( 2 * 5px ) ); }",
+				".foo { transform: translatex( -moz-calc( 2 * -5px ) ); }",
+				".foo { transform: translatey( -moz-calc( 2 * 5px ) ); }"
+			],
+			[
+				".foo { margin: -webkit-calc( 1px ) -webkit-calc( 2px ); }",
+				null,
+				".foo { margin: -webkit-calc( 2px ) -webkit-calc( 1px ); }"
+			],
+			[
+				"a { padding: calc( 1px /* ) */ + 2px ) 3px; }",
+				null,
+				"a { padding: 3px calc( 1px /* ) */ + 2px ); }"
+			]
+		]
+	},
+	"gradients": {
+		"cases": [
+			[
+				"div { background-image: linear-gradient( 10deg, red, blue ); }",
+				"div { background-image: linear-gradient( 350deg, red, blue ); }",
+				"div { background-image: linear-gradient( 260deg, red, blue ); }",
+				"div { background-image: linear-gradient( 100deg, red, blue ); }"
+			],
+			[
+				"div { background-image: linear-gradient( 10grad, rgb( 255, 0, 0 ), rgb( 0, 0, 255 ) ); }",
+				"div { background-image: linear-gradient( 390grad, rgb( 255, 0, 0 ), rgb( 0, 0, 255 ) ); }",
+				"div { background-image: linear-gradient( 290grad, rgb( 255, 0, 0 ), rgb( 0, 0, 255 ) ); }",
+				"div { background-image: linear-gradient( 110grad, rgb( 255, 0, 0 ), rgb( 0, 0, 255 ) ); }"
+			],
+			[
+				"div { background-image: repeating-linear-gradient( 0.0625turn, #F00, #F30 10%, #00F 20% ); }",
+				"div { background-image: repeating-linear-gradient( 0.9375turn, #F00, #F30 10%, #00F 20% ); }",
+				"div { background-image: repeating-linear-gradient( 0.6875turn, #F00, #F30 10%, #00F 20% ); }",
+				"div { background-image: repeating-linear-gradient( 0.3125turn, #F00, #F30 10%, #00F 20% ); }"
+			],
+			[
+				"div { background-image: linear-gradient( 0.1turn, #F00, #00F ); }",
+				"div { background-image: linear-gradient( 0.9turn, #F00, #00F ); }",
+				"div { background-image: linear-gradient( 0.65turn, #F00, #00F ); }",
+				"div { background-image: linear-gradient( 0.35turn, #F00, #00F ); }"
+			],
+			[
+				".foo { background-image: linear-gradient(#326cc1, #234e8c); }",
+				null,
+				".foo { background-image: linear-gradient(90deg, #326cc1, #234e8c); }",
+				".foo { background-image: linear-gradient(270deg, #326cc1, #234e8c); }"
+			],
+			[
+				".foo { background-image: linear-gradient( 0, rgba( 0, 0, 255, 0.2 ) 10%, #FF0000 ); }",
+				null,
+				".foo { background-image: linear-gradient( 270deg, rgba( 0, 0, 255, 0.2 ) 10%, #FF0000 ); }",
+				".foo { background-image: linear-gradient( 90deg, rgba( 0, 0, 255, 0.2 ) 10%, #FF0000 ); }"
+			],
+			[
+				"div { background: radial-gradient( circle 250px at left top, #00F, #F00 ); }",
+				"div { background: radial-gradient( circle 250px at right top, #00F, #F00 ); }",
+				null,
+				"div { background: radial-gradient( circle 250px at right top, #00F, #F00 ); }"
+			],
+			[
+				"div { background: radial-gradient( ellipse 10em 200px at 10% 20%, #00F, #08F 10%, #F00 ); }",
+				"div { background: radial-gradient( ellipse 10em 200px at 90% 20%, #00F, #08F 10%, #F00 ); }",
+				"div { background: radial-gradient( ellipse 200px 10em at 20% 10%, #00F, #08F 10%, #F00 ); }",
+				"div { background: radial-gradient( ellipse 200px 10em at 80% 10%, #00F, #08F 10%, #F00 ); }"
+			],
+			[
+				"div { background: radial-gradient( farthest-corner at 10% 20%, #00F, #F00 ); }",
+				"div { background: radial-gradient( farthest-corner at 90% 20%, #00F, #F00 ); }",
+				"div { background: radial-gradient( farthest-corner at 20% 10%, #00F, #F00 ); }",
+				"div { background: radial-gradient( farthest-corner at 80% 10%, #00F, #F00 ); }"
+			],
+			[
+				"div { background: radial-gradient( 10px 20px ellipse at top, #00F, #F00 ); }",
+				null,
+				"div { background: radial-gradient( 20px 10px ellipse at left, #00F, #F00 ); }",
+				"div { background: radial-gradient( 20px 10px ellipse at right, #00F, #F00 ); }"
+			],
+			[
+				"div { background: repeating-radial-gradient( 20% 40% ellipse, #00F, #F00 ); }",
+				null,
+				"div { background: repeating-radial-gradient( 40% 20% ellipse, #00F, #F00 ); }"
+			]
+		]
+	},
 	"rotate simple vertical/horizontal properties": {
 		"cases": [
 			[
@@ -1370,6 +1485,12 @@
 				".a-foo.png { color: red; }"
 			],
 			[
+				".height { color: red; }"
+			],
+			[
+				".foo-left /* comment */ { color: red; }"
+			],
+			[
 				"[class*=\"span\"].pull-right,.row-fluid [class*=\"span\"].pull-right { color: red; }"
 			]
 		]
@@ -1492,11 +1613,8 @@
 			]
 		]
 	},
-	"do not flip gradient notation": {
+	"do not flip legacy gradient notation": {
 		"cases": [
-			[
-				".foo { background-image: -moz-linear-gradient(#326cc1, #234e8c); }"
-			],
 			[
 				".foo { background-image: -webkit-gradient(linear, 100% 0%, 0% 0%, from(#666666), to(#ffffff)); }"
 			]

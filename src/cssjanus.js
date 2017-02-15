@@ -105,12 +105,20 @@ function CSSJanus() {
 		noFlipSingleToken = '`NOFLIP_SINGLE`',
 		noFlipClassToken = '`NOFLIP_CLASS`',
 		commentToken = '`COMMENT`',
+		calcToken = '`CALC$1`',
+		calcPattern = '-?`CALC\\d+`',
 		// Patterns
 		nonAsciiPattern = '[^\\u0020-\\u007e]',
 		unicodePattern = '(?:(?:\\[0-9a-f]{1,6})(?:\\r\\n|\\s)?)',
 		numPattern = '(?:[0-9]*\\.[0-9]+|[0-9]+)(?:[eE][-+]?[0-9+])?',
 		unitPattern = '(?:em|ex|px|cm|mm|in|pt|pc|deg|rad|grad|ms|s|hz|khz|%)',
-		directionPattern = 'direction\\s*:\\s*',
+		// Whitespace
+		_ = '(?:\\s|' + commentToken + ')*',
+		ws = '(?:\\s|' + commentToken + ')+',
+		sws = '(' + ws + ')',
+		colon = _ + ':' + _,
+		slash = _ + '/' + _,
+		directionPattern = 'direction' + colon,
 		urlSpecialCharsPattern = '[!#$%&*-~]',
 		validAfterUriCharsPattern = '[\'"]?\\s*',
 		nonLetterPattern = '(^|[^a-zA-Z])',
@@ -121,78 +129,102 @@ function CSSJanus() {
 		nmstartPattern = '(?:[_a-z]|' + nonAsciiPattern + '|' + escapePattern + ')',
 		nmcharPattern = '(?:[_a-z0-9-]|' + nonAsciiPattern + '|' + escapePattern + ')',
 		identPattern = '-?' + nmstartPattern + nmcharPattern + '*',
-		quantPattern = '[-+]?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?',
-		posQuantPattern = '\\+?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?',
+		quantPattern = '[-+]?(?:' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|' + calcPattern + ')',
+		posQuantPattern = '(?:\\+?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|' + calcPattern + ')',
 		signedQuantPattern = '((?:' + quantPattern + ')|(?:inherit|auto))',
-		fourNotationQuantPropsPattern = '((?:margin|padding|border-width|border-image-width|border-image-outset)\\s*:\\s*)',
-		fourNotationColorPropsPattern = '((?:border-color|border-style)\\s*:\\s*)',
-		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%-]+\\))',
+		fourNotationQuantPropsPattern = '((?:margin|padding|border-width|border-image-width|border-image-outset)' + colon + ')',
+		fourNotationColorPropsPattern = '((?:border-color|border-style)' + colon + ')',
+		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%+-]+\\))',
 		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*',
 		sidesPattern = 'top|right|bottom|left',
 		edgesPattern = '(?:' + sidesPattern + '|center)',
 		lookAheadNotLetterPattern = '(?![a-zA-Z])',
-		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'|"[^"]*")*?{)',
+		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'|"[^"]*"|' + commentToken + ')*?{)',
 		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
-		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
+		suffixPattern = '(' + _ + '(?:!important' + _ + ')?[;}])',
+		anglePattern = '(?:([-+]?' + numPattern + ')((?:deg|g?rad|turn)?))',
+		colorStopsPattern = colorPattern + '(?:' + ws + quantPattern + ')?' +
+			'(?:' + _ + ',' + _ + colorPattern + '(?:' + ws + quantPattern + ')?)+',
 		// Regular expressions
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
 		noFlipSingleRegExp = new RegExp( '(' + noFlipPattern + lookAheadNotOpenBracePattern + '[^;}]+;?)', 'gi' ),
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
 		directionRegExp = new RegExp( '(' + directionPattern + ')(ltr|rtl)', 'gi' ),
 		sidesRegExp = new RegExp( nonLetterPattern +
-			'((?:float|clear|text-align|vertical-align)\\s*:\\s*|(vertical-align\\s*:\\s*(?:text-)?|text-orientation\\s*:\\s*sideways-))?(' + sidesPattern + ')' +
+			'((?:float|clear|text-align|vertical-align)' + colon + '|(vertical-align' + colon + '(?:text-)?|text-orientation' + colon + 'sideways-))?(' + sidesPattern + ')' +
 			lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
 		edgeInUrlRegExp = new RegExp( nonLetterPattern + '(' + sidesPattern + ')' + lookAheadNotLetterPattern + lookAheadForClosingParenPattern, 'gi' ),
 		dirInUrlRegExp = new RegExp( nonLetterPattern + '(ltr|rtl|(?:tb|bt|vertical)-(?:lr|rl|inline)|(?:lr|rl|horizontal)-(?:tb|bt|inline))' + lookAheadNotLetterPattern + lookAheadForClosingParenPattern, 'gi' ),
-		cursorRegExp = new RegExp( '(cursor\\s*:\\s*)(?:([ns])?([ew])?(s[ew])?-resize|(row-resize|col-resize|text|vertical-text))', 'gi' ),
-		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
-		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(?:(\\s+)' + colorPattern + '(?:(\\s+)' + colorPattern + ')?)?' + suffixPattern, 'gi' ),
+		cursorRegExp = new RegExp( '(cursor' + colon + ')(?:([ns])?([ew])?(s[ew])?-resize|(row-resize|col-resize|text|vertical-text))', 'gi' ),
+		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + sws + signedQuantPattern + '(?:' + sws + signedQuantPattern + '(?:' + sws + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
+		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + sws + colorPattern + '(?:' + sws + colorPattern + '(?:' + sws + colorPattern + ')?)?' + suffixPattern, 'gi' ),
+		quantPlainUnitRegex = new RegExp( '[-+]?' + numPattern + unitPattern, 'gi' ),
 		// Background-positions.
-		bgRegExp = new RegExp( '(background(?:-position)?)(\\s*:\\s*)([^;{}]+)', 'gi' ),
-		bgXYRegExp = new RegExp( '(background-position-[xy])(?:(\\s*:\\s*)([^;{}]+)' + suffixPattern + ')?', 'gi' ),
+		bgRegExp = new RegExp( '(background(?:-position)?)(' + colon + ')([^;{}]+)', 'gi' ),
+		bgXYRegExp = new RegExp( '(background-position-[xy])(?:(' + colon + ')([^;{}]+)' + suffixPattern + ')?', 'gi' ),
 		positionValuesRegExp = new RegExp(
 			'(^|\\s|,)' +
-			'((' + edgesPattern + '(?:\\s+' + quantPattern + '(?=\\s+' + edgesPattern + '))?)|' + quantPattern + ')' +
-			'(?:(\\s+)((' + edgesPattern + '(?:\\s+' + quantPattern + ')?)|' + quantPattern + '))?' +
-			'(?:(\\s*\\/\\s*)(' + posQuantPattern + ')(\\s+)(' + posQuantPattern + '))?' + // background-size
+			'((' + edgesPattern + '(?:' + ws + quantPattern + '(?=' + ws + edgesPattern + '))?)|' + quantPattern + ')' +
+			'(?:' + sws + '((' + edgesPattern + '(?:' + ws + quantPattern + ')?)|' + quantPattern + '))?' +
+			'(?:(' + slash + ')(' + posQuantPattern + ')' + sws + '(' + posQuantPattern + '))?' + // background-size
 			'(?![^()]*\\))' +
 			lookAheadNotClosingParenPattern, 'gi' ),
 		bgPositionSingleValueRegExp = new RegExp(
 			'(^|\\s|,)' +
 			'([-+]?' + numPattern + '%)' +
 			lookAheadNotClosingParenPattern, 'gi' ),
-		bgRepeatRegExp = new RegExp( '(background-repeat\\s*:\\s*)([A-z-, ]+)' + suffixPattern ),
-		bgRepeatValueRegExp = new RegExp( '(?:repeat-[xy]|((?:no-)?repeat|space|round)(\\s+)((?:no-)?repeat|space|round))' + lookAheadNotClosingParenPattern, 'gi' ),
-		bgSizeRegExp = new RegExp( '(background-size\\s*:\\s*)([^;{}]+)' ),
-		bgSizeValueRegExp = new RegExp( '(auto|' + posQuantPattern + ')(\\s+)(auto|' + posQuantPattern + ')', 'gi' ),
-		borderImageRegExp = new RegExp( '(border-image(?:-slice)?\\s*:\\s*[^;}]*?)' +
-			signedQuantPattern + '(?:(\\s+(?:fill\\s+)?)' + signedQuantPattern + '(?:(\\s+(?:fill\\s+)?)' + signedQuantPattern + '(?:(\\s+(?:fill\\s+)?)' + signedQuantPattern + ')?)?)?' +
-			'(?:((?:\\s+fill)?\\s*/\\s*)(?:' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + ')?)?)?)?' +
-				'(?:(\\s*/\\s*)(?:' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + '(?:(\\s+)' + signedQuantPattern + ')?)?)?)?)?' +
+		bgRepeatRegExp = new RegExp( '(background-repeat' + colon + ')([A-z-, ]+)' + suffixPattern ),
+		bgRepeatValueRegExp = new RegExp( '(?:repeat-[xy]|((?:no-)?repeat|space|round)' + sws + '((?:no-)?repeat|space|round))' + lookAheadNotClosingParenPattern, 'gi' ),
+		bgSizeRegExp = new RegExp( '(background-size' + colon + ')([^;{}]+)' ),
+		twoQuantsRegExp = new RegExp( '(auto|' + posQuantPattern + ')' + sws + '(auto|' + posQuantPattern + ')', 'gi' ),
+		linearGradientRegExp = new RegExp(
+			'((?:repeating-)?linear-gradient\\(' + _ + ')' +
+			'(?:' + anglePattern + '(' + _ + ',' + _ + '))?' +
+			'(' + colorStopsPattern + _ + '\\))',
+			'gi'
+		),
+		radialGradientRegExp = new RegExp(
+			'((?:repeating-)?radial-gradient\\(' + _ + ')' +
+			'((?:' + _ + '(?:(?:closest|farthest)-(?:corner|side)|circle|ellipse|' + posQuantPattern + ')(?=\\s|,))*)' +
+			'(' + ws + 'at(?:' + ws + '(?:' + edgesPattern + '|' + quantPattern + ')){1,4})?' + // positon
+			'(' + _ + ',' + _ + colorStopsPattern + _ + '\\))',
+			'gi'
+		),
+		borderImageRegExp = new RegExp( '(border-image(?:-slice)?' + colon + '[^;}]*?)' +
+			signedQuantPattern + '(?:(' + ws + '(?:fill' + ws + ')?)' + signedQuantPattern + '(?:(' + ws + '(?:fill' + ws + ')?)' + signedQuantPattern + '(?:(' + ws + '(?:fill' + ws + ')?)' + signedQuantPattern + ')?)?)?' +
+			'(?:((?:' + ws + 'fill)?' + slash + ')(?:' + signedQuantPattern + '(?:' + sws + signedQuantPattern + '(?:' + sws + signedQuantPattern + '(?:' + sws + signedQuantPattern + ')?)?)?)?' +
+				'(?:(' + slash + ')(?:' + signedQuantPattern + '(?:' + sws + signedQuantPattern + '(?:' + sws + signedQuantPattern + '(?:' + sws + signedQuantPattern + ')?)?)?)?)?' +
 			')?' +
 			lookAheadNotClosingParenPattern, 'gi' ),
-		borderImageRepeatRegExp = new RegExp( '(border-image(?:-repeat)?\\s*\\:\\s*[^;}]*?)(stretch|repeat|round|space)(\\s+)(stretch|repeat|round|space)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern, 'gi' ),
+		borderImageRepeatRegExp = new RegExp( '(border-image(?:-repeat)?' + colon + '[^;}]*?)(stretch|repeat|round|space)' + sws + '(stretch|repeat|round|space)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern, 'gi' ),
 		// border-radius: <length or percentage>{1,4} [optional: / <length or percentage>{1,4} ]
-		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)' + signedQuantPattern + '(?:(?:(\\s+)' + signedQuantPattern + ')(?:(\\s+)' + signedQuantPattern + ')?(?:(\\s+)' + signedQuantPattern + ')?)?' +
-			'(?:(?:(\\s*\\/\\s*)' + signedQuantPattern + ')(?:(\\s+)' + signedQuantPattern + ')?(?:(\\s+)' + signedQuantPattern + ')?(?:(\\s+)' + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
-		borderRadiusCornerRegExp = new RegExp( 'border-(left|right)-(top|bottom)-radius(?:(\\s*:\\s*)(' + posQuantPattern + ')(\\s+)(' + posQuantPattern + '))?' + lookAheadNotOpenBracePattern + lookAheadNotClosingParenPattern, 'gi' ),
-		shadowRegExp = new RegExp( '((?:box|text)-shadow\\s*:\\s*)([^;{}]+)', 'gi' ),
-		shadowValueRegExp = new RegExp( signedQuantPattern + '(\\s+)' + signedQuantPattern + '([^,;}]*)', 'gi' ),
-		transformRegExp = new RegExp( '(transform\\s*:\\s*)([^;{}]+)' + suffixPattern, 'gi' ),
-		transformFunctionRegExp = new RegExp( '((?:rotate|translate|skew|scale|matrix)(?:x|y|z|3d)?)(\\(\\s*)([^\\)]*?)(\\s*\\))', 'gi' ),
-		transformOriginRegExp = new RegExp( '(transform-origin\\s*:\\s*)' +
-			'(?=((?:top|bottom)\\s+' + quantPattern + '|' + quantPattern + '\\s+(?:left|right))?)' +
-			'(?=((?:left|right)\\s+' + quantPattern + '|' + quantPattern + '\\s+(?:top|bottom))?)' +
-			'(' + edgesPattern + '(?=\\s+' + quantPattern + ')|' + quantPattern + ')' +
-			'(?:(\\s+)(' + edgesPattern + '|' + quantPattern + '))?', 'gi' ),
-		perspectiveOriginRegExp = new RegExp( '(perspective-origin\\s*:\\s*)([^;{}]+)', 'gi' ),
+		borderRadiusRegExp = new RegExp( '(border-radius' + colon + ')' + signedQuantPattern + '(?:(?:' + sws + signedQuantPattern + ')(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?)?' +
+			'(?:(?:(' + slash + ')' + signedQuantPattern + ')(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
+		borderRadiusCornerRegExp = new RegExp( 'border-(left|right)-(top|bottom)-radius(?:(' + colon + ')(' + posQuantPattern + ')' + sws + '(' + posQuantPattern + '))?' + lookAheadNotOpenBracePattern + lookAheadNotClosingParenPattern, 'gi' ),
+		shadowRegExp = new RegExp( '((?:box|text)-shadow' + colon + ')([^;{}]+)', 'gi' ),
+		shadowValueRegExp = new RegExp( signedQuantPattern + sws + signedQuantPattern + '([^,;}]*)', 'gi' ),
+		transformRegExp = new RegExp( '(transform' + colon + ')([^;{}]+)' + suffixPattern, 'gi' ),
+		transformFunctionRegExp = new RegExp( '((?:rotate|translate|skew|scale|matrix)(?:x|y|z|3d)?)(\\(' + _ + ')([^\\)]*?)(' + _ + '\\))', 'gi' ),
+		transformOriginRegExp = new RegExp( '(transform-origin' + colon + ')' +
+			'(?=((?:top|bottom)' + ws + quantPattern + '|' + quantPattern + ws + '(?:left|right))?)' +
+			'(?=((?:left|right)' + ws + quantPattern + '|' + quantPattern + ws + '(?:top|bottom))?)' +
+			'(' + edgesPattern + '(?=' + ws + quantPattern + ')|' + quantPattern + ')' +
+			'(?:' + sws + '(' + edgesPattern + '|' + quantPattern + '))?', 'gi' ),
+		perspectiveOriginRegExp = new RegExp( '(perspective-origin' + colon + ')([^;{}]+)', 'gi' ),
 		sizeRegExp = new RegExp( '(max-|min-|[^-a-z])(height|width)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
-		writingModeRegExp = new RegExp( '(writing-mode\\s*:\\s*)(tb|bt|rl|lr|horizontal|vertical)-(tb|bt|rl|lr)', 'gi' ),
-		resizeRegExp = new RegExp( '(resize\\s*:\\s*)(horizontal|vertical)', 'gi' ),
+		writingModeRegExp = new RegExp( '(writing-mode' + colon + ')(tb|bt|rl|lr|horizontal|vertical)-(tb|bt|rl|lr)', 'gi' ),
+		resizeRegExp = new RegExp( '(resize' + colon + ')(horizontal|vertical)', 'gi' ),
 		xyPropRegExp = new RegExp( '(overflow|scroll-snap-points|scroll-snap-type)-([xy])' + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
-		mediaQueryRegExp = new RegExp( '(@media\\s+)([^{]+)(\\{)', 'gi' ),
-		mediaFeatureRegExp = new RegExp( '(width|height|aspect-ratio|orientation)(\\s*:\\s*)([^{/()\\s]+)(?:(\\s*/\\s*)(\\d+))?', 'gi' );
+		mediaQueryRegExp = new RegExp( '(@media' + ws + ')([^{]+)(\\{)', 'gi' ),
+		mediaFeatureRegExp = new RegExp( '(width|height|aspect-ratio|orientation)(' + colon + ')([^{/()\\s]+)(?:(' + slash + ')(\\d+))?', 'gi' ),
+		// Angle units and their values for full circles.
+		angleMaxes = {
+			deg: 360,
+			grad: 400,
+			rad: Math.PI * 2,
+			turn: 1
+		};
 
 	/**
 	 * Generates an array containing numeric versions of the inline-start and block-start of the given direction.
@@ -209,22 +241,33 @@ function CSSJanus() {
 	}
 
 	/**
+	 * Get the number of digits after the decimal point of a number.
+	 *
+	 * @private
+	 * @param {string|number} value
+	 * @return {number}
+	 */
+	function getPrecision( value ) {
+		var valueString = value.toString(),
+			decimalIndex = valueString.indexOf( '.' );
+		return decimalIndex === -1 ? 0 : valueString.length - decimalIndex - 1;
+	}
+
+	/**
 	 * Invert the value of a property with a value of the CSS datatype "position".
 	 *
 	 * @private
 	 * @param {string} value
 	 */
 	function flipPositionValue( value ) {
-		var idx, len;
+		var number, precision;
 		if ( value.slice( -1 ) === '%' ) {
-			idx = value.indexOf( '.' );
-			if ( idx !== -1 ) {
-				// Two off, one for the "%" at the end, one for the dot itself
-				len = value.length - idx - 2;
-				value = 100 - parseFloat( value );
-				value = value.toFixed( len ) + '%';
+			number = value.slice( 0, -1 );
+			precision = getPrecision( number );
+			if ( precision !== 0 ) {
+				value = ( 100 - number ).toFixed( precision ) + '%';
 			} else {
-				value = 100 - parseFloat( value ) + '%';
+				value = 100 - number + '%';
 			}
 		}
 		return value;
@@ -336,6 +379,7 @@ function CSSJanus() {
 				noFlipSingleTokenizer,
 				noFlipClassTokenizer,
 				commentTokenizer,
+				calcTokenizer,
 				i,
 				swapText;
 
@@ -475,13 +519,71 @@ function CSSJanus() {
 			}
 
 			// Tokenize
-			css = commentTokenizer.tokenize(
-				noFlipClassTokenizer.tokenize(
-					noFlipSingleTokenizer.tokenize(
-						// We wrap tokens in ` , not ~ like the original implementation does.
-						// This was done because ` is not a legal character in CSS and can only
-						// occur in URLs, where we escape it to %60 before inserting our tokens.
-						css.replace( '`', '%60' )
+
+			// calc() is more complicated than comments, because they can be
+			// nested, which can't be handled by normal regular expressions.
+			calcTokenizer = ( function ( token ) {
+				var matches = [];
+
+				return {
+					tokenize: function ( css ) {
+						var calcIndex,
+							depth,
+							lastBracket,
+							nextOpen,
+							nextClose,
+							regex = /(?=((?:-moz-|-webkit-)?calc\())/gi,
+							lastCalc;
+
+						outer: for ( ; ( lastCalc = regex.exec( css ) ); ) {
+							calcIndex = lastCalc.index;
+							lastBracket = calcIndex + lastCalc[ 1 ].length;
+							depth = 1;
+							for ( ; depth > 0; ) {
+								nextOpen = css.indexOf( '(', lastBracket );
+								nextClose = css.indexOf( ')', lastBracket );
+								if ( nextOpen !== -1 && nextOpen < nextClose ) {
+									lastBracket = nextOpen + 1;
+									depth++;
+								} else if ( nextClose !== -1 ) {
+									lastBracket = nextClose + 1;
+									depth--;
+								} else {
+									// Unclosed calc(). Abort.
+									continue outer;
+								}
+							}
+							css = css.substring( 0, calcIndex ) +
+								// Tokenize the calc(), recording it's index in the token.
+								// This is necessary because calcs may be moved around.
+								token.replace( /\$1/, matches.push( css.substring( calcIndex, lastBracket ) ) - 1 ) +
+								css.substring( lastBracket );
+						}
+						return css;
+					},
+					detokenize: function ( str ) {
+						var regex = new RegExp( '(-?)' + token.replace( /\$1/, '(\\d+)' ), 'g' );
+						return str.replace( regex, function ( match, negative, index ) {
+							var calc = matches[ index ];
+							if ( negative ) {
+								// Flip all values with units.
+								calc = calc.replace( quantPlainUnitRegex, flipSign );
+							}
+							return calc;
+						} );
+					}
+				};
+			} )( calcToken );
+
+			css = calcTokenizer.tokenize(
+				commentTokenizer.tokenize(
+					noFlipClassTokenizer.tokenize(
+						noFlipSingleTokenizer.tokenize(
+							// We wrap tokens in ` , not ~ like the original implementation does.
+							// This was done because ` is not a legal character in CSS and can only
+							// occur in URLs, where we escape it to %60 before inserting our tokens.
+							css.replace( '`', '%60' )
+						)
 					)
 				)
 			);
@@ -575,6 +677,41 @@ function CSSJanus() {
 						} ) + suffix : '' )
 					);
 				} )
+				// Background gradients.
+				.replace( linearGradientRegExp, function ( match, pre, angleQuant, angleUnitText, space, post ) {
+					var angleQuantFloat = parseFloat( angleQuant || 180 ),
+						angleUnit = angleUnitText || 'deg',
+						angleText = '',
+						max = angleMaxes[ angleUnit ],
+						addedRotation = map[ 0 ] * max / 4,
+						precision;
+
+					if ( angleQuantFloat === 0 && angleUnitText ) {
+						// Invalid angle.
+						return match;
+					}
+
+					precision = Math.max( getPrecision( angleQuant || '0' ), getPrecision( addedRotation ) );
+					angleQuant = ( max + ( reflected ? 1 : -1 ) * ( addedRotation - angleQuantFloat ) ) % max;
+
+					// If no angle given, and no necessary angle change, leave unchanged.
+					if ( space || angleQuant !== 180 ) {
+						angleText = angleQuant.toFixed( precision ) + ( angleQuant === 0 ? angleUnitText : angleUnit ) + ( space || ', ' );
+					}
+
+					return pre + angleText + post;
+				} )
+				.replace( radialGradientRegExp, function ( match, pre, shape, position, post ) {
+
+					if ( shape.indexOf( 'ellipse' ) !== -1 && quarterTurned ) {
+						// Swap X and Y sizes.
+						shape = shape.replace( twoQuantsRegExp, '$3$2$1' );
+					}
+
+					position = position ? positionFormat( position ) : '';
+
+					return pre + shape + position + post;
+				} )
 
 				// Border images
 				.replace( borderImageRegExp, borderImages )
@@ -660,13 +797,13 @@ function CSSJanus() {
 									break;
 								case 'translatex':
 								case 'translatey':
-									if ( prop.slice( -1 ) === 'x' ? flipX : flipY ) {
+									if ( lcProp.slice( -1 ) === 'x' ? flipX : flipY ) {
 										vals[ 0 ] = flipSign( vals[ 0 ] );
 									}
 									break;
 								case 'rotatex':
 								case 'rotatey':
-									if ( ( ( prop.slice( -1 ) === 'x' ) ? flipY : flipX ) ^ quarterTurned ) {
+									if ( ( ( lcProp.slice( -1 ) === 'x' ) ? flipY : flipX ) ^ quarterTurned ) {
 										vals[ 0 ] = flipSign( vals[ 0 ] );
 									}
 									break;
@@ -764,7 +901,7 @@ function CSSJanus() {
 						return prop + value.replace( bgRepeatValueRegExp, backgroundTwoPointSwap ) + suffix;
 					} )
 					.replace( bgSizeRegExp, function ( match, prop, value ) {
-						return prop + value.replace( bgSizeValueRegExp, backgroundTwoPointSwap );
+						return prop + value.replace( twoQuantsRegExp, backgroundTwoPointSwap );
 					} )
 					.replace( mediaQueryRegExp, function ( match, prop, value, suffix ) {
 						return prop + value.replace( mediaFeatureRegExp, function ( match, prop, space, value, slash, vPixels ) {
@@ -779,7 +916,9 @@ function CSSJanus() {
 			// Detokenize
 			css = noFlipSingleTokenizer.detokenize(
 				noFlipClassTokenizer.detokenize(
-					commentTokenizer.detokenize( css )
+					commentTokenizer.detokenize(
+						calcTokenizer.detokenize( css )
+					)
 				)
 			);
 
