@@ -550,10 +550,10 @@
 			]
 		]
 	},
-	"do not flip URLs when flags are off": {
-		"settings": {
-			"swapLtrRtlInUrl": false,
-			"swapLeftRightInUrl": false
+	"do not flip URLs when url transforms are off": {
+		"options": {
+			"transformDirInUrl": false,
+			"transformEdgeInUrl": false
 		},
 		"cases": [
 			[
@@ -591,10 +591,10 @@
 			]
 		]
 	},
-	"flip URLs when flags are on": {
-		"settings": {
-			"swapLtrRtlInUrl": true,
-			"swapLeftRightInUrl": true
+	"flip URLs when url transforms are on": {
+		"options": {
+			"transformDirInUrl": true,
+			"transformEdgeInUrl": true
 		},
 		"cases": [
 			[
@@ -636,6 +636,30 @@
 				"background: url(/foo/bar-left.png); direction: ltr",
 				"background: url(/foo/bar-right.png); direction: rtl"
 			],
+			[
+				"background: url(/foo/bar-ltr_left.png);right:10px; direction: ltr",
+				"background: url(/foo/bar-rtl_right.png);left:10px; direction: rtl"
+			]
+		]
+	},
+	"do not flip URLs (back-compat boolean argument)": {
+		"args": [
+			false,
+			false
+		],
+		"cases": [
+			[
+				"background: url(/foo/bar-ltr_left.png);right:10px; direction: ltr",
+				"background: url(/foo/bar-ltr_left.png);left:10px; direction: rtl"
+			]
+		]
+	},
+	"flip URLs (back-compat boolean argument)": {
+		"args": [
+			true,
+			true
+		],
+		"cases": [
 			[
 				"background: url(/foo/bar-ltr_left.png);right:10px; direction: ltr",
 				"background: url(/foo/bar-rtl_right.png);left:10px; direction: rtl"

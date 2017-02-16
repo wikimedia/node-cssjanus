@@ -7,12 +7,12 @@ module.exports = function ( grunt ) {
 			testData = require( '../../test/data.json' ),
 			failures = 0,
 			tests = 0,
-			name, test, settings, i, input, noop, output;
+			name, test, args, i, input, noop, output;
 
 		for ( name in testData ) {
 			tests++;
 			test = testData[ name ];
-			settings = test.settings || {};
+			args = test.args || [ test.options || {} ];
 
 			try {
 				for ( i = 0; i < test.cases.length; i++ ) {
@@ -23,8 +23,8 @@ module.exports = function ( grunt ) {
 					assert.equal(
 						cssjanus.transform(
 							input,
-							settings.swapLtrRtlInUrl,
-							settings.swapLeftRightInUrl
+							args[ 0 ],
+							args[ 1 ]
 						),
 						output
 					);
@@ -34,8 +34,8 @@ module.exports = function ( grunt ) {
 						assert.equal(
 							cssjanus.transform(
 								output,
-								settings.swapLtrRtlInUrl,
-								settings.swapLeftRightInUrl
+								args[ 0 ],
+								args[ 1 ]
 							),
 							input
 						);
