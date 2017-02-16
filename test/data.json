@@ -359,6 +359,10 @@
 			[
 				".foo { text-align: left; }",
 				".foo { text-align: right; }"
+			],
+			[
+				".foo { text-align-last: left; }",
+				".foo { text-align-last: right; }"
 			]
 		]
 	},
@@ -479,6 +483,28 @@
 				"@supports ( box-shadow: 1px ) { .foo { padding: 1px 2px; } }", 
 				null,
 				"@supports ( box-shadow: 1px ) { .foo { padding: 2px 1px; } }"
+			]
+		]
+	},
+	"flip drop-shadows": {
+		"cases": [
+			[
+				"div { filter: drop-shadow( 1px 2px red ); }",
+				"div { filter: drop-shadow( -1px 2px red ); }",
+				"div { filter: drop-shadow( 2px 1px red ); }",
+				"div { filter: drop-shadow( -2px 1px red ); }"
+			],
+			[
+				"div { -webkit-filter: drop-shadow( -5px -6px 7em rgb( 0, 0, 255 ) ); }",
+				"div { -webkit-filter: drop-shadow( 5px -6px 7em rgb( 0, 0, 255 ) ); }",
+				"div { -webkit-filter: drop-shadow( -6px -5px 7em rgb( 0, 0, 255 ) ); }",
+				"div { -webkit-filter: drop-shadow( 6px -5px 7em rgb( 0, 0, 255 ) ); }"
+			],
+			[
+				"div { filter: drop-shadow(1px 2em) drop-shadow( rgba( 0, 0, 255, 0.8 ) -5px -6px 7em 8px ); }",
+				"div { filter: drop-shadow(-1px 2em) drop-shadow( rgba( 0, 0, 255, 0.8 ) 5px -6px 7em 8px ); }",
+				"div { filter: drop-shadow(2em 1px) drop-shadow( rgba( 0, 0, 255, 0.8 ) -6px -5px 7em 8px ); }",
+				"div { filter: drop-shadow(-2em 1px) drop-shadow( rgba( 0, 0, 255, 0.8 ) 6px -5px 7em 8px ); }"
 			]
 		]
 	},
@@ -1610,6 +1636,12 @@
 			],
 			[
 				"div { border-width: 3px; }"
+			],
+			[
+				"table { caption-side: top; }"
+			],
+			[
+				"table { caption-side: bottom-outside; }"
 			]
 		]
 	},

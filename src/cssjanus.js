@@ -106,7 +106,7 @@ function CSSJanus() {
 		noFlipClassToken = '`NOFLIP_CLASS`',
 		commentToken = '`COMMENT`',
 		calcToken = '`CALC$1`',
-		calcPattern = '-?`CALC\\d+`',
+		calcPattern = '`CALC\\d+`',
 		// Patterns
 		nonAsciiPattern = '[^\\u0020-\\u007e]',
 		unicodePattern = '(?:(?:\\[0-9a-f]{1,6})(?:\\r\\n|\\s)?)',
@@ -118,6 +118,7 @@ function CSSJanus() {
 		sws = '(' + ws + ')',
 		colon = _ + ':' + _,
 		slash = _ + '/' + _,
+		comma = _ + ',' + _,
 		directionPattern = 'direction' + colon,
 		urlSpecialCharsPattern = '[!#$%&*-~]',
 		validAfterUriCharsPattern = '[\'"]?\\s*',
@@ -129,12 +130,12 @@ function CSSJanus() {
 		nmstartPattern = '(?:[_a-z]|' + nonAsciiPattern + '|' + escapePattern + ')',
 		nmcharPattern = '(?:[_a-z0-9-]|' + nonAsciiPattern + '|' + escapePattern + ')',
 		identPattern = '-?' + nmstartPattern + nmcharPattern + '*',
-		quantPattern = '[-+]?(?:' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|' + calcPattern + ')',
+		quantPattern = '(?:[-+]?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|-?' + calcPattern + ')',
 		posQuantPattern = '(?:\\+?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|' + calcPattern + ')',
 		signedQuantPattern = '((?:' + quantPattern + ')|(?:inherit|auto))',
 		fourNotationQuantPropsPattern = '((?:margin|padding|border-width|border-image-width|border-image-outset)' + colon + ')',
 		fourNotationColorPropsPattern = '((?:border-color|border-style)' + colon + ')',
-		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%+-]+\\))',
+		colorPattern = '((?:rgba?|hsla?)\\([ \\d.,%+-]+\\)|#?' + nmcharPattern + '+)',
 		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*',
 		sidesPattern = 'top|right|bottom|left',
 		edgesPattern = '(?:' + sidesPattern + '|center)',
@@ -145,14 +146,20 @@ function CSSJanus() {
 		suffixPattern = '(' + _ + '(?:!important' + _ + ')?[;}])',
 		anglePattern = '(?:([-+]?' + numPattern + ')((?:deg|g?rad|turn)?))',
 		colorStopsPattern = colorPattern + '(?:' + ws + quantPattern + ')?' +
-			'(?:' + _ + ',' + _ + colorPattern + '(?:' + ws + quantPattern + ')?)+',
+			'(?:' + comma + colorPattern + '(?:' + ws + quantPattern + ')?)+',
 		// Regular expressions
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
 		noFlipSingleRegExp = new RegExp( '(' + noFlipPattern + lookAheadNotOpenBracePattern + '[^;}]+;?)', 'gi' ),
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
 		directionRegExp = new RegExp( '(' + directionPattern + ')(ltr|rtl)', 'gi' ),
 		sidesRegExp = new RegExp( nonLetterPattern +
-			'((?:float|clear|text-align|vertical-align)' + colon + '|(vertical-align' + colon + '(?:text-)?|text-orientation' + colon + 'sideways-))?(' + sidesPattern + ')' +
+			'(' +
+				// These properties accept left/right, but not top/bottom. Flip, don't ever rotate.
+				'(?:float|clear|text-align(?:-last)?|vertical-align)' + colon +
+				// These properties shouldn't be flipped or rotated at all.
+				'|(vertical-align' + colon + '(?:text-)?|text-orientation' + colon + 'sideways-|caption-side' + colon + ')' +
+			')?' +
+			'(' + sidesPattern + ')' +
 			lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
 		edgeInUrlRegExp = new RegExp( nonLetterPattern + '(' + sidesPattern + ')' + lookAheadNotLetterPattern + lookAheadForClosingParenPattern, 'gi' ),
 		dirInUrlRegExp = new RegExp( nonLetterPattern + '(ltr|rtl|(?:tb|bt|vertical)-(?:lr|rl|inline)|(?:lr|rl|horizontal)-(?:tb|bt|inline))' + lookAheadNotLetterPattern + lookAheadForClosingParenPattern, 'gi' ),
@@ -180,7 +187,7 @@ function CSSJanus() {
 		twoQuantsRegExp = new RegExp( '(auto|' + posQuantPattern + ')' + sws + '(auto|' + posQuantPattern + ')', 'gi' ),
 		linearGradientRegExp = new RegExp(
 			'((?:repeating-)?linear-gradient\\(' + _ + ')' +
-			'(?:' + anglePattern + '(' + _ + ',' + _ + '))?' +
+			'(?:' + anglePattern + '(' + comma + '))?' +
 			'(' + colorStopsPattern + _ + '\\))',
 			'gi'
 		),
@@ -188,7 +195,7 @@ function CSSJanus() {
 			'((?:repeating-)?radial-gradient\\(' + _ + ')' +
 			'((?:' + _ + '(?:(?:closest|farthest)-(?:corner|side)|circle|ellipse|' + posQuantPattern + ')(?=\\s|,))*)' +
 			'(' + ws + 'at(?:' + ws + '(?:' + edgesPattern + '|' + quantPattern + ')){1,4})?' + // positon
-			'(' + _ + ',' + _ + colorStopsPattern + _ + '\\))',
+			'(' + comma + colorStopsPattern + _ + '\\))',
 			'gi'
 		),
 		borderImageRegExp = new RegExp( '(border-image(?:-slice)?' + colon + '[^;}]*?)' +
@@ -202,7 +209,13 @@ function CSSJanus() {
 		borderRadiusRegExp = new RegExp( '(border-radius' + colon + ')' + signedQuantPattern + '(?:(?:' + sws + signedQuantPattern + ')(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?)?' +
 			'(?:(?:(' + slash + ')' + signedQuantPattern + ')(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
 		borderRadiusCornerRegExp = new RegExp( 'border-(left|right)-(top|bottom)-radius(?:(' + colon + ')(' + posQuantPattern + ')' + sws + '(' + posQuantPattern + '))?' + lookAheadNotOpenBracePattern + lookAheadNotClosingParenPattern, 'gi' ),
-		shadowRegExp = new RegExp( '((?:box|text)-shadow' + colon + ')([^;{}]+)', 'gi' ),
+		shadowRegExp = new RegExp( '((?:box|text)-shadow' + colon + '|drop-shadow\\(' + _ + ')' +
+			'(' +
+				'(?:inset|' + quantPattern + '|' + colorPattern + ')' +
+				'(?:(?:' + ws + '|' + comma + ')(?:inset|' + quantPattern + '|' + colorPattern + '))*' +
+			')',
+			'gi'
+		),
 		shadowValueRegExp = new RegExp( signedQuantPattern + sws + signedQuantPattern + '([^,;}]*)', 'gi' ),
 		transformRegExp = new RegExp( '(transform' + colon + ')([^;{}]+)' + suffixPattern, 'gi' ),
 		transformFunctionRegExp = new RegExp( '((?:rotate|translate|skew|scale|matrix)(?:x|y|z|3d)?)(\\(' + _ + ')([^\\)]*?)(' + _ + '\\))', 'gi' ),
