@@ -914,6 +914,11 @@
 				"div { background-size: 50% 40%; }"
 			],
 			[
+				"div { background-size: 10% 20%, auto, contain, 30px 40px, 50px; }",
+				null,
+				"div { background-size: 20% 10%, auto, contain, 40px 30px, auto 50px; }"
+			],
+			[
 				"@supports ( background-position: foo ) and ( padding: 1% 2px ) { .bar { padding: 2px; } }"
 			]
 		]

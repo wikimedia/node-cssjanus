@@ -155,7 +155,7 @@ function CSSJanus() {
 		sidesRegExp = new RegExp( nonLetterPattern +
 			'(' +
 				// These properties accept left/right, but not top/bottom. Flip, don't ever rotate.
-				'(?:float|clear|text-align(?:-last)?|vertical-align)' + colon +
+				'(?:float|clear|text-align(?:-last)?)' + colon +
 				// These properties shouldn't be flipped or rotated at all.
 				'|(vertical-align' + colon + '(?:text-)?|text-orientation' + colon + 'sideways-|caption-side' + colon + ')' +
 			')?' +
@@ -184,7 +184,7 @@ function CSSJanus() {
 		bgRepeatRegExp = new RegExp( '(background-repeat' + colon + ')([A-z-, ]+)' + suffixPattern ),
 		bgRepeatValueRegExp = new RegExp( '(?:repeat-[xy]|((?:no-)?repeat|space|round)' + sws + '((?:no-)?repeat|space|round))' + lookAheadNotClosingParenPattern, 'gi' ),
 		bgSizeRegExp = new RegExp( '(background-size' + colon + ')([^;{}]+)' ),
-		twoQuantsRegExp = new RegExp( '(auto|' + posQuantPattern + ')' + sws + '(auto|' + posQuantPattern + ')', 'gi' ),
+		twoQuantsRegExp = new RegExp( '(auto|' + posQuantPattern + ')(?:' + sws + '(auto|' + posQuantPattern + '))?', 'gi' ),
 		linearGradientRegExp = new RegExp(
 			'((?:repeating-)?linear-gradient\\(' + _ + ')' +
 			'(?:' + anglePattern + '(' + comma + '))?' +
@@ -208,7 +208,7 @@ function CSSJanus() {
 		// border-radius: <length or percentage>{1,4} [optional: / <length or percentage>{1,4} ]
 		borderRadiusRegExp = new RegExp( '(border-radius' + colon + ')' + signedQuantPattern + '(?:(?:' + sws + signedQuantPattern + ')(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?)?' +
 			'(?:(?:(' + slash + ')' + signedQuantPattern + ')(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?(?:' + sws + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
-		borderRadiusCornerRegExp = new RegExp( 'border-(left|right)-(top|bottom)-radius(?:(' + colon + ')(' + posQuantPattern + ')' + sws + '(' + posQuantPattern + '))?' + lookAheadNotOpenBracePattern + lookAheadNotClosingParenPattern, 'gi' ),
+		borderRadiusSingleCornerRegExp = new RegExp( 'border-(left|right)-(top|bottom)-radius(?:(' + colon + ')(' + posQuantPattern + ')' + sws + '(' + posQuantPattern + '))?' + lookAheadNotOpenBracePattern + lookAheadNotClosingParenPattern, 'gi' ),
 		shadowRegExp = new RegExp( '((?:box|text)-shadow' + colon + '|drop-shadow\\(' + _ + ')' +
 			'(' +
 				'(?:inset|' + quantPattern + '|' + colorPattern + ')' +
@@ -343,28 +343,39 @@ function CSSJanus() {
 	}
 
 	/**
+	 * Relocate the various values in four-part notation rules, like padding: 1px 2px 3px 4px;
+	 *
 	 * @private
-	 * @param {Object} pointMap
-	 * @param {Array} array
+	 * @param {Object} pointMap Mapping of which entries go where. Either map for sides or cornersMap for corners.
+	 * @param {Array} array Alternating value strings and spaces. (Eg [ '1px', ' ', '2px', ' ', ... ])
 	 * @param {boolean} turned Whether transformation is such that a three-point value would become four-point.
 	 * @return {string}
 	 */
 	function processFourNotationArray( pointMap, array, turned ) {
-		function fourNotationMap( val, index, all ) {
-			var d;
+		return array.map( function fourNotationMap( val, index, all ) {
+			var actualIndex;
 			if ( index & 1 ) {
-				// If turned, add a space to fit the duplicate final value.
-				return val || ( ( index === 5 && turned && all[ 4 ] ) ? ' ' : '' );
+				// Spaces between values.
+				return val ||
+					// If turned so that a fourth value is needed, add a space to fit the duplicate final value.
+					( ( index === 5 && turned && all[ 4 ] ) ? ' ' : '' );
 			} else {
 				if ( !val ) {
 					return ( index === 6 && turned && all[ 4 ] ) ? all[ pointMap[ index / 2 ] * 2 ] : '';
 				} else {
-					d = ( index / 2 );
-					return ( all[ pointMap[ d ] * 2 ] || all[ ( pointMap[ d ] * 2 ) ^ 4 ] || all[ 0 ] );
+					// "Actual" index, skipping spaces.
+					actualIndex = ( index / 2 );
+					return (
+						all[ pointMap[ actualIndex ] * 2 ] ||
+						// There's less than four values, and the one this would normally be
+						// swapped with doesn't exist. Try an earlier equivalent one.
+						all[ ( pointMap[ actualIndex ] * 2 ) ^ 4 ] ||
+						// There's literally only one value in the list. Use that.
+						all[ 0 ]
+					);
 				}
 			}
-		}
-		return array.map( fourNotationMap ).join( '' );
+		} ).join( '' );
 	}
 
 	return {
@@ -423,16 +434,20 @@ function CSSJanus() {
 			commentTokenizer = new Tokenizer( commentRegExp, commentToken );
 
 			for ( i = 0; i < 4; i++ ) {
+				// Which sides are moved where, eg map[ 1 ] = 3 means that the right is the old left.
 				map[ target[ i & 1 ] ^ ( i & 2 ) ] = source[ i & 1 ] ^ ( i & 2 );
+				// Which corners are moved where, eg cornersMap[ 0 ] = 1 means that the top-left is the old top-right.
 				cornersMap[ target[ i & 1 ] ^ ( i & 2 ) ] = ( ( ( source[ i & 1 ] ^ ( i & 2 ) ) + reflected ) & 3 );
 			}
 
-			// Whether X/Y properties should be flipped (pre-rotation, if applicable).
+			// Whether X/Y axes should be flipped (pre-rotation, if applicable).
 			flipX = ( map[ 3 ] === 1 || map[ 0 ] === 1 );
 			flipY = ( map[ 2 ] === 0 || map[ 1 ] === 0 );
 
 			swapText = ( function () {
-				var textChanges = {};
+				var textChanges = {},
+					rotateMap,
+					i;
 
 				for ( i = 0; i < 4; i++ ) {
 					textChanges[ sides[ map[ i ] ] ] = sides[ i ];
@@ -441,26 +456,23 @@ function CSSJanus() {
 				}
 
 				if ( quarterTurned ) {
-					textChanges[ 'background-position-y' ] = 'background-position-x';
-					textChanges[ 'background-position-x' ] = 'background-position-y';
-					textChanges.scaley = 'scalex';
-					textChanges.scalex = 'scaley';
-					textChanges.skewy = 'skewx';
-					textChanges.skewx = 'skewy';
-					textChanges.rotatey = 'rotatex';
-					textChanges.rotatex = 'rotatey';
-					textChanges.translatey = 'translatex';
-					textChanges.translatex = 'translatey';
-					textChanges.horizontal = 'vertical';
-					textChanges.vertical = 'horizontal';
-					textChanges.text = 'vertical-text';
-					textChanges[ 'vertical-text' ] = 'text';
-					textChanges[ 'row-resize' ] = 'col-resize';
-					textChanges[ 'col-resize' ] = 'row-resize';
-					textChanges.width = 'height';
-					textChanges.height = 'width';
-					textChanges.landscape = 'portrait';
-					textChanges.portrait = 'landscape';
+					rotateMap = {
+						horizontal: 'vertical',
+						'background-position-x': 'background-position-y',
+						height: 'width',
+						text: 'vertical-text',
+						'row-resize': 'col-resize',
+						portrait: 'landscape',
+						scalex: 'scaley',
+						skewx: 'skewy',
+						rotatex: 'rotatey',
+						translatex: 'translatey'
+					};
+
+					Object.keys( rotateMap ).forEach( function ( key ) {
+						textChanges[ key ] = rotateMap[ key ];
+						textChanges[ rotateMap[ key ] ] = key;
+					} );
 				}
 
 				if ( dirFlipped ) {
@@ -483,13 +495,6 @@ function CSSJanus() {
 
 			function fourNotation( match, pre, q1, s1, q2, s2, q3, s3, q4, s4 ) {
 				return pre + processFourNotationArray( map, [].slice.call( arguments, 2, 9 ), quarterTurned ) + s4;
-			}
-
-			function borderImages( match, pre ) {
-				return pre +
-					processFourNotationArray( map, [].slice.call( arguments,  2,  9 ), quarterTurned ) + ( arguments[ 9 ] || '' ) +
-					processFourNotationArray( map, [].slice.call( arguments, 10, 17 ), quarterTurned ) + ( arguments[ 17 ] || '' ) +
-					processFourNotationArray( map, [].slice.call( arguments, 18, 25 ), quarterTurned );
 			}
 
 			function positionFormat( val ) {
@@ -727,7 +732,15 @@ function CSSJanus() {
 				} )
 
 				// Border images
-				.replace( borderImageRegExp, borderImages )
+				.replace( borderImageRegExp, function ( match, pre ) {
+					return pre +
+						// border-image-slice
+						processFourNotationArray( map, [].slice.call( arguments,  2,  9 ), quarterTurned ) + ( arguments[ 9 ] || '' ) +
+						// border-image-width
+						processFourNotationArray( map, [].slice.call( arguments, 10, 17 ), quarterTurned ) + ( arguments[ 17 ] || '' ) +
+						// border-image-outset
+						processFourNotationArray( map, [].slice.call( arguments, 18, 25 ), quarterTurned );
+				} )
 				// Transforms
 				.replace( transformRegExp, function ( match, prop, value, suffix ) {
 					return prop + value.replace( transformFunctionRegExp,
@@ -914,7 +927,9 @@ function CSSJanus() {
 						return prop + value.replace( bgRepeatValueRegExp, backgroundTwoPointSwap ) + suffix;
 					} )
 					.replace( bgSizeRegExp, function ( match, prop, value ) {
-						return prop + value.replace( twoQuantsRegExp, backgroundTwoPointSwap );
+						return prop + value.replace( twoQuantsRegExp, function ( match, x, space, y ) {
+							return match === 'auto' ? match : ( y ? y + space : 'auto ' ) + x;
+						} );
 					} )
 					.replace( mediaQueryRegExp, function ( match, prop, value, suffix ) {
 						return prop + value.replace( mediaFeatureRegExp, function ( match, prop, space, value, slash, vPixels ) {
@@ -923,7 +938,7 @@ function CSSJanus() {
 						} ) + suffix;
 					} )
 					.replace( borderImageRepeatRegExp, '$1$4$3$2' )
-					.replace( borderRadiusCornerRegExp, 'border-$2-$1-radius$3$6$5$4' );
+					.replace( borderRadiusSingleCornerRegExp, 'border-$2-$1-radius$3$6$5$4' );
 			}
 
 			// Detokenize
