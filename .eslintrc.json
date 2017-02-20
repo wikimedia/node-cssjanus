@@ -1,0 +1,9 @@
+{
+	"extends": "wikimedia",
+	"env": {
+		"node": true
+	},
+	"rules": {
+		"no-bitwise": 0
+	}
+}

@@ -271,6 +271,7 @@ function CSSJanus() {
 	 *
 	 * @private
 	 * @param {string} value
+	 * @return {string}
 	 */
 	function flipPositionValue( value ) {
 		var number, precision;
@@ -316,6 +317,7 @@ function CSSJanus() {
 	 * @param {string} x
 	 * @param {string} space
 	 * @param {string} y
+	 * @return {string}
 	 */
 	function backgroundTwoPointSwap( match, x, space, y ) {
 		// y will only be absent on background-repeat: repeat-[xy]; or background: [...] repeat-[xy] [...];
@@ -491,7 +493,7 @@ function CSSJanus() {
 					var lcText = text && text.toLowerCase();
 					return textChanges[ lcText ] || text || '';
 				};
-			} )();
+			}() );
 
 			function fourNotation( match, pre, q1, s1, q2, s2, q3, s3, q4, s4 ) {
 				return pre + processFourNotationArray( map, [].slice.call( arguments, 2, 9 ), quarterTurned ) + s4;
@@ -591,7 +593,7 @@ function CSSJanus() {
 						} );
 					}
 				};
-			} )( calcToken );
+			}( calcToken ) );
 
 			css = calcTokenizer.tokenize(
 				commentTokenizer.tokenize(
@@ -633,16 +635,14 @@ function CSSJanus() {
 				.replace( sidesRegExp, function ( match, prefix, dontRotate, suppressChange, side ) {
 					return dontRotate ?
 						prefix + dontRotate +
-							( !suppressChange && dirFlipped && ( side === 'right' ? 'left' : ( side === 'left' && 'right' ) ) || side )
-						:
+							( !suppressChange && dirFlipped && ( side === 'right' ? 'left' : ( side === 'left' && 'right' ) ) || side ) :
 						prefix + swapText( side );
 				} )
 				// Transform North/East/South/West in rules like cursor: nw-resize;
 				.replace( cursorRegExp, function ( match, pre, ns, ew, nesw, otherCursor ) {
 					return pre + (
 						otherCursor ?
-							swapText( otherCursor )
-							:
+							swapText( otherCursor ) :
 							( nesw ?
 								( cornersFlipped ? nesw === 'sw' ? 'nwse' : 'nesw' : ns + ew + nesw ) :
 								swapText( quarterTurned ? ew : ns ) + swapText( quarterTurned ? ns : ew )
@@ -735,7 +735,7 @@ function CSSJanus() {
 				.replace( borderImageRegExp, function ( match, pre ) {
 					return pre +
 						// border-image-slice
-						processFourNotationArray( map, [].slice.call( arguments,  2,  9 ), quarterTurned ) + ( arguments[ 9 ] || '' ) +
+						processFourNotationArray( map, [].slice.call( arguments, 2, 9 ), quarterTurned ) + ( arguments[ 9 ] || '' ) +
 						// border-image-width
 						processFourNotationArray( map, [].slice.call( arguments, 10, 17 ), quarterTurned ) + ( arguments[ 17 ] || '' ) +
 						// border-image-outset
@@ -830,12 +830,6 @@ function CSSJanus() {
 								case 'rotatex':
 								case 'rotatey':
 									if ( ( ( lcProp.slice( -1 ) === 'x' ) ? flipY : flipX ) ^ quarterTurned ) {
-										vals[ 0 ] = flipSign( vals[ 0 ] );
-									}
-									break;
-								case 'skewx':
-								case 'skewy':
-									if ( flipX ^ flipY ) {
 										vals[ 0 ] = flipSign( vals[ 0 ] );
 									}
 									break;
