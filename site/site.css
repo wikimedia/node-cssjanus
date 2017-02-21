@@ -1,0 +1,20 @@
+.demo-footer {
+	padding-top: 40px;
+	padding-bottom: 40px;
+	margin-top: 100px;
+	background: #f9f9f9;
+	color: #777;
+	text-align: center;
+	border-top: 1px solid #e5e5e5
+}
+
+.demo-form-group {
+	display: inline-block;
+	width: 48%;
+}
+
+.demo-fork-me {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
