@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>CSSJanus Demos</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="../site.css">
+<style id="css">
+	body {
+		writing-mode: lr-tb;
+		-o-writing-mode: horizontal-tb;
+		-moz-writing-mode: horizontal-tb;
+		-webkit-writing-mode: horizontal-tb;
+		writing-mode: horizontal-tb;
+		direction: ltr;
+	}
+
+	/* Content direction */
+
+	.inline-arrow-container {
+		white-space: nowrap;
+		margin: auto;
+		line-height: 0;
+	}
+
+	.inline-arrow-body {
+		display: inline-block;
+		border-bottom: 12px red solid;
+		float: left;
+		width: 80%;
+		height: 31px; /* 25 (arrow-head border) + 12 (this border-bottom)/2 */
+		margin-left: 19px;
+		padding: 0 10px;
+		line-height: 19px;
+	}
+
+	.inline-arrow-head {
+		border: 25px solid transparent;
+		border-left-color: red;
+		display: inline-block;
+	}
+
+	.block-arrow-container {
+		float: left;
+		margin-top: -19px;
+	}
+
+	.block-arrow-body {
+		border-left: 12px green solid;
+		margin-left: 19px;
+		height: 80%;
+		padding: 20px 5px;
+	}
+
+	.block-arrow-head {
+		display: inline-block;
+		border: 25px solid transparent;
+		border-top-color: green;
+	}
+
+	/* Floated content */
+
+	.p-float {
+		float: right;
+	}
+
+	.floatpointer {
+		display: inline-block;
+		padding-right: 20px;
+		background: url(Arrow-ltr-inline.png) no-repeat 100% 50%;
+	}
+
+	/* Sides */
+
+	.p-sides {
+		padding: 1em 5px;
+		border: 1px solid #aaa;
+		border-bottom-left-radius: 4px;
+		border-color: transparent rgba( 0, 0, 0, 0 ) #aaa #aaa;
+		margin: 0 0 1px 15px;
+	}
+
+	/* Vertical */
+
+	.p-container {
+		padding: 0 20%;
+	}
+
+	/* Text */
+
+	.p-indent {
+		text-indent: 2em;
+		unicode-bidi: bidi-override;
+		text-align: left;
+	}
+
+	.border {
+		border: 1px solid black;
+		border-color: red rgb( 0, 255, 0 ) #0000FF hsl( 0, 0%, 0% );
+		border-width: 1px 2px 3px;
+	}
+
+	/* Spacing */
+
+	.padding {
+		padding: 4px 0.6em 2px 16px;
+		border: 1px green dotted;
+	}
+
+	.space-after, .space-before, .space-both {
+		border: 1px dotted #AAA;
+		display: inline-block;
+	}
+
+	.space-after {
+		padding-right: 1em;
+		margin-right: 1em;
+	}
+
+	.space-before {
+		padding: 0 0 0 1em;
+		margin: 0 0 0 1em;
+	}
+
+	.space-both {
+		padding: 0 1em 0;
+		margin: 0 1em 0;
+	}
+
+	/* Borders */
+
+	.radius {
+		padding: 0.3em;
+		border: 1px solid #ccc;
+		border-radius: 4px 16px / 2px 6px 10px;
+	}
+
+	.border-styles {
+		padding-right: 4px;
+		border-right: 4px solid red;
+		border-radius: 0 10px 10px 0 / 0 6px 6px 0;
+	}
+
+	.border-images {
+		border: solid;
+		border-width: 28px 10px 10px 14px;
+		/* @noflip */
+		border-image: url(borderimage-ltr.png) 16 10 10 28 / 28px 10px 10px 14px round stretch;
+		line-height: 28px;
+		padding: 4px 8px;
+		display: inline-block;
+	}
+
+	.border-images-inline-start {
+		border: 1px dashed;
+		border-left: 4px solid #080;
+	}
+
+	.border-images-block-start {
+		border: 1px dashed;
+		border-top: 4px solid #880;
+	}
+
+	.border-images-block-end {
+		border: 1px dashed;
+		border-bottom: 4px solid #008;
+	}
+
+	/* Shadows */
+
+	.text-shadows {
+		text-shadow: #FAA -20px -4px 2px, #AAF 20px 4px 2px;
+	}
+
+	.box-shadows {
+		box-shadow: 5px 0 2px #0F0 inset;
+	}
+
+	.box-shadows2 {
+		box-shadow: 1px 1px 2px red, 3px 3px 1px -1px #C00, 0 0 1px orange inset;
+	}
+
+	/* Transform */
+
+	.transformed {
+		transform: translate( 25%, 50% );
+		width: 14em;
+		height: 8em;
+	}
+	.untransformed {
+		width: 14em;
+		height: 8em;
+		position: relative;
+	}
+	.untransformed::before {
+		content: "";
+		display: block;
+		width: 2px;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 25%;
+		background: rgba(250, 100, 0, 0.3);
+	}
+	.untransformed::after {
+		content: "";
+		display: block;
+		width: 100%;
+		height: 2px;
+		position: absolute;
+		top: 50%;
+		left: 0;
+		background: rgba(250, 100, 0, 0.3);
+	}
+
+	/* Position */
+
+	.posholder {
+		/* @noflip */
+		direction: ltr; /* Descriptions */
+	}
+
+	.posleft, .posright, .postop, .posbottom {
+		position: relative;
+		border: 1px solid #000;
+		padding: 2px 4px;
+		margin: 1px;
+	}
+
+	.posbase {
+		border: 1px solid #000;
+		padding: 2px;
+	}
+	.posleft {
+		left: 6px;
+	}
+	.posright {
+		right: 6px;
+	}
+	.postop {
+		top: 6px;
+	}
+	.posbottom {
+		bottom: 6px;
+	}
+
+	/* Cursors */
+
+	.cursor-pointer {
+		cursor: pointer;
+	}
+
+	.resize-l {
+		cursor: w-resize;
+	}
+
+	.resize-v {
+		cursor: ns-resize;
+	}
+
+	.resize-r {
+		cursor: e-resize;
+	}
+
+	.resize-rd {
+		cursor: se-resize;
+	}
+
+	.resize-d {
+		cursor: nesw-resize;
+	}
+
+	.resize-row {
+		cursor: row-resize;
+	}
+
+	.resize-column {
+		cursor: col-resize;
+	}
+
+	/* Background images */
+
+	ul.outer {
+		list-style-image: url(Arrow-ltr-inline.png);
+	}
+
+	ul.inner {
+		list-style-image: none;
+	}
+
+	ul.inner li {
+		padding: 5px;
+		margin: 5px 0;
+	}
+
+	ul.inner .inline-start-background {
+		background-image: url(Arrow-ltr-inline.png);
+		background-repeat: no-repeat;
+		background-position: 0% 50%;
+		padding-left: 20px;
+	}
+
+	ul.inner .block-after-background {
+		background: url(Arrow-ltr-inline.png) repeat no-repeat bottom;
+		padding-bottom: 20px;
+	}
+
+	/* @noflip */
+	.cje-form {
+		writing-mode: lr-tb;
+		-o-writing-mode: horizontal-tb;
+		-moz-writing-mode: horizontal-tb;
+		-webkit-writing-mode: horizontal-tb;
+		writing-mode: horizontal-tb;
+		direction: ltr;
+		position: fixed;
+		top: 1%;
+		left: 0;
+		right: 0;
+		text-align: center;
+	}
+</style>
+<script src="../lib/es5-shim.js"></script>
+<script>exports = {}; function require() { return exports; }</script>
+<script src="../../src/cssjanus.js"></script>
+</head>
+<div class="container">
+	<div class="page-header">
+		<h1>CSSJanus Demos</h1>
+		<p class="lead"><a href="../">Return to flip service</a>.</p>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Content direction</h3></div>
+		<div class="panel-body">
+			<div class="inline-arrow-container">
+				<div class="inline-arrow-body">
+					Inline direction
+				</div>
+				<div class="inline-arrow-head"></div>
+			</div>
+			<div class="block-arrow-container">
+				<div class="block-arrow-body">
+					Block<br />direction
+				</div>
+				<div class="block-arrow-head"></div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Floated content</h3></div>
+		<div class="panel-body">
+			<div class="well well-sm"><span class="floatpointer">Point to the end</span></div>
+			<div class="clearfix"></div>
+			<div class="p-float well well-sm">Floatation</div>
+			<p><em>Cupcake ipsum dolor sit. Amet I love croissant chocolate chocolate cake gummi bears chocolate. Chocolate jelly beans I love jelly. Sweet roll pastry sweet. Tart lemon drops pie. Jelly candy canes brownie pie macaroon pudding pie.</em></p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Sides</h3></div>
+		<div class="panel-body">
+			<div class="p-float p-sides">Flotation</div>
+			<p>A floating box at the far end of the box has borders on two sides (using <code>border-color</code> with four values), and <code>border-radius</code> on the one visible corner. It also has a margin on two sides, with different units.</p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Vertical</h3></div>
+		<div class="panel-body">
+			<div class="p-container">
+				<p>This paragraph is in a container that has padding on each side, using the two-value ("padding: 0 20%;") syntax. When rotated (top to bottom), the values should be flipped, so that the padding is on the top and bottom.</p>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Text</h3></div>
+		<div class="panel-body">
+			<p class="p-indent">This paragraph is has a <code>text-indent</code>. <em>Sed efficitur vulputate arcu a facilisis. Sed et libero volutpat, facilisis ex vel, dapibus nisi. Maecenas bibendum, est non consequat consectetur, tellus erat elementum tortor, ut aliquet tellus enim sed ligula. Sed luctus congue purus sit amet condimentum. Suspendisse est ligula, accumsan laoreet porta vel, rutrum finibus dui.</em></p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Spacing</h3></div>
+		<div class="panel-body">
+			<p><code>padding</code> and <code>margin</code> styles. <span class="padding">Padding</span>.</p>
+			<p>
+				<span class="space-after">This span has both padding and margin after the text, using margin-[direction]/padding-[direction] properties.</span> When flipping from ltr to rtl, padding-right becomes padding-left. For tb-lr, it becomes padding-bottom.
+			</p>
+			<p>
+				Lorem ipsum. <span class="space-before">This span has both padding and margin before the text, using the four-value syntax.</span> (E.g. padding: 0 0 0 1em; )
+			</p>
+			<p>
+				Lorem ipsum. <span class="space-both">This span has both padding and margin on both sides of the text, using the three-value syntax.</span> When rotated, this gets converted to four-value syntax.
+			</p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Borders</h3></div>
+		<div class="panel-body">
+			<p>A <span class="border">border</span> and <span class="radius">border radius</span>.</p>
+			<p><span class="border-styles">This span has a red border after the text, with rounded corners.</span></p>
+			<p><span class="border-images">This span has a thicker border <span class="border-images-block-start">closer to the preceding line</span>, a thinner border to the <span class="border-images-inline-start">inline-start direction</span>, and repeating text at the <span class="border-images-block-end">border closer to the following line</span>. </span></p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Shadows</h3></div>
+		<div class="panel-body">
+			<p>Using <code>box-shadow</code>, <code>text-shadow</code>, including inset positioning and overlapping shadows.</p>
+			<p class="text-shadows">This text has a red shadow before the text slightly closer to the previous line, and a blue shadow after the text and slightly closer to the following line.</p>
+			<p class="box-shadows">This box has an inset shadow, visible before the text.</p>
+			<div class="box-shadows2">This box has a light orange shadow at the start and above the text. And a red shadow at the end and below the text.</div>
+		</li>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Transform</h3></div>
+		<div class="panel-body">
+			<p><code>transform: translate( 25%, 50% );</code></p>
+			<div class="well p-float untransformed">
+			Original
+			</div>
+			<div class="well p-float transformed">
+			Transformed<br>(25% towards end of line, 50% toward end of page)
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Position</h3></div>
+		<div class="panel-body">
+			<p><code>position: relative;</code></p>
+			<ul class="list-group">
+				<li class="list-group-item posholder">Moved <span class="posbase"></span><span class="postop">toward the following line</span><span class="posbase"></span>.</li>
+				<li class="list-group-item posholder">Moved <span class="posbase"></span><span class="posbottom">toward the previous line</span><span class="posbase"></span>.</li>
+				<li class="list-group-item posholder">Moved <span class="posbase"></span><span class="posleft">forward in the direction of the text</span><span class="posbase"></span>.</li>
+				<li class="list-group-item posholder">Moved <span class="posbase"></span><span class="posright">backward in the direction of the text</span><span class="posbase"></span>.</li>
+			</ul>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Cursors</h3></div>
+		<div class="panel-body">
+			<p class="cursor-pointer">Cursor is shown when hovering over the text.</p>
+			<ul class="list-group">
+				<li class="list-group-item resize-r">The cursor points in the text direction.</li>
+				<li class="list-group-item resize-l">The cursor points against the text direction.</li>
+				<li class="list-group-item resize-v">The cursor is perpendicular to the text direction.</li>
+				<li class="list-group-item resize-rd">The cursor points to the diagonal between the block direction and inline direction.</li>
+				<li class="list-group-item resize-d">diagonal cursor</li>
+				<li class="list-group-item resize-row">row cursor</li>
+				<li class="list-group-item resize-column">column cursor</li>
+			</ul>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title">Background image</h3></div>
+		<div class="panel-body">
+			<p>Background-images, including URL flips, and positioning.</p>
+			<ul class="outer">
+				<li>Outer</li>
+			</ul>
+			<ul class="inner">
+				<li class="inline-start-background">This element has a background arrow pointing toward the text, positioned at the text beginning.</li>
+				<li class="block-after-background">This element has repeated background arrows on a line after the the text's block, pointing toward the inline direction.</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="cje-form">
+	<div class="btn-group" role="group">
+		<button type="button" class="btn btn-default" data-value="ltr">LTR</button>
+		<button type="button" class="btn btn-default" data-value="rtl">RTL</button>
+	</div>
+</div>
+<footer class="demo-footer" role="contentinfo">
+	<div class="container">
+		<p><a href="../">Flip service</a> · <a href="https://github.com/cssjanus/cssjanus.github.io/blob/master/demo/index.html">Source code of this page</a></p>
+	</div>
+</footer>
+<script>
+( function () {
+	var activeBtn,
+		cssjanus = require(),
+		buttons = document.getElementsByTagName( 'button' ),
+		cssElem = document.getElementById( 'css' ),
+		css = cssElem.firstChild.nodeValue;
+	for ( var i = 0; i < buttons.length; i++ ) {
+		buttons[ i ].onclick = function () {
+			var value = this.getAttribute( 'data-value' );
+			if ( value === 'ltr' ) {
+				cssElem.firstChild.nodeValue = css;
+			} else {
+				cssElem.firstChild.nodeValue = cssjanus.transform(
+					css,
+					true,
+					true
+				);
+			}
+			this.className += ' active';
+			if (activeBtn) {
+				activeBtn.className = activeBtn.className.replace( ' active', '' );
+			}
+			activeBtn = this;
+		};
+	}
+} )();
+</script>
+</html>
