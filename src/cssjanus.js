@@ -300,11 +300,12 @@ function CSSJanus() {
 		 * Transform a left-to-right stylesheet to right-to-left.
 		 *
 		 * @param {string} css Stylesheet to transform
-		 * @param {boolean} swapLtrRtlInUrl Swap 'ltr' and 'rtl' in URLs
-		 * @param {boolean} swapLeftRightInUrl Swap 'left' and 'right' in URLs
+		 * @param {Object} options Options
+		 * @param {boolean} [options.transformDirInUrl=false] Transform directions in URLs (e.g. 'ltr', 'rtl')
+		 * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
 		 * @return {string} Transformed stylesheet
 		 */
-		transform: function ( css, swapLtrRtlInUrl, swapLeftRightInUrl ) {
+		transform: function ( css, options ) {
 			// Tokenizers
 			var noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
 				noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken ),
@@ -323,14 +324,14 @@ function CSSJanus() {
 			);
 
 			// Transform URLs
-			if ( swapLtrRtlInUrl ) {
+			if ( options.transformDirInUrl ) {
 				// Replace 'ltr' with 'rtl' and vice versa in background URLs
 				css = css
 					.replace( ltrInUrlRegExp, '$1' + temporaryToken )
 					.replace( rtlInUrlRegExp, '$1ltr' )
 					.replace( temporaryTokenRegExp, 'rtl' );
 			}
-			if ( swapLeftRightInUrl ) {
+			if ( options.transformEdgeInUrl ) {
 				// Replace 'left' with 'right' and vice versa in background URLs
 				css = css
 					.replace( leftInUrlRegExp, '$1' + temporaryToken )
@@ -394,10 +395,24 @@ cssjanus = new CSSJanus();
  * This function is a static wrapper around the transform method of an instance of CSSJanus.
  *
  * @param {string} css Stylesheet to transform
- * @param {boolean} [swapLtrRtlInUrl=false] Swap 'ltr' and 'rtl' in URLs
- * @param {boolean} [swapLeftRightInUrl=false] Swap 'left' and 'right' in URLs
+ * @param {Object|boolean} [options] Options object, or transformDirInUrl option (back-compat)
+ * @param {boolean} [options.transformDirInUrl=false] Transform directions in URLs (e.g. 'ltr', 'rtl')
+ * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
+ * @param {boolean} [transformEdgeInUrl] Back-compat parameter
  * @return {string} Transformed stylesheet
  */
-exports.transform = function ( css, swapLtrRtlInUrl, swapLeftRightInUrl ) {
-	return cssjanus.transform( css, swapLtrRtlInUrl, swapLeftRightInUrl );
+exports.transform = function ( css, options, transformEdgeInUrl ) {
+	var norm;
+	if ( typeof options === 'object' ) {
+		norm = options;
+	} else {
+		norm = {};
+		if ( typeof options === 'boolean' ) {
+			norm.transformDirInUrl = options;
+		}
+		if ( typeof transformEdgeInUrl === 'boolean' ) {
+			norm.transformEdgeInUrl = transformEdgeInUrl;
+		}
+	}
+	return cssjanus.transform( css, norm );
 };
