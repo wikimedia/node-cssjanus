@@ -148,7 +148,9 @@ function CSSJanus() {
 		boxShadowRegExp = new RegExp( '(box-shadow\\s*:\\s*(?:inset\\s*)?)' + signedQuantPattern, 'gi' ),
 		textShadow1RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern + '(\\s*)' + colorPattern, 'gi' ),
 		textShadow2RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
-		textShadow3RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' );
+		textShadow3RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' ),
+		translateXRegExp = new RegExp( '(transform\\s*:[^;]*)(translateX\\s*\\(\\s*)' + signedQuantPattern + '(\\s*\\))', 'gi' ),
+		translateRegExp = new RegExp( '(transform\\s*:[^;]*)(translate\\s*\\(\\s*)' + signedQuantPattern + '((?:\\s*,\\s*' + signedQuantPattern + '){0,2}\\s*\\))', 'gi' );
 
 	/**
 	 * Invert the horizontal value of a background position property.
@@ -271,6 +273,19 @@ function CSSJanus() {
 	 * @private
 	 * @param {string} match
 	 * @param {string} property
+	 * @param {string} prefix
+	 * @param {string} offset
+	 * @param {string} suffix
+	 * @return {string}
+	 */
+	function calculateNewTranslate( match, property, prefix, offset, suffix ) {
+		return property + prefix + flipSign( offset ) + suffix;
+	}
+
+	/**
+	 * @private
+	 * @param {string} match
+	 * @param {string} property
 	 * @param {string} color
 	 * @param {string} space
 	 * @param {string} offset
@@ -345,6 +360,9 @@ function CSSJanus() {
 				.replace( textShadow1RegExp, calculateNewFourTextShadow )
 				.replace( textShadow2RegExp, calculateNewFourTextShadow )
 				.replace( textShadow3RegExp, calculateNewShadow )
+				// Translate
+				.replace( translateXRegExp, calculateNewTranslate )
+				.replace( translateRegExp, calculateNewTranslate )
 				// Swap the second and fourth parts in four-part notation rules
 				// like padding: 1px 2px 3px 4px;
 				.replace( fourNotationQuantRegExp, '$1$2$3$8$5$6$7$4$9' )

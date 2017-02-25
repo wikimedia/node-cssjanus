@@ -407,6 +407,51 @@
 			]
 		]
 	},
+	"flip transform translate x-axis": {
+		"cases": [
+			[
+				".foo { transform: translate( 30px ); }",
+				".foo { transform: translate( -30px ); }"
+			],
+			[
+				".foo { transform: translate( 30% ); }",
+				".foo { transform: translate( -30% ); }"
+			],
+			[
+				".foo { transform: translate( 30%, 20% ); }",
+				".foo { transform: translate( -30%, 20% ); }"
+			],
+			[
+				".foo { transform: translate( 30%, 20%, 10% ); }",
+				".foo { transform: translate( -30%, 20%, 10% ); }"
+			],
+			[
+				".foo { transform: translate( 30%, 20%, 10%, 0% ); }"
+			],
+			[
+				".foo { transform: translateY( 30px ) rotate( 20deg ) translateX( 10px ); }",
+				".foo { transform: translateY( 30px ) rotate( 20deg ) translateX( -10px ); }"
+			],
+			[
+				".foo { transform: translateX( 30px ) rotate( 20deg ) translateY( 10px ); }",
+				".foo { transform: translateX( -30px ) rotate( 20deg ) translateY( 10px ); }"
+			],
+			[
+				".foo { transform: translateX( 30px ); }",
+				".foo { transform: translateX( -30px ); }"
+			],
+			[
+				".foo { other-property: translateX( 30px ); }"
+			],
+			[
+				".foo { -webkit-transform: translateX( 30px ); }",
+				".foo { -webkit-transform: translateX( -30px ); }"
+			],
+			[
+				".foo { transform: translateY( 30px ); }"
+			]
+		]
+	},
 	"flip background-position keywords": {
 		"cases": [
 			[
