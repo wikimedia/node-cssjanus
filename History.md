@@ -1,5 +1,9 @@
 # Release History
 
+## v1.2.0 / 2017-03-14
+
+* Flip `translate(x[,y,z])` and `translateX(x)` (Ed Sanders)
+
 ## v1.1.3 / 2016-12-23
 
 * Do not flip offset-y in text-shadow, even when color isn't as first value (Ed Sanders)
