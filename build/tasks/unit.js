@@ -7,7 +7,7 @@ module.exports = function ( grunt ) {
 			testData = require( '../../test/data.json' ),
 			failures = 0,
 			tests = 0,
-			name, test, args, i, input, noop, output;
+			name, test, args, i, input, noop, roundtrip, output;
 
 		for ( name in testData ) {
 			tests++;
@@ -19,6 +19,7 @@ module.exports = function ( grunt ) {
 					input = test.cases[ i ][ 0 ];
 					noop = test.cases[ i ][ 1 ] === undefined;
 					output = noop ? input : test.cases[ i ][ 1 ];
+					roundtrip = test.roundtrip !== undefined ? test.roundtrip : !noop;
 
 					assert.equal(
 						cssjanus.transform(
@@ -29,7 +30,7 @@ module.exports = function ( grunt ) {
 						output
 					);
 
-					if ( !noop ) {
+					if ( roundtrip ) {
 						// Round-trip
 						assert.equal(
 							cssjanus.transform(
