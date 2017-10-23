@@ -391,6 +391,15 @@
 			]
 		]
 	},
+	"flip border-radius (one-way)": {
+		"roundtrip": false,
+		"cases": [
+			[
+				".foo { border-radius: 1px 2px 3px; }",
+				".foo { border-radius: 2px 1px 2px 3px; }"
+			]
+		]
+	},
 	"flip border-top-{edge}-radius": {
 		"cases": [
 			[
