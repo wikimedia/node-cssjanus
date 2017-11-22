@@ -385,13 +385,14 @@ function CSSJanus() {
 		 * Transform a stylesheet to from one direction to another.
 		 *
 		 * @param {string} css Stylesheet to transform
-		 * @param {boolean} transformDirInUrl Transform directions and writing modes (such as 'ltr', 'rtl', 'vertical-lr', 'rl-tb', 'horizontal-inline', etc) in URLs
-		 * @param {boolean} transformEdgeInUrl Transform edges ('left', 'right', 'top', and 'bottom') in URLs
-		 * @param {string} sourceDir The source direction and writing mode
-		 * @param {string} targetDir The target direction and writing mode
+		 * @param {Object} options Options
+		 * @param {boolean} [options.transformDirInUrl=false] Transform directions in URLs (e.g. 'ltr', 'rtl', 'vertical-lr', 'rl-tb', 'horizontal-inline')
+		 * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right', 'top', and 'bottom')
+		 * @param {string} [options.sourceDir='lr-tb'] The source direction and writing mode
+		 * @param {string} [options.targetDir='rl-tb'] The target direction and writing mode
 		 * @return {string} Transformed stylesheet
 		 */
-		transform: function ( css, transformDirInUrl, transformEdgeInUrl, sourceDir, targetDir ) {
+		transform: function ( css, options ) {
 			var source,
 				target,
 				map,
@@ -407,11 +408,13 @@ function CSSJanus() {
 				commentTokenizer,
 				calcTokenizer,
 				i,
-				swapText;
+				swapText,
+				sourceDir,
+				targetDir;
 
 			// Default values
-			sourceDir = sourceDir || 'lr-tb';
-			targetDir = targetDir || 'rl-tb';
+			sourceDir = options.sourceDir || 'lr-tb';
+			targetDir = options.targetDir || 'rl-tb';
 
 			if ( sourceDir === targetDir ) {
 				return css;
@@ -609,7 +612,7 @@ function CSSJanus() {
 			);
 
 			// Transform URLs
-			if ( transformDirInUrl ) {
+			if ( options.transformDirInUrl ) {
 				// Transform directions and writing-modes in background URLs.
 				css = css.replace( dirInUrlRegExp, function ( match, pre, dir ) {
 					// Valid directions:
@@ -622,7 +625,7 @@ function CSSJanus() {
 					} ).join( '-' );
 				} );
 			}
-			if ( transformEdgeInUrl ) {
+			if ( options.transformEdgeInUrl ) {
 				// Replace 'left', 'top', 'right', and 'bottom' with the appropriate side in background URLs
 				css = css.replace( edgeInUrlRegExp, function ( match, pre, edge ) {
 					return pre + swapText( edge );
@@ -961,12 +964,26 @@ cssjanus = new CSSJanus();
  * This function is a static wrapper around the transform method of an instance of CSSJanus.
  *
  * @param {string} css Stylesheet to transform
- * @param {boolean} [transformDirInUrl=false] Transform directions and writing modes (such as 'ltr', 'rtl', 'vertical-lr', 'rl-tb', 'horizontal-inline', etc) in URLs
- * @param {boolean} [transformEdgeInUrl=false] Transform edges ('left', 'right', 'top', and 'bottom') in URLs
- * @param {string} [sourceDir='lr-tb'] The source direction and writing mode
- * @param {string} [targetDir='rl-tb'] The target direction and writing mode
+ * @param {Object|boolean} [options] Options object, or transformDirInUrl option (back-compat)
+ * @param {boolean} [options.transformDirInUrl=false] Transform directions in URLs (e.g. 'ltr', 'rtl', 'vertical-lr', 'rl-tb', 'horizontal-inline')
+ * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right','top', 'bottom')
+ * @param {string} [options.sourceDir='lr-tb'] The source direction and writing mode
+ * @param {string} [options.targetDir='rl-tb'] The target direction and writing mode
+ * @param {boolean} [transformEdgeInUrl] Back-compat parameter
  * @return {string} Transformed stylesheet
  */
-exports.transform = function ( css, transformDirInUrl, transformEdgeInUrl, sourceDir, targetDir ) {
-	return cssjanus.transform( css, transformDirInUrl, transformEdgeInUrl, sourceDir, targetDir );
+exports.transform = function ( css, options, transformEdgeInUrl ) {
+	var norm;
+	if ( typeof options === 'object' ) {
+		norm = options;
+	} else {
+		norm = {};
+		if ( typeof options === 'boolean' ) {
+			norm.transformDirInUrl = options;
+		}
+		if ( typeof transformEdgeInUrl === 'boolean' ) {
+			norm.transformEdgeInUrl = transformEdgeInUrl;
+		}
+	}
+	return cssjanus.transform( css, norm );
 };

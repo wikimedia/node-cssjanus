@@ -7,12 +7,13 @@ module.exports = function ( grunt ) {
 			testData = require( '../../test/data.json' ),
 			failures = 0,
 			tests = 0,
-			name, test, settings, i, input, noop, output, tblrOutput, tbrlOutput;
+			name, test, args, options, i, input, noop, roundtrip, output, tblrOutput, tbrlOutput;
 
 		for ( name in testData ) {
 			tests++;
 			test = testData[ name ];
-			settings = test.settings || {};
+			options = test.options || {};
+			args = test.args || [ options ];
 
 			try {
 				for ( i = 0; i < test.cases.length; i++ ) {
@@ -21,23 +22,24 @@ module.exports = function ( grunt ) {
 					output = noop ? input : test.cases[ i ][ 1 ];
 					tblrOutput = test.cases[ i ][ 2 ] || input;
 					tbrlOutput = test.cases[ i ][ 3 ] || tblrOutput;
+					roundtrip = test.roundtrip !== undefined ? test.roundtrip : !noop;
 
 					assert.equal(
 						cssjanus.transform(
 							input,
-							settings.swapLtrRtlInUrl,
-							settings.swapLeftRightInUrl
+							args[ 0 ],
+							args[ 1 ]
 						),
 						output
 					);
 
-					if ( !noop ) {
+					if ( roundtrip ) {
 						// Round-trip right-to-left
 						assert.equal(
 							cssjanus.transform(
 								output,
-								settings.swapLtrRtlInUrl,
-								settings.swapLeftRightInUrl
+								args[ 0 ],
+								args[ 1 ]
 							),
 							input
 						);
@@ -50,27 +52,25 @@ module.exports = function ( grunt ) {
 						output = test.cases[ i ][ 1 ];
 					}
 
-					assert.equal(
-						cssjanus.transform(
-							input,
-							settings.swapLtrRtlInUrl,
-							settings.swapLeftRightInUrl,
-							'lr-tb',
-							'tb-lr'
-						),
-						tblrOutput
-					);
+					if ( !test.args ) {
+						// If an explicit args is given, don't run tests for vertical-writing.
+						// Boolean args not compatible with vertical transforms.
+						assert.equal(
+							cssjanus.transform(
+								input,
+								Object.assign( { sourceDir: 'lr-tb', targetDir: 'tb-lr' }, options )
+							),
+							tblrOutput
+						);
 
-					assert.equal(
-						cssjanus.transform(
-							input,
-							settings.swapLtrRtlInUrl,
-							settings.swapLeftRightInUrl,
-							'lr-tb',
-							'tb-rl'
-						),
-						tbrlOutput
-					);
+						assert.equal(
+							cssjanus.transform(
+								input,
+								Object.assign( { sourceDir: 'lr-tb', targetDir: 'tb-rl' }, options )
+							),
+							tbrlOutput
+						);
+					}
 				}
 				grunt.verbose.write( name + '...' );
 				grunt.verbose.ok();

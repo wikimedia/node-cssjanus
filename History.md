@@ -1,5 +1,14 @@
 # Release History
 
+## v1.2.1 / 2017-10-23
+
+* Drop support for Node.js v0.10 and v0.12 (Timo Tijhof)
+* test: Cover border-radius with three values (Timo Tijhof)
+
+## v1.2.0 / 2017-03-14
+
+* Flip `translate(x[,y,z])` and `translateX(x)` (Ed Sanders)
+
 ## v1.1.3 / 2016-12-23
 
 * Do not flip offset-y in text-shadow, even when color isn't as first value (Ed Sanders)
@@ -31,7 +40,7 @@
 
 * Prevent issues with css selectors containing parentheses (Yoav Farhi)
 * Fix bgHorizontalPercentageRegExp to not be too greedy (Dion Hulse)
-* Support "/*!" syntax for @noflip (Tom Yam)
+* Support `/*!` syntax for @noflip (Tom Yam)
 
 ## v1.0.1 / 2013-08-08
 
