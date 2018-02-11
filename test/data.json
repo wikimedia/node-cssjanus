@@ -754,6 +754,12 @@
 			],
 			[
 				".a-foo.png { width: 0; }"
+			],
+			[
+				".foo-left /* comment */ { color: red; }"
+			],
+			[
+				"[class*=\"span\"].pull-right,.row-fluid [class*=\"span\"].pull-right { color: red; }"
 			]
 		]
 	},
