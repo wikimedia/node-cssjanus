@@ -13,6 +13,10 @@
     "url": "git://github.com/cssjanus/cssjanus.git"
   },
   "main": "./src/cssjanus.js",
+  "files": [
+    "src/",
+    "LICENSE.txt"
+  ],
   "scripts": {
     "test": "grunt test"
   },
