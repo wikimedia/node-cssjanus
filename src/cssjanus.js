@@ -92,7 +92,6 @@ function CSSJanus() {
 
 	var
 		// Tokens
-		temporaryToken = '`TMP`',
 		noFlipSingleToken = '`NOFLIP_SINGLE`',
 		noFlipClassToken = '`NOFLIP_CLASS`',
 		commentToken = '`COMMENT`',
@@ -101,7 +100,14 @@ function CSSJanus() {
 		unicodePattern = '(?:(?:\\[0-9a-f]{1,6})(?:\\r\\n|\\s)?)',
 		numPattern = '(?:[0-9]*\\.[0-9]+|[0-9]+)',
 		unitPattern = '(?:em|ex|px|cm|mm|in|pt|pc|deg|rad|grad|ms|s|hz|khz|%)',
-		directionPattern = 'direction\\s*:\\s*',
+		// Whitespace
+		_ = '(?:\\s|' + commentToken + ')*',
+		ws = '(?:\\s|' + commentToken + ')+',
+		sws = '(' + ws + ')',
+		colon = _ + ':' + _,
+		slash = _ + '/' + _,
+		comma = _ + ',' + _,
+		directionPattern = 'direction' + colon,
 		urlSpecialCharsPattern = '[!#$%&*-~]',
 		validAfterUriCharsPattern = '[\'"]?\\s*',
 		nonLetterPattern = '(^|[^a-zA-Z])',
@@ -114,43 +120,40 @@ function CSSJanus() {
 		identPattern = '-?' + nmstartPattern + nmcharPattern + '*',
 		quantPattern = numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?',
 		signedQuantPattern = '((?:-?' + quantPattern + ')|(?:inherit|auto))',
-		fourNotationQuantPropsPattern = '((?:margin|padding|border-width)\\s*:\\s*)',
-		fourNotationColorPropsPattern = '((?:-color|border-style)\\s*:\\s*)',
+		fourNotationQuantPropsPattern = '((?:margin|padding|border-width)' + colon + ')',
+		fourNotationColorPropsPattern = '((?:-color|border-style)' + colon + ')',
 		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%-]+\\))',
 		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*',
+		sidesPattern = 'right|left',
 		lookAheadNotLetterPattern = '(?![a-zA-Z])',
 		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'])*?{)',
 		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
-		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
+		suffixPattern = '(' + _ + '(?:!important' + _ + ')?[;}])',
 		// Regular expressions
-		temporaryTokenRegExp = new RegExp( '`TMP`', 'g' ),
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
 		noFlipSingleRegExp = new RegExp( '(' + noFlipPattern + lookAheadNotOpenBracePattern + '[^;}]+;?)', 'gi' ),
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
-		directionLtrRegExp = new RegExp( '(' + directionPattern + ')ltr', 'gi' ),
-		directionRtlRegExp = new RegExp( '(' + directionPattern + ')rtl', 'gi' ),
-		leftRegExp = new RegExp( nonLetterPattern + '(left)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
-		rightRegExp = new RegExp( nonLetterPattern + '(right)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
-		leftInUrlRegExp = new RegExp( nonLetterPattern + '(left)' + lookAheadForClosingParenPattern, 'gi' ),
-		rightInUrlRegExp = new RegExp( nonLetterPattern + '(right)' + lookAheadForClosingParenPattern, 'gi' ),
-		ltrInUrlRegExp = new RegExp( nonLetterPattern + '(ltr)' + lookAheadForClosingParenPattern, 'gi' ),
-		rtlInUrlRegExp = new RegExp( nonLetterPattern + '(rtl)' + lookAheadForClosingParenPattern, 'gi' ),
-		cursorEastRegExp = new RegExp( nonLetterPattern + '([ns]?)e-resize', 'gi' ),
-		cursorWestRegExp = new RegExp( nonLetterPattern + '([ns]?)w-resize', 'gi' ),
-		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + suffixPattern, 'gi' ),
-		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + suffixPattern, 'gi' ),
-		bgHorizontalPercentageRegExp = new RegExp( '(background(?:-position)?\\s*:\\s*(?:[^:;}\\s]+\\s+)*?)(' + quantPattern + ')', 'gi' ),
-		bgHorizontalPercentageXRegExp = new RegExp( '(background-position-x\\s*:\\s*)(-?' + numPattern + '%)', 'gi' ),
+		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + sws + signedQuantPattern + sws + signedQuantPattern + sws + signedQuantPattern + suffixPattern, 'gi' ),
+		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + sws + colorPattern + sws + colorPattern + sws + colorPattern + suffixPattern, 'gi' ),
+		bgHorizontalPercentageRegExp = new RegExp( '(background(?:-position)?' + colon + '(?:[^:;}\\s]+\\s+)*?)(' + quantPattern + ')', 'gi' ),
+		bgHorizontalPercentageXRegExp = new RegExp( '(background-position-x' + colon + ')(-?' + numPattern + '%)', 'gi' ),
+		directionRegExp = new RegExp( '(' + directionPattern + ')(ltr|rtl)' + lookAheadNotLetterPattern, 'gi' ),
+		sidesRegExp = new RegExp( nonLetterPattern +
+			'(' + sidesPattern + ')' +
+			lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
+		edgeInUrlRegExp = new RegExp( nonLetterPattern + '(' + sidesPattern + ')' + lookAheadNotLetterPattern + lookAheadForClosingParenPattern, 'gi' ),
+		dirInUrlRegExp = new RegExp( nonLetterPattern + '(ltr|rtl)' + lookAheadNotLetterPattern + lookAheadForClosingParenPattern, 'gi' ),
+		cursorRegExp = new RegExp( '(cursor' + colon + ')(?:([ns])?([ew])?(s[ew])?-resize)', 'gi' ),
 		// border-radius: <length or percentage>{1,4} [optional: / <length or percentage>{1,4} ]
-		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)' + signedQuantPattern + '(?:(?:\\s+' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' +
-			'(?:(?:(?:\\s*\\/\\s*)' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
-		boxShadowRegExp = new RegExp( '(box-shadow\\s*:\\s*(?:inset\\s*)?)' + signedQuantPattern, 'gi' ),
-		textShadow1RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern + '(\\s*)' + colorPattern, 'gi' ),
-		textShadow2RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
-		textShadow3RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' ),
-		translateXRegExp = new RegExp( '(transform\\s*:[^;]*)(translateX\\s*\\(\\s*)' + signedQuantPattern + '(\\s*\\))', 'gi' ),
-		translateRegExp = new RegExp( '(transform\\s*:[^;]*)(translate\\s*\\(\\s*)' + signedQuantPattern + '((?:\\s*,\\s*' + signedQuantPattern + '){0,2}\\s*\\))', 'gi' );
+		borderRadiusRegExp = new RegExp( '(border-radius' + colon + ')' + signedQuantPattern + '(?:(?:' + ws + signedQuantPattern + ')(?:' + ws + signedQuantPattern + ')?(?:' + ws + signedQuantPattern + ')?)?' +
+			'(?:(?:(?:' + slash + ')' + signedQuantPattern + ')(?:' + ws + signedQuantPattern + ')?(?:' + ws + signedQuantPattern + ')?(?:' + ws + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
+		boxShadowRegExp = new RegExp( '(box-shadow' + colon + '(?:inset\\s*)?)' + signedQuantPattern, 'gi' ),
+		textShadow1RegExp = new RegExp( '(text-shadow' + colon + ')' + signedQuantPattern + '(\\s*)' + colorPattern, 'gi' ),
+		textShadow2RegExp = new RegExp( '(text-shadow' + colon + ')' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
+		textShadow3RegExp = new RegExp( '(text-shadow' + colon + ')' + signedQuantPattern, 'gi' ),
+		translateXRegExp = new RegExp( '(transform' + _ + ':[^;]*)(translateX\\s*\\(\\s*)' + signedQuantPattern + '(\\s*\\))', 'gi' ),
+		translateRegExp = new RegExp( '(transform' + _ + ':[^;]*)(translate\\s*\\(\\s*)' + signedQuantPattern + '((?:' + comma + signedQuantPattern + '){0,2}\\s*\\))', 'gi' );
 
 	/**
 	 * Invert the horizontal value of a background position property.
@@ -306,10 +309,36 @@ function CSSJanus() {
 		 * @return {string} Transformed stylesheet
 		 */
 		transform: function ( css, options ) {
-			// Tokenizers
-			var noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
+			var swapText,
+				// Tokenizers
+				noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
 				noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken ),
 				commentTokenizer = new Tokenizer( commentRegExp, commentToken );
+
+			swapText = ( function () {
+				var textChanges = {
+					left: 'right',
+					right: 'left',
+					e: 'w',
+					w: 'e',
+					nesw: 'nwse',
+					nwse: 'nesw',
+					ltr: 'rtl',
+					rtl: 'ltr'
+				};
+
+				/**
+				 * Transform certain property names and values, ex "left" -> "right".
+				 *
+				 * @param {string} text Text to be transformed.
+				 * @return {string}
+				 */
+				return function swapText( text ) {
+					// CSS property names are case insensitive.
+					var lcText = text && text.toLowerCase();
+					return textChanges[ lcText ] || text || '';
+				};
+			}() );
 
 			// Tokenize
 			css = commentTokenizer.tokenize(
@@ -326,33 +355,40 @@ function CSSJanus() {
 			// Transform URLs
 			if ( options.transformDirInUrl ) {
 				// Replace 'ltr' with 'rtl' and vice versa in background URLs
-				css = css
-					.replace( ltrInUrlRegExp, '$1' + temporaryToken )
-					.replace( rtlInUrlRegExp, '$1ltr' )
-					.replace( temporaryTokenRegExp, 'rtl' );
+				css = css.replace( dirInUrlRegExp, function ( match, pre, dir ) {
+					return pre + swapText( dir );
+				} );
 			}
 			if ( options.transformEdgeInUrl ) {
 				// Replace 'left' with 'right' and vice versa in background URLs
-				css = css
-					.replace( leftInUrlRegExp, '$1' + temporaryToken )
-					.replace( rightInUrlRegExp, '$1left' )
-					.replace( temporaryTokenRegExp, 'right' );
+				css = css.replace( edgeInUrlRegExp, function ( match, pre, edge ) {
+					return pre + swapText( edge );
+				} );
 			}
 
 			// Transform rules
 			css = css
 				// Replace direction: ltr; with direction: rtl; and vice versa.
-				.replace( directionLtrRegExp, '$1' + temporaryToken )
-				.replace( directionRtlRegExp, '$1ltr' )
-				.replace( temporaryTokenRegExp, 'rtl' )
+				.replace( directionRegExp, function ( match, pre, dir ) {
+					return pre + swapText( dir );
+				} )
 				// Flip rules like left: , padding-right: , etc.
-				.replace( leftRegExp, '$1' + temporaryToken )
-				.replace( rightRegExp, '$1left' )
-				.replace( temporaryTokenRegExp, 'right' )
+				.replace( sidesRegExp, function ( match, prefix, side ) {
+					return prefix + swapText( side );
+				} )
 				// Flip East and West in rules like cursor: nw-resize;
-				.replace( cursorEastRegExp, '$1$2' + temporaryToken )
-				.replace( cursorWestRegExp, '$1$2e-resize' )
-				.replace( temporaryTokenRegExp, 'w-resize' )
+				.replace( cursorRegExp, function ( match, pre, ns, ew, nesw ) {
+					if ( nesw && ( !ns || !ew ) ) {
+						// Invalid cursor value. Return unchanged.
+						return match;
+					}
+					return pre + (
+						( nesw ?
+							swapText( ns + ew + nesw ) :
+							( ns || '' ) + swapText( ew )
+						) + '-resize'
+					);
+				} )
 				// Border radius
 				.replace( borderRadiusRegExp, calculateNewBorderRadius )
 				// Shadows
