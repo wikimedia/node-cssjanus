@@ -1,5 +1,9 @@
 # Release History
 
+## v1.2.2 / 2018-02-11
+
+* build: Add 'files' publishing whitelist to package.json (Timo Tijhof)
+
 ## v1.2.1 / 2017-10-23
 
 * Drop support for Node.js v0.10 and v0.12 (Timo Tijhof)
