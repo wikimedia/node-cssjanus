@@ -151,19 +151,19 @@ function CSSJanus() {
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
 		noFlipSingleRegExp = new RegExp( '(' + noFlipPattern + lookAheadNotOpenBracePattern + '[^;}]+;?)', 'gi' ),
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
-		directionRegExp = new RegExp( '(' + directionPattern + ')(ltr|rtl)', 'gi' ),
+		directionRegExp = new RegExp( '(' + directionPattern + ')(ltr|rtl)' + lookAheadNotLetterPattern, 'gi' ),
 		sidesRegExp = new RegExp( nonLetterPattern +
 			'(' +
 				// These properties accept left/right, but not top/bottom. Flip, don't ever rotate.
 				'(?:float|clear|text-align(?:-last)?)' + colon +
-				// These properties shouldn't be flipped or rotated at all.
+				// These properties shouldn't be flipped or rotated at all. Suppress change when present.
 				'|(vertical-align' + colon + '(?:text-)?|text-orientation' + colon + 'sideways-|caption-side' + colon + ')' +
 			')?' +
 			'(' + sidesPattern + ')' +
 			lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
 		edgeInUrlRegExp = new RegExp( nonLetterPattern + '(' + sidesPattern + ')' + lookAheadNotLetterPattern + lookAheadForClosingParenPattern, 'gi' ),
 		dirInUrlRegExp = new RegExp( nonLetterPattern + '(ltr|rtl|(?:tb|bt|vertical)-(?:lr|rl|inline)|(?:lr|rl|horizontal)-(?:tb|bt|inline))' + lookAheadNotLetterPattern + lookAheadForClosingParenPattern, 'gi' ),
-		cursorRegExp = new RegExp( '(cursor' + colon + ')(?:([ns])?([ew])?(s[ew])?-resize|(row-resize|col-resize|text|vertical-text))', 'gi' ),
+		cursorRegExp = new RegExp( '(cursor' + colon + ')(?:([ns])?([ew])?-resize|((?:row|col|ns|ew|nesw|nwse)-resize|text|vertical-text))', 'gi' ),
 		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + sws + signedQuantPattern + '(?:' + sws + signedQuantPattern + '(?:' + sws + signedQuantPattern + ')?)?' + suffixPattern, 'gi' ),
 		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + sws + colorPattern + '(?:' + sws + colorPattern + '(?:' + sws + colorPattern + ')?)?' + suffixPattern, 'gi' ),
 		quantPlainUnitRegex = new RegExp( '[-+]?' + numPattern + unitPattern, 'gi' ),
@@ -181,9 +181,9 @@ function CSSJanus() {
 			'(^|\\s|,)' +
 			'([-+]?' + numPattern + '%)' +
 			lookAheadNotClosingParenPattern, 'gi' ),
-		bgRepeatRegExp = new RegExp( '(background-repeat' + colon + ')([A-z-, ]+)' + suffixPattern ),
+		bgRepeatRegExp = new RegExp( '(background-repeat' + colon + ')([A-z-, ]+)' + suffixPattern, 'gi' ),
 		bgRepeatValueRegExp = new RegExp( '(?:repeat-[xy]|((?:no-)?repeat|space|round)' + sws + '((?:no-)?repeat|space|round))' + lookAheadNotClosingParenPattern, 'gi' ),
-		bgSizeRegExp = new RegExp( '(background-size' + colon + ')([^;{}]+)' ),
+		bgSizeRegExp = new RegExp( '(background-size' + colon + ')([^;{}]+)', 'gi' ),
 		twoQuantsRegExp = new RegExp( '(auto|' + posQuantPattern + ')(?:' + sws + '(auto|' + posQuantPattern + '))?', 'gi' ),
 		linearGradientRegExp = new RegExp(
 			'((?:repeating-)?linear-gradient\\(' + _ + ')' +
@@ -229,8 +229,9 @@ function CSSJanus() {
 		writingModeRegExp = new RegExp( '(writing-mode' + colon + ')(tb|bt|rl|lr|horizontal|vertical)-(tb|bt|rl|lr)', 'gi' ),
 		resizeRegExp = new RegExp( '(resize' + colon + ')(horizontal|vertical)', 'gi' ),
 		xyPropRegExp = new RegExp( '(overflow|scroll-snap-points|scroll-snap-type)-([xy])' + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
-		mediaQueryRegExp = new RegExp( '(@media' + ws + ')([^{]+)(\\{)', 'gi' ),
-		mediaFeatureRegExp = new RegExp( '(width|height|aspect-ratio|orientation)(' + colon + ')([^{/()\\s]+)(?:(' + slash + ')(\\d+))?', 'gi' ),
+		mediaQueryRegExp = new RegExp( '(@media' + ws + ')([^{}]+)(\\{)', 'gi' ),
+		mediaOrientationRegExp = new RegExp( '(orientation' + colon + ')(landscape|portrait)', 'gi' ),
+		mediaFeatureRegExp = new RegExp( '(width|height|aspect-ratio)(' + colon + ')(?:(' + posQuantPattern + ')(?:(' + slash + ')(' + posQuantPattern + '))?)?', 'gi' ),
 		// Angle units and their values for full circles.
 		angleMaxes = {
 			deg: 360,
@@ -310,18 +311,19 @@ function CSSJanus() {
 	}
 
 	/**
-	 * Swap horizontal and vertical values for various background properties.
+	 * Swap horizontal and vertical values for background-repeat, both explicit
+	 * and via background shorthand.
 	 *
 	 * @private
 	 * @param {string} match
-	 * @param {string} x
+	 * @param {string} x Horizontal axis repeat value
 	 * @param {string} space
-	 * @param {string} y
+	 * @param {string} y Vertical axis repeat value
 	 * @return {string}
 	 */
 	function backgroundTwoPointSwap( match, x, space, y ) {
-		// y will only be absent on background-repeat: repeat-[xy]; or background: [...] repeat-[xy] [...];
-		return y ? y + space + x : ( match === 'repeat-x' ? 'repeat-y' : 'repeat-x' );
+		// x/y will only be absent on background-repeat: repeat-[xy]; or background: [...] repeat-[xy] [...];
+		return y ? y + space + x : ( match.toLowerCase() === 'repeat-x' ? 'repeat-y' : 'repeat-x' );
 	}
 
 	/**
@@ -455,19 +457,29 @@ function CSSJanus() {
 					i;
 
 				for ( i = 0; i < 4; i++ ) {
-					textChanges[ sides[ map[ i ] ] ] = sides[ i ];
-					textChanges[ cursors[ map[ i ] ] ] = cursors[ i ];
-					textChanges[ wmDirs[ map[ i ] ] ] = wmDirs[ i ];
+					textChanges[ sides[ map[ i ] ] ] = sides[ i ]; // "left", "top", etc
+					textChanges[ cursors[ map[ i ] ] ] = cursors[ i ]; // "n[-resize]", etc.
+					textChanges[ wmDirs[ map[ i ] ] ] = wmDirs[ i ]; // "tb", "lr", etc.
 				}
 
 				if ( quarterTurned ) {
+					// Text fragments to be swapped when changing from horizontal writing
+					// to vertical, or vice versa.
 					rotateMap = {
-						horizontal: 'vertical',
-						'background-position-x': 'background-position-y',
+						// Specific properties
 						height: 'width',
+						'background-position-x': 'background-position-y',
+						// Resize, writing modes, and URLs.
+						horizontal: 'vertical',
+						// Cursors
 						text: 'vertical-text',
+						'ns-resize': 'ew-resize',
 						'row-resize': 'col-resize',
+						// Media orientation
 						portrait: 'landscape',
+						// Overflow-*, scroll snap properties
+						x: 'y',
+						// Transforms
 						scalex: 'scaley',
 						skewx: 'skewy',
 						rotatex: 'rotatey',
@@ -483,6 +495,11 @@ function CSSJanus() {
 				if ( dirFlipped ) {
 					textChanges.ltr = 'rtl';
 					textChanges.rtl = 'ltr';
+				}
+
+				if ( cornersFlipped ) {
+					textChanges[ 'nesw-resize' ] = 'nwse-resize';
+					textChanges[ 'nwse-resize' ] = 'nesw-resize';
 				}
 
 				/**
@@ -637,19 +654,26 @@ function CSSJanus() {
 				// Flip rules like left: , padding-right: , etc.
 				.replace( sidesRegExp, function ( match, prefix, dontRotate, suppressChange, side ) {
 					return dontRotate ?
+						// Dealing with a property with non-standard behaviour regarding sides.
+						// For example:
+						// * caption-side is writing-mode-relative, and shouldn't ever be
+						//   rotated or flipped. suppressChange = true
+						// * float: left/right works by direction, not writing mode. It can
+            //   be flipped between left and right, but never rotated.
 						prefix + dontRotate +
-							( !suppressChange && dirFlipped && ( side === 'right' ? 'left' : ( side === 'left' && 'right' ) ) || side ) :
+							( !suppressChange && dirFlipped && ( { right: 'left', left: 'right' }[ side.toLowerCase() ] ) || side ) :
+						// Normal sides. Rotate/flip as applicable.
 						prefix + swapText( side );
 				} )
 				// Transform North/East/South/West in rules like cursor: nw-resize;
-				.replace( cursorRegExp, function ( match, pre, ns, ew, nesw, otherCursor ) {
+				.replace( cursorRegExp, function ( match, pre, ns, ew, otherCursor ) {
 					return pre + (
 						otherCursor ?
+							// cursor: ns/ew/nesw/nwse/row/col-resize/text/vertical-text
 							swapText( otherCursor ) :
-							( nesw ?
-								( cornersFlipped ? nesw === 'sw' ? 'nwse' : 'nesw' : ns + ew + nesw ) :
-								swapText( quarterTurned ? ew : ns ) + swapText( quarterTurned ? ns : ew )
-							) + '-resize'
+							// cursor: n/e/s/w/ne/nw/se/sw-resize
+							swapText( quarterTurned ? ew : ns ) +
+							swapText( quarterTurned ? ns : ew ) + '-resize'
 					);
 				} )
 				// Border radius
@@ -687,7 +711,7 @@ function CSSJanus() {
 						swapText( prop ) +
 						// If there's a value, transform it. (No value if in transition statement.)
 						( space ? space + val.replace( bgPositionSingleValueRegExp, function ( match, pre, position ) {
-							if ( prop === 'background-position-x' ?
+							if ( prop.toLowerCase() === 'background-position-x' ?
 								flipX :
 								flipY
 							) {
@@ -905,7 +929,7 @@ function CSSJanus() {
 			if ( dirFlipped ) {
 				// Replace direction: ltr; with direction: rtl; and vice versa.
 				css = css.replace( directionRegExp, function ( match, pre, dir ) {
-					return pre + ( dir === 'ltr' ? 'rtl' : 'ltr' );
+					return pre + swapText( dir );
 				} );
 			}
 
@@ -914,8 +938,8 @@ function CSSJanus() {
 					.replace( resizeRegExp, function ( match, prop, value ) {
 						return prop + swapText( value );
 					} )
-					.replace( xyPropRegExp, function ( match, prop, value ) {
-						return prop + '-' + ( value === 'x' ? 'y' : 'x' );
+					.replace( xyPropRegExp, function ( match, prop, dimension ) {
+						return prop + '-' + swapText( dimension );
 					} )
 					.replace( sizeRegExp, function ( match, prefix, prop ) {
 						return prefix + swapText( prop );
@@ -925,13 +949,15 @@ function CSSJanus() {
 					} )
 					.replace( bgSizeRegExp, function ( match, prop, value ) {
 						return prop + value.replace( twoQuantsRegExp, function ( match, x, space, y ) {
-							return match === 'auto' ? match : ( y ? y + space : 'auto ' ) + x;
+							return match.toLowerCase() === 'auto' ? match : ( y ? y + space : 'auto ' ) + x;
 						} );
 					} )
-					.replace( mediaQueryRegExp, function ( match, prop, value, suffix ) {
-						return prop + value.replace( mediaFeatureRegExp, function ( match, prop, space, value, slash, vPixels ) {
+					.replace( mediaQueryRegExp, function ( match, prefix, value, suffix ) {
+						return prefix + value.replace( mediaFeatureRegExp, function ( match, prop, space, value, slash, vPixels ) {
 							return swapText( prop ) + space +
-								( slash ? vPixels + slash + value : swapText( value ) );
+								( slash ? vPixels + slash + value : value );
+						} ).replace( mediaOrientationRegExp, function ( match, prop, value ) {
+							return prop + swapText( value );
 						} ) + suffix;
 					} )
 					.replace( borderImageRepeatRegExp, '$1$4$3$2' )

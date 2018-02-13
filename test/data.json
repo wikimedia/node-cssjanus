@@ -337,6 +337,11 @@
 				".foo { cursor: ne-resize; }"
 			],
 			[
+				".foo { cursor: ns-resize; }",
+				null,
+				".foo { cursor: ew-resize; }"
+			],
+			[
 				".foo { cursor: nesw-resize; }",
 				".foo { cursor: nwse-resize; }",
 				null,
@@ -1460,12 +1465,21 @@
 				"url('http://www.blogger.com/img/triangle_ltr.gif'\t)"
 			],
 			[
+				"background: url(/foo/filtr.png)"
+			],
+			[
+				"background: url(/foo/ltrly_metaphorical.png)"
+			],
+			[
 				"background: url(/foo/bar.right.png)",
 				"background: url(/foo/bar.left.png)",
 				"background: url(/foo/bar.bottom.png)"
 			],
 			[
 				"background: url(/foo/bright.png)"
+			],
+			[
+				"background: url(/foo/smurf-rights.png)"
 			],
 			[
 				"background: url(/foo/bar-ltr.png)",
@@ -1609,6 +1623,84 @@
 			[
 				".foo { float: left; float: right; float: left; }",
 				".foo { float: right; float: left; float: right; }"
+			]
+		]
+	},
+	"work with different capitalizations": {
+		"roundtrip": false,
+		"cases": [
+			[
+				".foo { FlOaT: LeFt; }",
+				".foo { FlOaT: right; }"
+			],
+			[
+				".foo { Direction: LtR; }",
+				".foo { Direction: rtl; }"
+			],
+			[
+				".foo { Cursor: NeSw-resize; }",
+				".foo { Cursor: nwse-resize; }",
+				null,
+				".foo { Cursor: nwse-resize; }"
+			],
+			[
+				".foo { Cursor :nS-resize ; }",
+				null,
+				".foo { Cursor :ew-resize ; }"
+			],
+			[
+				".foo { Padding-Left: 1PX; }",
+				".foo { Padding-right: 1PX; }",
+				".foo { Padding-top: 1PX; }"
+			],
+			[
+				".foo {leFt: 1em;}",
+				".foo {right: 1em;}",
+				".foo {top: 1em;}"
+			],
+			[
+				".foo { Background-Position-X: 77%; }",
+				".foo { Background-Position-X: 23%; }",
+				".foo { background-position-y: 77%; }"
+			],
+			[
+				"div { Background-Repeat: Repeat-X; }",
+				null,
+				"div { Background-Repeat: repeat-y; }"
+			],
+			[
+				"div { Transform: roTate( 40DEG ); }",
+				"div { Transform: roTate( -40DEG ); }",
+				"div { Transform: roTate( -40DEG ); }",
+				"div { Transform: roTate( 40DEG ); }"
+			],
+			[
+				"div { transform: RotateX( 10deg ); }",
+				null,
+				"div { transform: rotatey( -10deg ); }",
+				"div { transform: rotatey( 10deg ); }"
+			],
+			[
+				"div { transform: RotateZ( 10deg ) Translate( 10px, 20px ); }",
+				"div { transform: RotateZ( -10deg ) Translate( -10px, 20px ); }",
+				"div { transform: RotateZ( -10deg ) Translate( 20px, 10px ); }",
+				"div { transform: RotateZ( 10deg ) Translate( -20px, 10px ); }"
+			],
+			[
+				"div { transform:sCalex( 2 ); }",
+				null,
+				"div { transform:scaley( 2 ); }"
+			],
+			[
+				"div { transform: SkeW( 5deg, 10deg ); }",
+				"div { transform: SkeW( -5deg, -10deg ); }",
+				"div { transform: SkeW( 10deg, 5deg ); }",
+				"div { transform: SkeW( -10deg, -5deg ); }"
+			],
+			[
+				"@MEDIA (Orientation: Landscape) { a { color: red; } }",
+				null,
+				"@MEDIA (Orientation: portrait) { a { color: red; } }"
 			]
 		]
 	},
