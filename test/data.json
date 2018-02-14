@@ -1288,6 +1288,27 @@
 				"div { transform: matrix( 0.8, -0.3, -0.1, 1.2, -20, 50 ); }"
 			],
 			[
+				"div { transform: scale( 2 ); }",
+				null,
+				"div { transform: scale( 1, 2 ); }"
+			],
+			[
+				"div { transform: scale( 1  ,  2 ); }",
+				null,
+				"div { transform: scale( 2  ,  1 ); }"
+			],
+			[
+				"div { transform: scale( /* a */ 1 /* b */ , /* c */  2 /* d */ ); }",
+				null,
+				"div { transform: scale( /* a */ 2 /* b */ , /* c */  1 /* d */ ); }"
+			],
+			[
+				"div { transform: translate( /* a */ -1,/* b */ 1 /* c */ ); }",
+				"div { transform: translate( /* a */ 1,/* b */ 1 /* c */ ); }",
+				"div { transform: translate( /* a */ 1,/* b */ -1 /* c */ ); }",
+				"div { transform: translate( /* a */ -1,/* b */ -1 /* c */ ); }"
+			],
+			[
 				"div { transform-origin: 10% 20% 0; }",
 				"div { transform-origin: 90% 20% 0; }",
 				"div { transform-origin: 20% 10% 0; }",

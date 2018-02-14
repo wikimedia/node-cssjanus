@@ -771,15 +771,20 @@ function CSSJanus() {
 				// Transforms
 				.replace( transformRegExp, function ( match, prop, value, suffix ) {
 					return prop + value.replace( transformFunctionRegExp,
-						function ( match, prop, start, value, end ) {
-							var lcProp = prop.toLowerCase(),
-								newProp = swapText( prop ),
+						function ( match, fnName, start, value, end ) {
+							var lcFnName = fnName.toLowerCase(),
+								newProp = swapText( fnName ),
 								fallbackFirstArg,
 								isR3d,
-								vals = value.split( /\s*,\s*/g ),
-								n;
+								vals = [],
+								separators = [],
+								newVals;
 
-							switch ( lcProp ) {
+							value.split( new RegExp( '(' + comma + ')', 'g' ) ).forEach( function ( text, index ) {
+								( index % 2 === 1 ? separators : vals ).push( text );
+							} );
+
+							switch ( lcFnName ) {
 								case 'rotate3d':
 									isR3d = true;
 									if ( vals.length !== 4 ) {
@@ -798,17 +803,17 @@ function CSSJanus() {
 									// Flip/swap first two args
 									fallbackFirstArg = '0';
 
-									if ( lcProp.indexOf( 'skew' ) === 0 ) {
+									if ( lcFnName.indexOf( 'skew' ) === 0 ) {
 										// skew, skewx, skewy.
 										if ( flipX ^ flipY ) {
 											vals[ 0 ] = flipSign( vals[ 0 ] );
-											if ( lcProp === 'skew' ) {
+											if ( lcFnName === 'skew' ) {
 												if ( vals[ 1 ] ) {
 													vals[ 1 ] = flipSign( vals[ 1 ] );
 												}
 											}
 										}
-										if ( lcProp !== 'skew' ) {
+										if ( lcFnName !== 'skew' ) {
 											// skewx and skewy have only one argument, no need to
 											// continue on to the swap of vals[ 0 ] and vals[ 1 ].
 											break;
@@ -850,44 +855,48 @@ function CSSJanus() {
 									break;
 								case 'translatex':
 								case 'translatey':
-									if ( lcProp.slice( -1 ) === 'x' ? flipX : flipY ) {
+									if ( lcFnName.slice( -1 ) === 'x' ? flipX : flipY ) {
 										vals[ 0 ] = flipSign( vals[ 0 ] );
 									}
 									break;
 								case 'rotatex':
 								case 'rotatey':
-									if ( ( ( lcProp.slice( -1 ) === 'x' ) ? flipY : flipX ) ^ quarterTurned ) {
+									if ( ( ( lcFnName.slice( -1 ) === 'x' ) ? flipY : flipX ) ^ quarterTurned ) {
 										vals[ 0 ] = flipSign( vals[ 0 ] );
 									}
 									break;
 								case 'matrix':
-									n = vals.slice( 0 );
+									newVals = vals.slice( 0 );
 									// Flip translation.
 									if ( flipX ) {
-										n[ 4 ] = flipSign( n[ 4 ] );
+										newVals[ 4 ] = flipSign( vals[ 4 ] );
 									}
 									if ( flipY ) {
-										n[ 5 ] = flipSign( n[ 5 ] );
+										newVals[ 5 ] = flipSign( vals[ 5 ] );
 									}
 									if ( quarterTurned ) {
 										// Swap scale dimensions
-										n[ 0 ] = vals[ 3 ];
-										n[ 3 ] = vals[ 0 ];
+										newVals[ 0 ] = vals[ 3 ];
+										newVals[ 3 ] = vals[ 0 ];
+										// Swap skew values.
+										newVals[ 1 ] = vals[ 2 ];
+										newVals[ 2 ] = vals[ 1 ];
 										// Swap translate directions.
-										n[ 1 ] = [ n[ 2 ], n[ 2 ] = n[ 1 ] ][ 0 ];
-										n[ 4 ] = [ n[ 5 ], n[ 5 ] = n[ 4 ] ][ 0 ];
+										newVals[ 4 ] = [ newVals[ 5 ], newVals[ 5 ] = newVals[ 4 ] ][ 0 ];
 									}
 									// Flip skew values.
 									if ( flipX ^ flipY ) {
-										n[ 1 ] = flipSign( n[ 1 ] );
-										n[ 2 ] = flipSign( n[ 2 ] );
+										newVals[ 1 ] = flipSign( newVals[ 1 ] );
+										newVals[ 2 ] = flipSign( newVals[ 2 ] );
 									}
 
-									vals = n;
+									vals = newVals;
 									break;
 							}
 
-							return newProp + start + vals.join( ', ' ) + end;
+							return newProp + start + vals.reduce( function ( acc, val, index ) {
+								return acc + ( separators[ index - 1 ] || ', ' ) + val;
+							} ) + end;
 						}
 					) + suffix;
 				} )
