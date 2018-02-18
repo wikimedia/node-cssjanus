@@ -100,10 +100,10 @@
 				".foo { padding: inherit 1px auto 3px; }"
 			],
 			[
-				".foo { margin: -1.25e2em +1ex 5E-1px .15e+1px; }",
-				".foo { margin: -1.25e2em .15e+1px 5E-1px +1ex; }",
-				".foo { margin: .15e+1px 5E-1px +1ex -1.25e2em; }",
-				".foo { margin: .15e+1px -1.25e2em +1ex 5E-1px; }"
+				".foo { margin: -1.25e2em +1ex 5E-1px .15e+1vw; }",
+				".foo { margin: -1.25e2em .15e+1vw 5E-1px +1ex; }",
+				".foo { margin: .15e+1vw 5E-1px +1ex -1.25e2em; }",
+				".foo { margin: .15e+1vw -1.25e2em +1ex 5E-1px; }"
 			],
 			[
 				".foo { padding: 1px 2px 3px 4px !important; }",
@@ -134,6 +134,12 @@
 				"  .foo  {  padding: 1px  4px   3px    2px     ;  }  ",
 				"  .foo  {  padding: 4px  3px   2px    1px     ;  }  ",
 				"  .foo  {  padding: 4px  1px   2px    3px     ;  }  "
+			],
+			[
+				".foo { /* allowed in certain old browsers */ padding: 1 px 2 px 3 px 4 px; }",
+				".foo { /* allowed in certain old browsers */ padding: 1 px 4 px 3 px 2 px; }",
+				".foo { /* allowed in certain old browsers */ padding: 4 px 3 px 2 px 1 px; }",
+				".foo { /* allowed in certain old browsers */ padding: 4 px 1 px 2 px 3 px; }"
 			],
 			[
 				"#settings td p strong {}"
@@ -299,6 +305,12 @@
 				null,
 				".foo { padding-left: 0; }",
 				".foo { padding-right: 0; }"
+			],
+			[
+				".foo { transition: padding-left 100ms,  padding-top 200ms; }",
+				".foo { transition: padding-right 100ms,  padding-top 200ms; }",
+				".foo { transition: padding-top 100ms,  padding-left 200ms; }",
+				".foo { transition: padding-top 100ms,  padding-right 200ms; }"
 			]
 		]
 	},
@@ -314,6 +326,12 @@
 				null,
 				".foo { margin-right: 0; }",
 				".foo { margin-left: 0; }"
+			],
+			[
+				".foo { transition: margin-left 1s, margin-top 2s; }",
+				".foo { transition: margin-right 1s, margin-top 2s; }",
+				".foo { transition: margin-top 1s, margin-left 2s; }",
+				".foo { transition: margin-top 1s, margin-right 2s; }"
 			]
 		]
 	},
@@ -408,16 +426,39 @@
 				".foo { text-shadow: red -2px 1px; }"
 			],
 			[
-				".foo { text-shadow: 1px 2px; }",
-				".foo { text-shadow: -1px 2px; }",
-				".foo { text-shadow: 2px 1px; }",
-				".foo { text-shadow: -2px 1px; }"
+				".foo { text-shadow:1px  2px; }",
+				".foo { text-shadow:-1px  2px; }",
+				".foo { text-shadow:2px  1px; }",
+				".foo { text-shadow:-2px  1px; }"
 			],
 			[
 				".foo { text-shadow: red 0 2px; }",
 				null,
 				".foo { text-shadow: red 2px 0; }",
 				".foo { text-shadow: red -2px 0; }"
+			],
+			[
+				".foo { text-shadow: rgb( 255, 0, 0 ) -1em 2px, 3px 4em 5px rgb(0 255 0); }",
+				".foo { text-shadow: rgb( 255, 0, 0 ) 1em 2px, -3px 4em 5px rgb(0 255 0); }",
+				".foo { text-shadow: rgb( 255, 0, 0 ) 2px -1em, 4em 3px 5px rgb(0 255 0); }",
+				".foo { text-shadow: rgb( 255, 0, 0 ) -2px -1em, -4em 3px 5px rgb(0 255 0); }"
+			],
+			[
+				".foo { text-shadow: #900 1px 2px; }",
+				".foo { text-shadow: #900 -1px 2px; }",
+				".foo { text-shadow: #900 2px 1px; }",
+				".foo { text-shadow: #900 -2px 1px; }"
+			],
+			[
+				".foo { text-shadow: rgb( 255 0 0 ) 1px 0; }",
+				".foo { text-shadow: rgb( 255 0 0 ) -1px 0; }",
+				".foo { text-shadow: rgb( 255 0 0 ) 0 1px; }"
+			],
+			[
+				".foo { text-shadow: rgb( 255 /* a */ 255 0 ) 1px 2px; }",
+				".foo { text-shadow: rgb( 255 /* a */ 255 0 ) -1px 2px; }",
+				".foo { text-shadow: rgb( 255 /* a */ 255 0 ) 2px 1px; }",
+				".foo { text-shadow: rgb( 255 /* a */ 255 0 ) -2px 1px; }"
 			]
 		]
 	},
@@ -483,6 +524,17 @@
 				"div { box-shadow: hsl(120, 100%, 50%) -1px 2px; }", 
 				"div { box-shadow: hsl(120, 100%, 50%) 2px 1px; }",
 				"div { box-shadow: hsl(120, 100%, 50%) -2px 1px; }"
+			],
+			[
+				".foo  { box-shadow: rgb( 255 0 0 ) inset -1px 2px 3px 3px;  }",
+				".foo  { box-shadow: rgb( 255 0 0 ) inset 1px 2px 3px 3px;  }",
+				".foo  { box-shadow: rgb( 255 0 0 ) inset 2px -1px 3px 3px;  }",
+				".foo  { box-shadow: rgb( 255 0 0 ) inset -2px -1px 3px 3px;  }"
+			],
+			[
+				".foo { box-shadow: red 2px 0 inset; }",
+				".foo { box-shadow: red -2px 0 inset; }",
+				".foo { box-shadow: red 0 2px inset; }"
 			],
 			[ 
 				"@supports ( box-shadow: 1px ) { .foo { padding: 1px 2px; } }", 
@@ -573,6 +625,17 @@
 				".foo { border-color: red hsla(0, 100%, 50%, 0.5) hsl(0, 100%, 50%) #f00; }",
 				".foo { border-color: hsla(0, 100%, 50%, 0.5) hsl(0, 100%, 50%) #f00 red; }",
 				".foo { border-color: hsla(0, 100%, 50%, 0.5) red #f00 hsl(0, 100%, 50%); }"
+			],
+			[
+				".foo { border-color: red #f00f rgb(255 /* a */ 0 /* b */ 0) rgba(255, 0, 0, 0.5); }",
+				".foo { border-color: red rgba(255, 0, 0, 0.5) rgb(255 /* a */ 0 /* b */ 0) #f00f; }",
+				".foo { border-color: rgba(255, 0, 0, 0.5) rgb(255 /* a */ 0 /* b */ 0) #f00f red; }",
+				".foo { border-color: rgba(255, 0, 0, 0.5) red #f00f rgb(255 /* a */ 0 /* b */ 0); }"
+			],
+			[
+				".foo { border-color: hsl( -5.3E2deg +5% 1e2 ) hsla( 0.5rad, 20%, 50%, 0.5 ); }",
+				null,
+				".foo { border-color: hsla( 0.5rad, 20%, 50%, 0.5 ) hsl( -5.3E2deg +5% 1e2 ); }"
 			]
 		]
 	},
@@ -583,6 +646,12 @@
 				".foo { border-width: 1px 4px 3px 2px; }",
 				".foo { border-width: 4px 3px 2px 1px; }",
 				".foo { border-width: 4px 1px 2px 3px; }"
+			],
+			[
+				".foo { border-width: 1px thin medium thick; }",
+				".foo { border-width: 1px thick medium thin; }",
+				".foo { border-width: thick medium thin 1px; }",
+				".foo { border-width: thick 1px thin medium; }"
 			]
 		]
 	},
@@ -731,6 +800,18 @@
 				".foo { background-position: right 5% top 10%; }",
 				".foo { background-position: left 10% top 5%; }",
 				".foo { background-position: right 10% top 5%; }"
+			],
+			[
+				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) left top; }",
+				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) right top; }",
+				null,
+				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) right top; }"
+			],
+			[
+				".foo { background: element( #foo-left ) left top; }",
+				".foo { background: element( #foo-left ) right top; }",
+				null,
+				".foo { background: element( #foo-left ) right top; }"
 			]
 		]
 	},
@@ -806,6 +887,12 @@
 				null, 
 				"div { background-position: 15% center; }",
 				"div { background-position: 85% center; }"
+			],
+			[
+				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) 1% top; }",
+				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) 99% top; }",
+				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) left 1%; }",
+				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) right 1%; }"
 			]
 		]
 	},
@@ -1076,6 +1163,17 @@
 				"a { padding: calc( 1px /* ) */ + 2px ) 3px; }",
 				null,
 				"a { padding: 3px calc( 1px /* ) */ + 2px ); }"
+			],
+			[
+				"div { border-color: red rgb( 255, calc( 50 * 2 ), 0 ) #000 #000; }",
+				"div { border-color: red #000 #000 rgb( 255, calc( 50 * 2 ), 0 ); }",
+				"div { border-color: #000 #000 rgb( 255, calc( 50 * 2 ), 0 ) red; }",
+				"div { border-color: #000 red rgb( 255, calc( 50 * 2 ), 0 ) #000; }"
+			],
+			[
+				".foo { left: calc( /* broken unclosed calc */; }",
+				".foo { right: calc( /* broken unclosed calc */; }",
+				".foo { top: calc( /* broken unclosed calc */; }"
 			]
 		]
 	},
@@ -1189,6 +1287,11 @@
 				"scroll-snap-points-x: repeat(400px);",
 				null,
 				"scroll-snap-points-y: repeat(400px);"
+			],
+			[
+				"#main { touch-action: pan-x; }",
+				null,
+				"#main { touch-action: pan-y; }"
 			]
 		]
 	},
@@ -1454,6 +1557,9 @@
 			],
 			[
 				".foo { background: url(/bar-lr-inline.png); }"
+			],
+			[
+				".foo { background: url('/foo-left.png' /* comment */ ); }"
 			]
 		]
 	},
@@ -1611,7 +1717,25 @@
 				".foo-left /* comment */ { color: red; }"
 			],
 			[
+				".foo-left * { color: red; }"
+			],
+			[
+				"a.padding-left .\\31 { color: red; }"
+			],
+			[
 				"[class*=\"span\"].pull-right,.row-fluid [class*=\"span\"].pull-right { color: red; }"
+			],
+			[
+				".left *|a { color: red; }"
+			],
+			[
+				".padding-left ['data-foo'$='value'] { color: red; }"
+			],
+			[
+				".padding-left [\"data-foo\"$=\"escaped\\\"quote[]\\\n\"] { color: red; }"
+			],
+			[
+				".left [\"hreflang\"|=\"en\"] { color: red; }"
 			]
 		]
 	},
@@ -1783,6 +1907,12 @@
 			],
 			[
 				"/* @noflip */ div.foo[bar*='baz{quux'] { left: 10px; float: left; }"
+			],
+			[
+				".foo { /* @noflip */ background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) left top; }"
+			],
+			[
+				"/* @noflip */ a::before{ content: \"brackets{}\"; right: 1px; }"
 			]
 		]
 	},
