@@ -98,7 +98,7 @@ function CSSJanus() {
 		commentToken = '`COMMENT`',
 		// Patterns
 		nonAsciiPattern = '[^\\u0020-\\u007e]',
-		unicodePattern = '(?:(?:\\[0-9a-f]{1,6})(?:\\r\\n|\\s)?)',
+		unicodePattern = '(?:(?:\\\\[0-9a-f]{1,6})(?:\\r\\n|\\s)?)',
 		numPattern = '(?:[0-9]*\\.[0-9]+|[0-9]+)',
 		unitPattern = '(?:em|ex|px|cm|mm|in|pt|pc|deg|rad|grad|ms|s|hz|khz|%)',
 		directionPattern = 'direction\\s*:\\s*',
