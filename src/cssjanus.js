@@ -151,7 +151,7 @@ function CSSJanus() {
 		sidesPattern = 'top|right|bottom|left',
 		edgesPattern = '(?:' + sidesPattern + '|center)',
 		lookAheadNotLetterPattern = '(?![a-zA-Z])',
-		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|\\*|=|~=|\\^=|\\$=|\\||' + stringPattern + '|' + commentToken + ')*?{)',
+		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|~|\\(|\\)|\\[|\\]|\\*|=|~=|\\^=|\\$=|\\||' + stringPattern + '|' + commentToken + ')*?{)',
 		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		suffixPattern = '(' + _ + '(?:!important' + _ + ')?[;}])',
@@ -235,9 +235,13 @@ function CSSJanus() {
 		transformRegExp = new RegExp( '(transform' + colon + ')([^;{}]+)' + suffixPattern, 'gi' ),
 		transformFunctionRegExp = new RegExp( '((?:rotate|translate|skew|scale|matrix)(?:x|y|z|3d)?)(\\(' + _ + ')([^\\)]*?)(' + _ + '\\))', 'gi' ),
 		transformOriginRegExp = new RegExp( '(transform-origin' + colon + ')' +
+			// Are the origin dimensions reversed, Y X instead of X Y?
 			'(?=((?:top|bottom)' + ws + quantPattern + '|' + quantPattern + ws + '(?:left|right))?)' +
+			// If the two values are swapped (because we're switching between horizontal and vertical), will it be Y X?
 			'(?=((?:left|right)' + ws + quantPattern + '|' + quantPattern + ws + '(?:top|bottom))?)' +
-			'(' + edgesPattern + '(?=' + ws + quantPattern + ')|' + quantPattern + ')' +
+			// First value. (If there's just a single edge value, don't match. No extra transformation necessary.)
+			'(' + edgesPattern + '(?=' + ws + '(?:' + edgesPattern + '|' + quantPattern + '))|' + quantPattern + ')' +
+			// Whitespace and second value (which can be either X or Y).
 			'(?:' + sws + '(' + edgesPattern + '|' + quantPattern + '))?', 'gi' ),
 		perspectiveOriginRegExp = new RegExp( '(perspective-origin' + colon + ')([^;{}]+)', 'gi' ),
 		sizeRegExp = new RegExp( '(max-|min-|[^-a-z])(height|width)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
@@ -551,11 +555,11 @@ function CSSJanus() {
 								yPos = space1 = '';
 							}
 						} else {
-							if ( !yEdge && ( map[ 2 ] === 0 || map[ 1 ] === 0 ) ) {
+							if ( !yEdge && flipY ) {
 								yPos = flipPositionValue( yPos );
 							}
 						}
-						if ( !xEdge && ( map[ 3 ] === 1 || map[ 0 ] === 1 ) ) {
+						if ( !xEdge && flipX ) {
 							xPos = flipPositionValue( xPos );
 						}
 					}
@@ -681,7 +685,7 @@ function CSSJanus() {
 						// * caption-side is writing-mode-relative, and shouldn't ever be
 						//   rotated or flipped. suppressChange = true
 						// * float: left/right works by direction, not writing mode. It can
-            //   be flipped between left and right, but never rotated.
+            //   be flipped between left and right, but never rotated. dontRotate = true
 						prefix + dontRotate +
 							( !suppressChange && dirFlipped && ( { right: 'left', left: 'right' }[ side.toLowerCase() ] ) || side ) :
 						// Normal sides. Rotate/flip as applicable.
@@ -701,14 +705,16 @@ function CSSJanus() {
 				// Border radius
 				.replace( borderRadiusRegExp, function ( match, pre ) {
 					var preSlash = processFourNotationArray( cornersMap, [].slice.call( arguments, 2, 9 ), cornersFlipped ),
+						slash = arguments[ 9 ] || '',
 						postSlash = processFourNotationArray( cornersMap, [].slice.call( arguments, 10, 17 ), cornersFlipped );
 					return pre +
-						( quarterTurned ? postSlash + ( arguments[ 9 ] || '' ) + preSlash : preSlash + ( arguments[ 9 ] || '' ) + postSlash ) +
+						( quarterTurned ? postSlash + slash + preSlash : preSlash + slash + postSlash ) +
 						( arguments[ 17 ] || '' );
 				} )
 				// Shadows
 				.replace( shadowRegExp, function ( match, prop, value ) {
 					return prop + value.replace( shadowValueRegExp, function ( match, color, X, space, Y, end ) {
+						// Process each shadow individually.
 						return ( color || '' ) + ( flipXYPositions( map[ 1 ], X, Y ) + space + flipXYPositions( map[ 2 ], X, Y ) ) + end;
 					} );
 				} )
@@ -926,24 +932,24 @@ function CSSJanus() {
 				.replace( transformOriginRegExp, function ( match, prop, reverseOrder, reverseOrderQT, v1, space, v2 ) {
 					var temp,
 						isReverseOrder = quarterTurned ? reverseOrderQT : reverseOrder,
-						x = isReverseOrder ? v2 : v1,
-						y = isReverseOrder ? v1 : v2;
+						toFlipV1 = isReverseOrder ? flipY : flipX,
+						toFlipV2 = isReverseOrder ? flipX : flipY;
 
-					if ( flipX ) {
-						x = flipPositionValue( x );
+					if ( toFlipV1 ) {
+						v1 = flipPositionValue( v1 );
 					}
-					if ( flipY && y ) {
-						y = flipPositionValue( y );
+					if ( toFlipV2 && v2 ) {
+						v2 = flipPositionValue( v2 );
 					}
+
 					if ( quarterTurned ) {
-						temp = y;
-						y = x;
-						x = temp;
+						temp = v2 || 'center';
+						v2 = v1;
+						v1 = temp;
 					}
-
-					return prop + ( isReverseOrder ?
-						( y ? y + space : 'center ' ) + x :
-						( x ? x + ( y ? space + y : '' ) : 'center ' + y )
+					return prop + ( ( v1 && v2 ) ?
+						v1 + ( space || ' ' ) + v2 :
+						( v1 || v2 )
 					);
 				} )
 				.replace( perspectiveOriginRegExp, function ( match, prop, val ) {

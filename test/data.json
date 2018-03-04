@@ -802,6 +802,12 @@
 				".foo { background-position: right 10% top 5%; }"
 			],
 			[
+				".foo { background-position: left top, left top; }",
+				".foo { background-position: right top, right top; }",
+				null,
+				".foo { background-position: right top, right top; }"
+			],
+			[
 				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) left top; }",
 				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) right top; }",
 				null,
@@ -887,6 +893,12 @@
 				null, 
 				"div { background-position: 15% center; }",
 				"div { background-position: 85% center; }"
+			],
+			[
+				"div { background-position: 1% 2%, 3% 4%; }", 
+				"div { background-position: 99% 2%, 97% 4%; }", 
+				"div { background-position: 2% 1%, 4% 3%; }",
+				"div { background-position: 98% 1%, 96% 3%; }"
 			],
 			[
 				".foo { background: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) 1% top; }",
@@ -1204,10 +1216,10 @@
 				"div { background-image: linear-gradient( 0.35turn, #F00, #00F ); }"
 			],
 			[
-				".foo { background-image: linear-gradient(#326cc1, #234e8c); }",
+				".foo { background-image: linear-gradient(hsl( 10deg 50% 50% ), #234e8c); }",
 				null,
-				".foo { background-image: linear-gradient(90deg, #326cc1, #234e8c); }",
-				".foo { background-image: linear-gradient(270deg, #326cc1, #234e8c); }"
+				".foo { background-image: linear-gradient(90deg, hsl( 10deg 50% 50% ), #234e8c); }",
+				".foo { background-image: linear-gradient(270deg, hsl( 10deg 50% 50% ), #234e8c); }"
 			],
 			[
 				".foo { background-image: linear-gradient( 0, rgba( 0, 0, 255, 0.2 ) 10%, #FF0000 ); }",
@@ -1449,8 +1461,8 @@
 			[
 				"div { transform-origin: left top; }",
 				"div { transform-origin: right top; }",
-				"div { transform-origin: top left; }",
-				"div { transform-origin: top right; }"
+				"div { transform-origin: left top; }",
+				"div { transform-origin: right top; }"
 			],
 			[
 				"div { transform-origin: left; }",
@@ -1727,6 +1739,9 @@
 			],
 			[
 				".left *|a { color: red; }"
+			],
+			[
+				".left ~ div { color: red; }"
 			],
 			[
 				".padding-left ['data-foo'$='value'] { color: red; }"
