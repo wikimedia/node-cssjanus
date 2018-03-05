@@ -16,16 +16,20 @@ var cssjanus;
  *
  * @author Trevor Parscal
  * @author Roan Kattouw
+ * @author Yair Rand
  *
  * @class
  * @constructor
  * @param {RegExp} regex Regular expression whose matches to replace by a token
- * @param {string} token Placeholder text
+ * @param {string} token Placeholder text, containing the string "\d+", to
+   replace with the index of the token.
  */
 function Tokenizer( regex, token ) {
 
 	var matches = [],
-		index = 0;
+		tokenParts = token.split( /\\d\+/ ),
+		tokenStart = tokenParts[ 0 ],
+		tokenEnd = tokenParts[ 1 ];
 
 	/**
 	 * Add a match.
@@ -35,18 +39,20 @@ function Tokenizer( regex, token ) {
 	 * @return {string} Token to leave in the matched string's place
 	 */
 	function tokenizeCallback( match ) {
-		matches.push( match );
-		return token;
+		var index = matches.push( match );
+		return tokenStart + index + tokenEnd;
 	}
 
 	/**
 	 * Get a match.
 	 *
 	 * @private
+	 * @param {string} tokenMatch Matched token
+	 * @param {string} foundIndex Index of the matched token
 	 * @return {string} Original matched string to restore
 	 */
-	function detokenizeCallback() {
-		return matches[ index++ ];
+	function detokenizeCallback( tokenMatch, foundIndex ) {
+		return matches[ foundIndex - 1 ];
 	}
 
 	return {
@@ -67,7 +73,8 @@ function Tokenizer( regex, token ) {
 		 * @return {string} Original string
 		 */
 		detokenize: function ( str ) {
-			return str.replace( new RegExp( '(' + token + ')', 'g' ), detokenizeCallback );
+			var tokenRegex = new RegExp( tokenStart + '(\\d+)' + tokenEnd, 'g' );
+			return str.replace( tokenRegex, detokenizeCallback );
 		}
 	};
 }
@@ -102,11 +109,10 @@ function CSSJanus() {
 			lr: 3
 		},
 		// Tokens
-		noFlipSingleToken = '`NOFLIP_SINGLE`',
-		noFlipClassToken = '`NOFLIP_CLASS`',
-		commentToken = '`COMMENT`',
-		calcToken = '`CALC$1`',
-		calcPattern = '`CALC\\d+`',
+		noFlipSingleToken = '`NOFLIP_SINGLE\\d+`',
+		noFlipClassToken = '`NOFLIP_CLASS\\d+`',
+		commentToken = '`COMMENT\\d+`',
+		calcToken = '`CALC\\d+`',
 		// Patterns
 		nonAsciiPattern = '[^\\u0020-\\u007e]',
 		unicodePattern = '(?:(?:\\\\[0-9a-f]{1,6})(?:\\r\\n|\\s)?)',
@@ -130,8 +136,8 @@ function CSSJanus() {
 		nmcharPattern = '(?:[_a-z0-9-]|' + nonAsciiPattern + '|' + escapePattern + ')',
 		identPattern = '-?' + nmstartPattern + nmcharPattern + '*',
 		stringPattern = '(?:"(?:[^\\\"\n]|' + escapePattern + '|\\\n)*"|\'(?:[^\\\'\n]|' + escapePattern + '|\\\n)*\')',
-		quantPattern = '(?:[-+]?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|-?' + calcPattern + ')',
-		posQuantPattern = '(?:\\+?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|' + calcPattern + ')',
+		quantPattern = '(?:[-+]?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|-?' + calcToken + ')',
+		posQuantPattern = '(?:\\+?' + numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?|' + calcToken + ')',
 		signedQuantPattern = '(' + quantPattern + '|inherit|auto)',
 		signedLineWidthPattern = '(' + quantPattern + '|inherit|auto|thin|medium|thick)',
 		fourNotationQuantPropsPattern = '((?:margin|padding|border-image-width|border-image-outset)' + colon + ')',
@@ -622,13 +628,13 @@ function CSSJanus() {
 							css = css.substring( 0, calcIndex ) +
 								// Tokenize the calc(), recording it's index in the token.
 								// This is necessary because calcs may be moved around.
-								token.replace( /\$1/, matches.push( css.substring( calcIndex, lastBracket ) ) - 1 ) +
+								token.replace( /\\d\+/, matches.push( css.substring( calcIndex, lastBracket ) ) - 1 ) +
 								css.substring( lastBracket );
 						}
 						return css;
 					},
 					detokenize: function ( str ) {
-						var regex = new RegExp( '(-?)' + token.replace( /\$1/, '(\\d+)' ), 'g' );
+						var regex = new RegExp( '(-?)' + token.replace( /\\d\+/, '(\\d+)' ), 'g' );
 						return str.replace( regex, function ( match, negative, index ) {
 							var calc = matches[ index ];
 							if ( negative ) {

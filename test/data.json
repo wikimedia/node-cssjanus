@@ -1186,6 +1186,17 @@
 				".foo { left: calc( /* broken unclosed calc */; }",
 				".foo { right: calc( /* broken unclosed calc */; }",
 				".foo { top: calc( /* broken unclosed calc */; }"
+			],
+			[
+				".foo { padding: calc( 2 * 2px /* 4px */ ) calc( 3 * 3px /* 9px */ ); }",
+				null,
+				".foo { padding: calc( 3 * 3px /* 9px */ ) calc( 2 * 2px /* 4px */ ); }"
+			],
+			[
+				".foo { margin: 1px calc( /* comment1 */ 2px * /* comment2 */ 2 /* comment3 */ ) 3%; }",
+				null,
+				".foo { margin: calc( /* comment1 */ 2px * /* comment2 */ 2 /* comment3 */ ) 3% calc( /* comment1 */ 2px * /* comment2 */ 2 /* comment3 */ ) 1px; }",
+				".foo { margin: calc( /* comment1 */ 2px * /* comment2 */ 2 /* comment3 */ ) 1px calc( /* comment1 */ 2px * /* comment2 */ 2 /* comment3 */ ) 3%; }"
 			]
 		]
 	},
