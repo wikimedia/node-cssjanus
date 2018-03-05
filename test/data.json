@@ -1939,6 +1939,9 @@
 			],
 			[
 				"/* @noflip */ a::before{ content: \"brackets{}\"; right: 1px; }"
+			],
+			[
+				"/* @noflip */ .\\\"\\}::before{ content: \"brackets{}\"; right: 1px; }"
 			]
 		]
 	},

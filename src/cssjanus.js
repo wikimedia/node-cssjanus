@@ -116,7 +116,7 @@ function CSSJanus() {
 		// Patterns
 		nonAsciiPattern = '[^\\u0020-\\u007e]',
 		unicodePattern = '(?:(?:\\\\[0-9a-f]{1,6})(?:\\r\\n|\\s)?)',
-		numPattern = '(?:[0-9]*\\.[0-9]+|[0-9]+)(?:[eE][-+]?[0-9+])?',
+		numPattern = '(?:[0-9]*\\.[0-9]+|[0-9]+)(?:[eE][-+]?[0-9]+)?',
 		unitPattern = '(?:em|ex|px|cm|mm|in|pt|pc|q|rem|ch|vh|vw|vmax|vmin|deg|rad|grad|ms|s|hz|khz|%)(?![a-z])',
 		// Whitespace
 		_ = '(?:\\s|' + commentToken + ')*',
@@ -157,7 +157,7 @@ function CSSJanus() {
 		sidesPattern = 'top|right|bottom|left',
 		edgesPattern = '(?:' + sidesPattern + '|center)',
 		lookAheadNotLetterPattern = '(?![a-zA-Z])',
-		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|~|\\(|\\)|\\[|\\]|\\*|=|~=|\\^=|\\$=|\\||' + stringPattern + '|' + commentToken + ')*?{)',
+		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|' + ws + '|\\r?\\n|#|\\:|\\.|\\,|\\+|>|~|\\(|\\)|\\[|\\]|\\*|=|~=|\\^=|\\$=|\\||' + stringPattern + ')*?{)',
 		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
 		suffixPattern = '(' + _ + '(?:!important' + _ + ')?[;}])',
@@ -166,7 +166,7 @@ function CSSJanus() {
 			'(?:' + comma + colorPattern + '(?:' + ws + quantPattern + ')?)+',
 		// Regular expressions
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
-		charsWithinSelectorPattern = '(?:' + urlPattern + '|' + stringPattern + '|[^\\}])*?',
+		charsWithinSelectorPattern = '(?:' + urlPattern + '|' + escapePattern + '|' + stringPattern + '|[^\\}])*?',
 		noFlipSingleRegExp = new RegExp( '(' + noFlipPattern + lookAheadNotOpenBracePattern + '(' + urlPattern + '|[^;}])+;?)', 'gi' ),
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
 		directionRegExp = new RegExp( '(' + directionPattern + ')(ltr|rtl)' + lookAheadNotLetterPattern, 'gi' ),
