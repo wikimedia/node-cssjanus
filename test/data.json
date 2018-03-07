@@ -818,6 +818,15 @@
 				".foo { background: element( #foo-left ) right top; }",
 				null,
 				".foo { background: element( #foo-left ) right top; }"
+			],
+			[
+				".foo { background: cross-fade( 5% url( foo.png ), rgb( 0, 255, 0 ) ) left top; }",
+				".foo { background: cross-fade( 5% url( foo.png ), rgb( 0, 255, 0 ) ) right top; }",
+				null,
+				".foo { background: cross-fade( 5% url( foo.png ), rgb( 0, 255, 0 ) ) right top; }"
+			],
+			[
+				".foo { background: image-set(url(/foo.png) 1x, url(/bar.png) 2x); }"
 			]
 		]
 	},
@@ -1070,6 +1079,11 @@
 				null,
 				".foo { background-position-x: 40%; }",
 				".foo { background-position-x: 60%; }"
+			],
+			[
+				".foo { background-position-x: 10%, /* comment */20%; }",
+				".foo { background-position-x: 90%, /* comment */80%; }",
+				".foo { background-position-y: 10%, /* comment */20%; }"
 			]
 		]
 	},
@@ -1134,6 +1148,21 @@
 				null,
 				"div { border-image: url(/foo-12.png) 2px 3px 2px 1px; }",
 				"div { border-image: url(/foo-12.png) 2px 1px 2px 3px; }"
+			],
+			[
+				"div { border-image: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) 1% 2%; }",
+				null,
+				"div { border-image: url(data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=) 2% 1%; }"
+			],
+			[
+				"div { border-image-width: 1/*  */2; }",
+				null,
+				"div { border-image-width: 2/*  */1; }"
+			],
+			[
+				"x { border-image: round /* */ url( foo.png ) 1 2; }",
+				null,
+				"x { border-image: round /* */ url( foo.png ) 2 1; }"
 			]
 		]
 	},
@@ -1209,6 +1238,12 @@
 				"div { background-image: linear-gradient( 100deg, red, blue ); }"
 			],
 			[
+				"div { background-image: linear-gradient( to left top, red, blue ); }",
+				"div { background-image: linear-gradient( to right top, red, blue ); }",
+				null,
+				"div { background-image: linear-gradient( to right top, red, blue ); }"
+			],
+			[
 				"div { background-image: linear-gradient( 10grad, rgb( 255, 0, 0 ), rgb( 0, 0, 255 ) ); }",
 				"div { background-image: linear-gradient( 390grad, rgb( 255, 0, 0 ), rgb( 0, 0, 255 ) ); }",
 				"div { background-image: linear-gradient( 290grad, rgb( 255, 0, 0 ), rgb( 0, 0, 255 ) ); }",
@@ -1239,6 +1274,12 @@
 				".foo { background-image: linear-gradient( 90deg, rgba( 0, 0, 255, 0.2 ) 10%, #FF0000 ); }"
 			],
 			[
+				"div { background-image: linear-gradient( 0deg, red, blue ); }",
+				null,
+				"div { background-image: linear-gradient( 270deg, red, blue ); }",
+				"div { background-image: linear-gradient( 90deg, red, blue ); }"
+			],
+			[
 				"div { background: radial-gradient( circle 250px at left top, #00F, #F00 ); }",
 				"div { background: radial-gradient( circle 250px at right top, #00F, #F00 ); }",
 				null,
@@ -1266,6 +1307,62 @@
 				"div { background: repeating-radial-gradient( 20% 40% ellipse, #00F, #F00 ); }",
 				null,
 				"div { background: repeating-radial-gradient( 40% 20% ellipse, #00F, #F00 ); }"
+			],
+			[
+				"div { background: repeating-radial-gradient( 20% 40%, #00F, #F00 ); }",
+				null,
+				"div { background: repeating-radial-gradient( 40% 20%, #00F, #F00 ); }"
+			],
+			[
+				"div { background: repeating-radial-gradient( at left 5%, #00F, #F00 ); }",
+				"div { background: repeating-radial-gradient( at right 5%, #00F, #F00 ); }",
+				"div { background: repeating-radial-gradient( at 5% top, #00F, #F00 ); }",
+				"div { background: repeating-radial-gradient( at 95% top, #00F, #F00 ); }"
+			],
+			[
+				"div { background: repeating-radial-gradient(at 10% 20%, #00F, #F00 ); }",
+				"div { background: repeating-radial-gradient(at 90% 20%, #00F, #F00 ); }",
+				"div { background: repeating-radial-gradient(at 20% 10%, #00F, #F00 ); }",
+				"div { background: repeating-radial-gradient(at 80% 10%, #00F, #F00 ); }"
+			],
+			[
+				"div { background: radial-gradient( 10% 20% at left top, #00F, #F00 ); }",
+				"div { background: radial-gradient( 10% 20% at right top, #00F, #F00 ); }",
+				"div { background: radial-gradient( 20% 10% at left top, #00F, #F00 ); }",
+				"div { background: radial-gradient( 20% 10% at right top, #00F, #F00 ); }"
+			],
+			[
+				"div { background: radial-gradient( ellipse calc( 1px + 2px ) 3px at top 10% left 20%, #00F, #08F 10%, #F00 ); }",
+				"div { background: radial-gradient( ellipse calc( 1px + 2px ) 3px at top 10% right 20%, #00F, #08F 10%, #F00 ); }",
+				"div { background: radial-gradient( ellipse 3px calc( 1px + 2px ) at top 20% left 10%, #00F, #08F 10%, #F00 ); }",
+				"div { background: radial-gradient( ellipse 3px calc( 1px + 2px ) at top 20% right 10%, #00F, #08F 10%, #F00 ); }"
+			],
+			[
+				"div { background: linear-gradient( 180deg, red 5%, rgb(0,0,0) ); }",
+				null,
+				"div { background: linear-gradient( 90deg, red 5%, rgb(0,0,0) ); }",
+				"div { background: linear-gradient( 270deg, red 5%, rgb(0,0,0) ); }"
+			],
+			[
+				"div { border-image: linear-gradient( 180deg, red, blue ) 1px 2px; }",
+				null,
+				"div { border-image: linear-gradient( 90deg, red, blue ) 2px 1px; }",
+				"div { border-image: linear-gradient( 270deg, red, blue ) 2px 1px; }"
+			],
+			[
+				"div { border-image: linear-gradient( 180deg, rgb( 255 0 0 ), #00FF00 ) 1% 2%; }",
+				null,
+				"div { border-image: linear-gradient( 90deg, rgb( 255 0 0 ), #00FF00 ) 2% 1%; }",
+				"div { border-image: linear-gradient( 270deg, rgb( 255 0 0 ), #00FF00 ) 2% 1%; }"
+			],
+			[
+				"div { list-style-image: linear-gradient( to top, red, #00FF00 ); }",
+				null,
+				"div { list-style-image: linear-gradient( to left, red, #00FF00 ); }",
+				"div { list-style-image: linear-gradient( to right, red, #00FF00 ); }"
+			],
+			[
+				"div { background: linear-gradient( calc( /* ignore calc angles */ 30deg * 2 ), red, blue ); }"
 			]
 		]
 	},
@@ -1550,6 +1647,15 @@
 				"url('http://www.blogger.com/img/triangle_ltr.gif'  )"
 			],
 			[
+				"url( 'http://www.blogger.com/img/left-bracket(.gif' )"
+			],
+			[
+				"url( 'http://www.blogger.com/img/closebracket)-right.gif' )"
+			],
+			[
+				".foo { background: url( test-left-\\;-\\(-\\;-\\}-\\)-left.png ); }"
+			],
+			[
 				"background: url(/foo/bar.left.png)"
 			],
 			[
@@ -1583,6 +1689,15 @@
 			],
 			[
 				".foo { background: url('/foo-left.png' /* comment */ ); }"
+			],
+			[
+				".foo { background: image-set(url(/foo-left.png) 1x, url(/bar-top.png) 2x); }"
+			],
+			[
+				".foo { background: image-set(\"/foo-left.png\" 1x, url(/bar-top.png) 2x); }"
+			],
+			[
+				".foo { background: image-set( \"/foo-left.png\" 1x, \"/bar-top.png\" 2x); }"
 			]
 		]
 	},
@@ -1646,6 +1761,11 @@
 				"background: url(/foo/bar-top.png); direction: ltr"
 			],
 			[
+				"background: url( test-\\)-left.png );",
+				"background: url( test-\\)-right.png );",
+				"background: url( test-\\)-top.png );"
+			],
+			[
 				"background: url(/foo/bar-ltr_left.png);right:10px; direction: ltr",
 				"background: url(/foo/bar-rtl_right.png);left:10px; direction: rtl",
 				"background: url(/foo/bar-ltr_top.png);bottom:10px; direction: ltr"
@@ -1671,6 +1791,29 @@
 				".foo { background: url(/bar-lr-inline.png); }",
 				".foo { background: url(/bar-rl-inline.png); }",
 				".foo { background: url(/bar-tb-inline.png); }"
+			],
+			[
+				".foo { background: image-set(url(/foo-left.png) 1x, url(/bar-top.png) 2x); }",
+				".foo { background: image-set(url(/foo-right.png) 1x, url(/bar-top.png) 2x); }",
+				".foo { background: image-set(url(/foo-top.png) 1x, url(/bar-left.png) 2x); }",
+				".foo { background: image-set(url(/foo-top.png) 1x, url(/bar-right.png) 2x); }"
+			],
+			[
+				".foo { background: image-set(\"/foo-left.png\" 1x, url(/bar-top.png) 2x); }",
+				".foo { background: image-set(\"/foo-right.png\" 1x, url(/bar-top.png) 2x); }",
+				".foo { background: image-set(\"/foo-top.png\" 1x, url(/bar-left.png) 2x); }",
+				".foo { background: image-set(\"/foo-top.png\" 1x, url(/bar-right.png) 2x); }"
+			],
+			[
+				".foo { background: image-set( \"/foo-left.png\" 1x, \"/bar-top.png\" 2x); }",
+				".foo { background: image-set( \"/foo-right.png\" 1x, \"/bar-top.png\" 2x); }",
+				".foo { background: image-set( \"/foo-top.png\" 1x, \"/bar-left.png\" 2x); }",
+				".foo { background: image-set( \"/foo-top.png\" 1x, \"/bar-right.png\" 2x); }"
+			],
+			[
+				".foo::after { content: \"left\" image-set( \"/foo-left.png\" 1x ) \"left\" }",
+				".foo::after { content: \"left\" image-set( \"/foo-right.png\" 1x ) \"left\" }",
+				".foo::after { content: \"left\" image-set( \"/foo-top.png\" 1x ) \"left\" }"
 			]
 		]
 	},
@@ -1762,6 +1905,30 @@
 			],
 			[
 				".left [\"hreflang\"|=\"en\"] { color: red; }"
+			],
+			[
+				".overflow-x, .background-position-x {}"
+			]
+		]
+	},
+	"leave strings and nondirectional functions alone": {
+		"cases": [
+			[
+				"[\"left\"=\"value\"]::before { content: \"I say left a lot\";}"
+			],
+			[
+				".\\\"::before { content: 'Work right with single quotes'; }"
+			],
+			[
+				".\\\"[left=\"escaped\\\"quotes\"]::after { padding-left: 0; content: \"left\"; left: 0; }",
+				".\\\"[left=\"escaped\\\"quotes\"]::after { padding-right: 0; content: \"left\"; right: 0; }",
+			  ".\\\"[left=\"escaped\\\"quotes\"]::after { padding-top: 0; content: \"left\"; top: 0; }"
+			],
+			[
+				"#foo::after { content: attr( top-attr ); }"
+			],
+			[
+				"#foo::after { background-image: element( #bottom-line ); }"
 			]
 		]
 	},
