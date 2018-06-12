@@ -6,7 +6,7 @@
  * Copyright 2010 Trevor Parscal
  */
 
-(function() {
+var cssjanus;
 
 /**
  * Create a tokenizer object.
@@ -305,7 +305,7 @@ function CSSJanus() {
 		 * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
 		 * @return {string} Transformed stylesheet
 		 */
-		'transform': function ( css, options ) {
+		transform: function ( css, options ) {
 			// Tokenizers
 			var noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
 				noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken ),
@@ -385,7 +385,14 @@ function CSSJanus() {
 
 /* Initialization */
 
-var cssjanus = window['cssjanus'] = new CSSJanus();
+cssjanus = new CSSJanus();
+
+if ( typeof window === 'object' ) {
+	// Allow cssjanus to be used in a browser.
+	window[ 'cssjanus' ] = cssjanus; // eslint-disable-line no-undef, dot-notation
+	// Allow the transform method to be referenced under closure compiler.
+	cssjanus[ 'transform' ] = cssjanus.transform; // eslint-disable-line dot-notation
+}
 
 /* Exports */
 
@@ -402,7 +409,7 @@ if ( typeof exports === 'object' ) {
    * @param {boolean} [transformEdgeInUrl] Back-compat parameter
    * @return {string} Transformed stylesheet
    */
-  exports.transform = function ( css, options, transformEdgeInUrl ) {
+	exports.transform = function ( css, options, transformEdgeInUrl ) {
 		var norm;
 		if ( typeof options === 'object' ) {
 			norm = options;
@@ -418,5 +425,3 @@ if ( typeof exports === 'object' ) {
 		return cssjanus.transform( css, norm );
 	};
 }
-
-})();
