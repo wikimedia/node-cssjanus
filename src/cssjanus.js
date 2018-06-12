@@ -305,7 +305,7 @@ function CSSJanus() {
 		 * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
 		 * @return {string} Transformed stylesheet
 		 */
-		transform: function ( css, options ) {
+		'transform': function ( css, options ) { // eslint-disable-line quote-props, (for closure compiler)
 			// Tokenizers
 			var noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
 				noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken ),
@@ -389,30 +389,37 @@ cssjanus = new CSSJanus();
 
 /* Exports */
 
-/**
- * Transform a left-to-right stylesheet to right-to-left.
- *
- * This function is a static wrapper around the transform method of an instance of CSSJanus.
- *
- * @param {string} css Stylesheet to transform
- * @param {Object|boolean} [options] Options object, or transformDirInUrl option (back-compat)
- * @param {boolean} [options.transformDirInUrl=false] Transform directions in URLs (e.g. 'ltr', 'rtl')
- * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
- * @param {boolean} [transformEdgeInUrl] Back-compat parameter
- * @return {string} Transformed stylesheet
- */
-exports.transform = function ( css, options, transformEdgeInUrl ) {
-	var norm;
-	if ( typeof options === 'object' ) {
-		norm = options;
-	} else {
-		norm = {};
-		if ( typeof options === 'boolean' ) {
-			norm.transformDirInUrl = options;
+if ( typeof module !== 'undefined' && module.exports ) {
+	/**
+	* Transform a left-to-right stylesheet to right-to-left.
+	*
+	* This function is a static wrapper around the transform method of an instance of CSSJanus.
+	*
+	* @param {string} css Stylesheet to transform
+	* @param {Object|boolean} [options] Options object, or transformDirInUrl option (back-compat)
+	* @param {boolean} [options.transformDirInUrl=false] Transform directions in URLs (e.g. 'ltr', 'rtl')
+	* @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
+	* @param {boolean} [transformEdgeInUrl] Back-compat parameter
+	* @return {string} Transformed stylesheet
+	*/
+	exports.transform = function ( css, options, transformEdgeInUrl ) {
+		var norm;
+		if ( typeof options === 'object' ) {
+			norm = options;
+		} else {
+			norm = {};
+			if ( typeof options === 'boolean' ) {
+				norm.transformDirInUrl = options;
+			}
+			if ( typeof transformEdgeInUrl === 'boolean' ) {
+				norm.transformEdgeInUrl = transformEdgeInUrl;
+			}
 		}
-		if ( typeof transformEdgeInUrl === 'boolean' ) {
-			norm.transformEdgeInUrl = transformEdgeInUrl;
-		}
-	}
-	return cssjanus.transform( css, norm );
-};
+		return cssjanus.transform( css, norm );
+	};
+} else if ( typeof window !== 'undefined' ) {
+	/* global window */
+	// Allow cssjanus to be used in a browser.
+	// eslint-disable-next-line dot-notation
+	window[ 'cssjanus' ] = cssjanus;
+}
