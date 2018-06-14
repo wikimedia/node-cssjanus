@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/cssjanus/cssjanus.svg?branch=master)](https://travis-ci.org/cssjanus/cssjanus) [![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus)
+[![Build Status](https://travis-ci.com/cssjanus/cssjanus.svg?branch=master)](https://travis-ci.com/cssjanus/cssjanus) [![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus)
 
 # CSSJanus
 
