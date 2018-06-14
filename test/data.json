@@ -754,6 +754,9 @@
 			],
 			[
 				".a-foo.png { width: 0; }"
+			],
+			[
+				"a.padding-left .\\31 { color: red; }"
 			]
 		]
 	},
