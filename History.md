@@ -1,5 +1,11 @@
 # Release History
 
+## v1.3.0 / 2018-07-03
+
+* Fix unintended flipping of selectors containing a backslash (YairRand)
+* Make cssjanus.js compatible with Closure Compiler (Chris Scribner)
+* Drop support for Node.js 4; This release requires Node 6 (Timo Tijhof)
+
 ## v1.2.2 / 2018-02-11
 
 * build: Add 'files' publishing whitelist to package.json (Timo Tijhof)
