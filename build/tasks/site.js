@@ -3,9 +3,9 @@
 module.exports = function ( grunt ) {
 	grunt.registerTask( 'site', function () {
 		var from = 'site/',
-			// E.g. 'grunt site --dest ../cssjanus.github.io'
+			// E.g. `DEST="../cssjanus.github.io" npm run site`
 			// Ensure 'to' path ends in a slash
-			to = ( grunt.option( 'dest' ) || 'dest/' ).replace( /\/?$/, '/' ),
+			to = ( process.env.DEST || 'dest/' ).replace( /\/?$/, '/' ),
 			paths = [
 				'/demo/',
 				'/lib/',
