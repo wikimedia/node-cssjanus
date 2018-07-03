@@ -21,14 +21,14 @@
     "test": "grunt test"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
   "dependencies": {},
   "devDependencies": {
     "eslint-config-wikimedia": "0.3.0",
-    "grunt": "1.0.2",
-    "grunt-contrib-watch": "1.0.0",
-    "grunt-eslint": "18.0.0",
-    "grunt-jsonlint": "1.0.8"
+    "grunt": "1.0.3",
+    "grunt-contrib-watch": "1.1.0",
+    "grunt-eslint": "21.0.0",
+    "grunt-jsonlint": "1.1.0"
   }
 }
