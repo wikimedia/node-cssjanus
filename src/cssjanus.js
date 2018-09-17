@@ -149,8 +149,8 @@ function CSSJanus() {
 		textShadow1RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern + '(\\s*)' + colorPattern, 'gi' ),
 		textShadow2RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + colorPattern + '(\\s*)' + signedQuantPattern, 'gi' ),
 		textShadow3RegExp = new RegExp( '(text-shadow\\s*:\\s*)' + signedQuantPattern, 'gi' ),
-		translateXRegExp = new RegExp( '(transform\\s*:[^;]*)(translateX\\s*\\(\\s*)' + signedQuantPattern + '(\\s*\\))', 'gi' ),
-		translateRegExp = new RegExp( '(transform\\s*:[^;]*)(translate\\s*\\(\\s*)' + signedQuantPattern + '((?:\\s*,\\s*' + signedQuantPattern + '){0,2}\\s*\\))', 'gi' );
+		translateXRegExp = new RegExp( '(transform\\s*:[^;}]*)(translateX\\s*\\(\\s*)' + signedQuantPattern + '(\\s*\\))', 'gi' ),
+		translateRegExp = new RegExp( '(transform\\s*:[^;}]*)(translate\\s*\\(\\s*)' + signedQuantPattern + '((?:\\s*,\\s*' + signedQuantPattern + '){0,2}\\s*\\))', 'gi' );
 
 	/**
 	 * Invert the horizontal value of a background position property.
