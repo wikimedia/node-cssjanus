@@ -458,6 +458,10 @@
 			],
 			[
 				".foo { transform: translateY( 30px ); }"
+			],
+			[
+				".foo { transform: translate( 10px ) } .bar { transform: translate( 10px ) }",
+				".foo { transform: translate( -10px ) } .bar { transform: translate( -10px ) }"
 			]
 		]
 	},
