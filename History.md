@@ -1,5 +1,11 @@
 # Release History
 
+## v1.3.1 / 2018-10-15
+
+* Fix bug where `transform` didn't flip on lines without semicolon (YairRand)
+* site: Remove now-redundant fake require() in index.html (Timo Tijhof)
+* build: Add npm-run command for 'grunt site' (Timo Tijhof)
+
 ## v1.3.0 / 2018-07-03
 
 * Fix unintended flipping of selectors containing a backslash (YairRand)
