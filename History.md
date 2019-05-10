@@ -1,5 +1,10 @@
 # Release History
 
+## v1.3.2 / 2019-05-10
+
+* test: Add a large test case to catch backtrack limit problem (James Forrester)
+* Document a known backtrack issue, not yet known to affect Node.js (Timo Tijhof)
+
 ## v1.3.1 / 2018-10-15
 
 * Fix bug where `transform` didn't flip on lines without semicolon (YairRand)
