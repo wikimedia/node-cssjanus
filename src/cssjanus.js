@@ -119,9 +119,9 @@ function CSSJanus() {
 		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%-]+\\))',
 		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*',
 		lookAheadNotLetterPattern = '(?![a-zA-Z])',
-		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'])*?{)',
-		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
-		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
+		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'])*+{)',
+		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '+' + validAfterUriCharsPattern + '\\))',
+		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '+' + validAfterUriCharsPattern + '\\))',
 		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
 		// Regular expressions
 		temporaryTokenRegExp = new RegExp( '`TMP`', 'g' ),
