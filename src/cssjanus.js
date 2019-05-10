@@ -117,11 +117,16 @@ function CSSJanus() {
 		fourNotationQuantPropsPattern = '((?:margin|padding|border-width)\\s*:\\s*)',
 		fourNotationColorPropsPattern = '((?:-color|border-style)\\s*:\\s*)',
 		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%-]+\\))',
-		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*',
+		// The use of a lazy match ("*?") may cause a backtrack limit to be exceeded before finding
+		// the intended match. This affects 'urlCharsPattern' and 'lookAheadNotOpenBracePattern'.
+		// We have not yet found this problem on Node.js, but we have on PHP 7, where it was
+		// mitigated by using a possessive quantifier ("*+"), which are not supported in JS.
+		// See <https://github.com/cssjanus/php-cssjanus/issues/14> and <https://phabricator.wikimedia.org/T215746#4944830>.
+		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*?',
 		lookAheadNotLetterPattern = '(?![a-zA-Z])',
 		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'])*?{)',
-		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
-		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + '?' + validAfterUriCharsPattern + '\\))',
+		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + validAfterUriCharsPattern + '\\))',
+		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + validAfterUriCharsPattern + '\\))',
 		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
 		// Regular expressions
 		temporaryTokenRegExp = new RegExp( '`TMP`', 'g' ),
