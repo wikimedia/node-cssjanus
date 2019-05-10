@@ -4,6 +4,7 @@ node_js:
   - "12"
   - "10"
   - "8"
+after_success: node test/bench
 notifications:
   irc:
     channels:
