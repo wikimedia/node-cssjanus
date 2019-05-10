@@ -39,22 +39,23 @@
 <a href="https://github.com/cssjanus/cssjanus"><img class="demo-fork-me" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 <!-- es5-shim for old IE -->
 <script src="./lib/es5-shim.js"></script>
-<!-- Fake require() since CSSJanus isn't officially meant for the browser -->
-<script>exports = {}; function require() { return exports; }</script>
 <script src="../src/cssjanus.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
 ( function () {
-	/*jshint jquery:true */
-	var cssjanus = require(),
-		$input = $( '#demo-input' ),
+	/* eslint-env jquery, browser */
+	/* global cssjanus */
+	var $input = $( '#demo-input' ),
 		$output = $( '#demo-output' ),
 		$swapLtr = $( '#demo-swap-ltr' ),
 		$swapLeft = $( '#demo-swap-left' ),
 		hashPrefix = '#input/';
 
 	function submit( input ) {
-		$output.val( cssjanus.transform( input, $swapLtr[0].checked, $swapLeft[0].checked ) );
+		$output.val( cssjanus.transform( input, {
+			transformDirInUrl: $swapLtr[ 0 ].checked,
+			transformEdgeInUrl: $swapLeft[ 0 ].checked
+		} ) );
 		if ( history.replaceState ) {
 			history.replaceState( null, document.title, hashPrefix + encodeURIComponent( input ) );
 		}
@@ -85,7 +86,7 @@
 		focus: function () {
 			this.select();
 		},
-		mouseup: function (e) {
+		mouseup: function ( e ) {
 			e.preventDefault();
 		}
 	} );
