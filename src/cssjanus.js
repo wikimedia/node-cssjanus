@@ -145,7 +145,7 @@ function CSSJanus() {
 		cursorWestRegExp = new RegExp( nonLetterPattern + '([ns]?)w-resize', 'gi' ),
 		fourNotationQuantRegExp = new RegExp( fourNotationQuantPropsPattern + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + '(\\s+)' + signedQuantPattern + suffixPattern, 'gi' ),
 		fourNotationColorRegExp = new RegExp( fourNotationColorPropsPattern + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + '(\\s+)' + colorPattern + suffixPattern, 'gi' ),
-		bgHorizontalPercentageRegExp = new RegExp( '(background(?:-position)?\\s*:\\s*(?:[^:;}\\s]+\\s+)*?)(' + quantPattern + ')', 'gi' ),
+		bgHorizontalPercentageRegExp = new RegExp( '(background(?:-position)?\\s*:\\s*(?:(?!linear-gradient)[^:;}\\s]+\\s+)*?)(' + quantPattern + ')', 'gi' ),
 		bgHorizontalPercentageXRegExp = new RegExp( '(background-position-x\\s*:\\s*)(-?' + numPattern + '%)', 'gi' ),
 		// border-radius: <length or percentage>{1,4} [optional: / <length or percentage>{1,4} ]
 		borderRadiusRegExp = new RegExp( '(border-radius\\s*:\\s*)' + signedQuantPattern + '(?:(?:\\s+' + signedQuantPattern + ')(?:\\s+' + signedQuantPattern + ')?(?:\\s+' + signedQuantPattern + ')?)?' +

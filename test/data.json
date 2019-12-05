@@ -578,6 +578,10 @@
 			[
 				".foo  {  background:  url(/foo/bar.png) 77% 40%  ;  }",
 				".foo  {  background:  url(/foo/bar.png) 23% 40%  ;  }"
+			],
+			[
+				".foo { background: url(/foo/bright.png) 20% 50%, linear-gradient( red 10%, blue ); }",
+				".foo { background: url(/foo/bright.png) 80% 50%, linear-gradient( red 10%, blue ); }"
 			]
 		]
 	},
@@ -605,6 +609,31 @@
 		"cases": [
 			[
 				".foo { background-position-y: 40%; }"
+			]
+		]
+	},
+	"do not flip gradient notation": {
+		"cases": [
+			[
+				".foo { background-image: -moz-linear-gradient(#326cc1, #234e8c); }"
+			],
+			[
+				".foo { background-image: -webkit-gradient(linear, 100% 0%, 0% 0%, from(#666666), to(#ffffff)); }"
+			]
+		]
+	},
+	"do not change percentages in linear gradient": {
+		"cases": [
+			[
+				".foo { background: linear-gradient(to left, #00ff00 0%, #ff0000 100%); }",
+				".foo { background: linear-gradient(to right, #00ff00 0%, #ff0000 100%); }"
+			],
+			[
+				".foo { background: linear-gradient(to left, #00ff00 0, #ff0000 100%); }",
+				".foo { background: linear-gradient(to right, #00ff00 0, #ff0000 100%); }"
+			],
+			[
+				".foo { background: linear-gradient( red 10%, blue ); }"
 			]
 		]
 	},
@@ -853,16 +882,6 @@
 			],
 			[
 				"/* @noflip */ div.foo[bar*='baz{quux'] { left: 10px; float: left; }"
-			]
-		]
-	},
-	"do not flip gradient notation": {
-		"cases": [
-			[
-				".foo { background-image: -moz-linear-gradient(#326cc1, #234e8c); }"
-			],
-			[
-				".foo { background-image: -webkit-gradient(linear, 100% 0%, 0% 0%, from(#666666), to(#ffffff)); }"
 			]
 		]
 	},
