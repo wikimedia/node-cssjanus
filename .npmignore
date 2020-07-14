@@ -1,6 +1,4 @@
-.js*
-.npmignore
-.travis.yml
-build
-test
-Gruntfile.js
+# Development only
+# dotfiles and tests
+/.*
+/test/

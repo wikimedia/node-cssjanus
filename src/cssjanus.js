@@ -129,7 +129,7 @@ function CSSJanus() {
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + validAfterUriCharsPattern + '\\))',
 		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
 		// Regular expressions
-		temporaryTokenRegExp = new RegExp( '`TMP`', 'g' ),
+		temporaryTokenRegExp = /`TMP`/g,
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
 		noFlipSingleRegExp = new RegExp( '(' + noFlipPattern + lookAheadNotOpenBracePattern + '[^;}]+;?)', 'gi' ),
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
@@ -310,7 +310,8 @@ function CSSJanus() {
 		 * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
 		 * @return {string} Transformed stylesheet
 		 */
-		'transform': function ( css, options ) { // eslint-disable-line quote-props, (for closure compiler)
+		'transform': function ( css, options ) { // eslint-disable-line quote-props
+			// Use single quotes in this object literal key for closure compiler.
 			// Tokenizers
 			var noFlipSingleTokenizer = new Tokenizer( noFlipSingleRegExp, noFlipSingleToken ),
 				noFlipClassTokenizer = new Tokenizer( noFlipClassRegExp, noFlipClassToken ),
@@ -396,17 +397,17 @@ cssjanus = new CSSJanus();
 
 if ( typeof module !== 'undefined' && module.exports ) {
 	/**
-	* Transform a left-to-right stylesheet to right-to-left.
-	*
-	* This function is a static wrapper around the transform method of an instance of CSSJanus.
-	*
-	* @param {string} css Stylesheet to transform
-	* @param {Object|boolean} [options] Options object, or transformDirInUrl option (back-compat)
-	* @param {boolean} [options.transformDirInUrl=false] Transform directions in URLs (e.g. 'ltr', 'rtl')
-	* @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
-	* @param {boolean} [transformEdgeInUrl] Back-compat parameter
-	* @return {string} Transformed stylesheet
-	*/
+	 * Transform a left-to-right stylesheet to right-to-left.
+	 *
+	 * This function is a static wrapper around the transform method of an instance of CSSJanus.
+	 *
+	 * @param {string} css Stylesheet to transform
+	 * @param {Object|boolean} [options] Options object, or transformDirInUrl option (back-compat)
+	 * @param {boolean} [options.transformDirInUrl=false] Transform directions in URLs (e.g. 'ltr', 'rtl')
+	 * @param {boolean} [options.transformEdgeInUrl=false] Transform edges in URLs (e.g. 'left', 'right')
+	 * @param {boolean} [transformEdgeInUrl] Back-compat parameter
+	 * @return {string} Transformed stylesheet
+	 */
 	exports.transform = function ( css, options, transformEdgeInUrl ) {
 		var norm;
 		if ( typeof options === 'object' ) {
