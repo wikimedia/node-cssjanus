@@ -18,8 +18,7 @@
     "LICENSE.txt"
   ],
   "scripts": {
-    "test": "grunt test",
-    "site": "grunt site"
+    "test": "grunt test"
   },
   "engines": {
     "node": ">=6.0.0"
