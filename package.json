@@ -18,14 +18,15 @@
     "LICENSE.txt"
   ],
   "scripts": {
-    "test": "eslint . && node test/unit.js"
+    "test": "eslint . && qunit test/unit.js"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=10.0.0"
   },
   "dependencies": {},
   "devDependencies": {
-    "eslint": "7.3.1",
-    "eslint-config-wikimedia": "0.16.2"
+    "eslint": "^7.6.0",
+    "eslint-config-wikimedia": "0.17.0",
+    "qunit": "2.11.0"
   }
 }

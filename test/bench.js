@@ -1,11 +1,12 @@
-/* eslint one-var:["error","never"], no-console:"off" */
-/* global Promise */
-var crypto = require( 'crypto' );
-var fs = require( 'fs' );
-var https = require( 'https' );
-var cssjanus = require( '../' );
+'use strict';
+/* eslint no-process-exit:"off" */
 
-var baseBench = {
+const crypto = require( 'crypto' );
+const fs = require( 'fs' );
+const https = require( 'https' );
+const cssjanus = require( '../' );
+
+const baseBench = {
 	name: '',
 	started: NaN,
 	start: function ( name ) {
@@ -13,14 +14,12 @@ var baseBench = {
 		this.started = process.hrtime();
 	},
 	end: function ( ops ) {
-		var time;
-		var rate;
-		var elapsed = process.hrtime( this.started );
+		const elapsed = process.hrtime( this.started );
 		if ( elapsed[ 0 ] === 0 && elapsed[ 1 ] === 0 ) {
 			throw new Error( 'insufficient clock precision for short benchmark' );
 		}
-		time = elapsed[ 0 ] + elapsed[ 1 ] / 1e9;
-		rate = ops / time;
+		const time = elapsed[ 0 ] + elapsed[ 1 ] / 1e9;
+		const rate = ops / time;
 		this.report( rate, time );
 	},
 	report: function ( rate, time ) {
@@ -39,10 +38,10 @@ function checksum( algorithm, str ) {
 }
 
 function fetch( url ) {
-	var redirects = 0;
+	let redirects = 0;
 	return new Promise( function ( resolve, reject ) {
 		https.get( url, function handleResponse( res ) {
-			var data = '';
+			let data = '';
 			// Handle redirect
 			if ( res.statusCode === 301 || res.statusCode === 302 ) {
 				if ( !res.headers.location ) {
@@ -78,12 +77,11 @@ function fetch( url ) {
 }
 
 function getFixture( name, sha1, url ) {
-	var data;
-	var pData;
-	var fetched;
-	var file = __dirname + '/fixture.' + name + '.dat';
+	const file = __dirname + '/fixture.' + name + '.dat';
+	let pData;
+	let fetched;
 	try {
-		data = fs.readFileSync( file, 'utf8' );
+		const data = fs.readFileSync( file, 'utf8' );
 		if ( checksum( 'sha1', data ) !== sha1 ) {
 			fetched = true;
 			pData = fetch( url );
@@ -109,9 +107,9 @@ function getFixture( name, sha1, url ) {
 function benchFixture( fixture ) {
 	return getFixture( fixture.name, fixture.sha1, fixture.src )
 		.then( function ( data ) {
-			var ops = 1000;
-			var i = ops;
-			var bench = Object.create( baseBench );
+			const ops = 1000;
+			const bench = Object.create( baseBench );
+			let i = ops;
 			bench.start( fixture.name );
 			while ( i-- ) {
 				cssjanus.transform( data );
@@ -121,7 +119,7 @@ function benchFixture( fixture ) {
 }
 
 function benchFixtures() {
-	var fixtures = [
+	const fixtures = [
 		{
 			name: 'mediawiki',
 			sha1: '6277eb6b3ce25e2abcaa720f5da1b979686ea166',

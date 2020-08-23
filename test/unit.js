@@ -1,21 +1,20 @@
-var assert = require( 'assert' ),
-	cssjanus = require( '../src/cssjanus' ),
-	testData = require( './data.json' ),
-	failures = 0,
-	tests = 0,
-	name, test, args, i, input, noop, roundtrip, output;
+'use strict';
 
-for ( name in testData ) {
-	tests++;
-	test = testData[ name ];
-	args = test.args || [ test.options || {} ];
+const QUnit = require( 'qunit' );
+const cssjanus = require( '../src/cssjanus' );
 
-	try {
-		for ( i = 0; i < test.cases.length; i++ ) {
-			input = test.cases[ i ][ 0 ];
-			noop = test.cases[ i ][ 1 ] === undefined;
-			output = noop ? input : test.cases[ i ][ 1 ];
-			roundtrip = test.roundtrip !== undefined ? test.roundtrip : !noop;
+const testData = require( './data.json' );
+
+for ( const name in testData ) {
+	const data = testData[ name ];
+	const args = data.args || [ data.options || {} ];
+
+	QUnit.test( name, ( assert ) => {
+		for ( let i = 0; i < data.cases.length; i++ ) {
+			const input = data.cases[ i ][ 0 ];
+			const noop = data.cases[ i ][ 1 ] === undefined;
+			const output = noop ? input : data.cases[ i ][ 1 ];
+			const roundtrip = data.roundtrip !== undefined ? data.roundtrip : !noop;
 
 			assert.equal(
 				cssjanus.transform(
@@ -23,7 +22,8 @@ for ( name in testData ) {
 					args[ 0 ],
 					args[ 1 ]
 				),
-				output
+				output,
+				`case #${i + 1}`
 			);
 
 			if ( roundtrip ) {
@@ -34,31 +34,16 @@ for ( name in testData ) {
 						args[ 0 ],
 						args[ 1 ]
 					),
-					input
+					input,
+					`case #${i + 1} roundtrip`
 				);
 
 				// Keep test data clean
-				assert(
-					test.cases[ i ][ 1 ] !== input,
-					'case #' + ( i + 1 ) + ' should not specify output if it matches the input'
+				assert.true(
+					data.cases[ i ][ 1 ] !== input,
+					`case #${i + 1} should not specify output if it matches the input`
 				);
-				output = test.cases[ i ][ 1 ];
 			}
 		}
-		console.log( '... ' + name );
-	} catch ( e ) {
-		console.error( name );
-		console.error( e.stack );
-		failures++;
-	}
+	} );
 }
-
-if ( failures === 1 ) {
-	console.error( failures + ' test failed.' );
-	process.exit( 1 );
-}
-if ( failures > 1 ) {
-	console.error( failures + ' tests failed.' );
-	process.exit( 1 );
-}
-console.log( tests + ' tests passed.' );
