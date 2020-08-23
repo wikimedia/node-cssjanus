@@ -1,5 +1,12 @@
 # Release History
 
+## v2.0.0 / 2020-08-23
+
+Node.js 10 or later is required.
+
+* Fix unexpected flipping in certain cases involving double quotes or comments in selectors (YairRand, [#35](https://github.com/cssjanus/cssjanus/issues/35))
+* Drop support for Node.js 6 and 8 (Timo Tijhof)
+
 ## v1.3.2 / 2019-05-10
 
 * test: Add a large test case to catch backtrack limit problem (James Forrester)
