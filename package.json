@@ -19,15 +19,28 @@
     "LICENSE.txt"
   ],
   "scripts": {
-    "test": "eslint . && qunit test/unit.js"
+    "test": "eslint . && qunit test/unit.js",
+    "cover": "nyc qunit test/unit.js",
+    "coveralls": "cat coverage/lcov.info | coveralls"
   },
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {},
   "devDependencies": {
+    "coveralls": "^3.1.0",
     "eslint": "^7.6.0",
     "eslint-config-wikimedia": "0.17.0",
+    "nyc": "^15.1.0",
     "qunit": "2.11.0"
+  },
+  "nyc": {
+    "include": [
+      "src"
+    ],
+    "reporter": [
+      "text",
+      "lcovonly"
+    ]
   }
 }

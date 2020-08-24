@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/cssjanus/cssjanus.svg?branch=master)](https://travis-ci.com/cssjanus/cssjanus) [![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus)
+[![Build Status](https://travis-ci.com/cssjanus/cssjanus.svg?branch=master)](https://travis-ci.com/cssjanus/cssjanus) [![Coverage Status](https://coveralls.io/repos/github/cssjanus/cssjanus/badge.svg?branch=master)](https://coveralls.io/github/cssjanus/cssjanus?branch=master) [![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus)
 
 # CSSJanus
 
@@ -7,11 +7,13 @@ Converts CSS stylesheets between left-to-right and right-to-left.
 Based the original [CSSJanus](https://code.google.com/p/cssjanus/) Google project.
 
 ## Install
+
 ```sh
 npm install cssjanus
 ```
 
 ## Basic usage
+
 ```javascript
 var cssjanus = require( 'cssjanus' );
 var rtlCss = cssjanus.transform( ltrCss );
@@ -28,6 +30,7 @@ transform( css, swapLtrRtlInUrl, swapLeftRightInUrl )
 * `swapLeftRightInUrl` (Boolean) Swap 'left' and 'right' in URLs
 
 ### Preventing flipping
+
 Use a `/* @noflip */` comment to protect a rule from being changed.
 
 ```css
@@ -43,4 +46,5 @@ Use a `/* @noflip */` comment to protect a rule from being changed.
 ```
 
 ## See also
+
 * [Interactive demo](https://cssjanus.github.io)

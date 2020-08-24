@@ -1,10 +1,14 @@
-sudo: false
 language: node_js
 node_js:
   - "14"
   - "12"
   - "10"
-after_success: node test/bench
+script:
+  - npm test
+  - npm run cover
+after_success:
+  - node test/bench
+  - npm run coveralls
 notifications:
   irc:
     channels:
