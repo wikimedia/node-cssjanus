@@ -1,6 +1,6 @@
 {
   "name": "cssjanus",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Converts CSS stylesheets between left-to-right and right-to-left.",
   "author": "Trevor Parscal <trevorparscal@gmail.com> (http://www.trevorparscal.com/)",
   "license": "Apache-2.0",
@@ -12,6 +12,12 @@
     "type": "git",
     "url": "git://github.com/cssjanus/cssjanus.git"
   },
+  "keywords": [
+    "i18n",
+    "bidi",
+    "rtl",
+    "ltr"
+  ],
   "main": "./src/cssjanus.js",
   "files": [
     "src/",
