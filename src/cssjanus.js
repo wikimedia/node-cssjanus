@@ -1,5 +1,5 @@
 /*!
- * Converts CSS stylesheets between left-to-right and right-to-left.
+ * Convert CSS stylesheets between left-to-right and right-to-left directions.
  * https://github.com/cssjanus/cssjanus
  *
  * Copyright 2008 Google Inc.
