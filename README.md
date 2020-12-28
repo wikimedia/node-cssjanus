@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/cssjanus/cssjanus.svg?branch=master)](https://travis-ci.com/cssjanus/cssjanus) [![Coverage Status](https://coveralls.io/repos/github/cssjanus/cssjanus/badge.svg?branch=master)](https://coveralls.io/github/cssjanus/cssjanus?branch=master) [![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus) [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
+[![Build Status](https://travis-ci.com/cssjanus/cssjanus.svg?branch=main)](https://travis-ci.com/cssjanus/cssjanus) [![Coverage Status](https://coveralls.io/repos/github/cssjanus/cssjanus/badge.svg?branch=main)](https://coveralls.io/github/cssjanus/cssjanus?branch=main) [![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus) [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 # CSSJanus
 
