@@ -1,9 +1,21 @@
 /*!
- * Convert CSS stylesheets between left-to-right and right-to-left directions.
- * https://github.com/cssjanus/cssjanus
+ * CSSJanus. https://github.com/cssjanus/cssjanus
  *
+ * Copyright 2014 Trevor Parscal
+ * Copyright 2010 Roan Kattouw
  * Copyright 2008 Google Inc.
- * Copyright 2010 Trevor Parscal
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 var cssjanus;
@@ -13,9 +25,6 @@ var cssjanus;
  *
  * This utility class is used by CSSJanus to protect strings by replacing them temporarily with
  * tokens and later transforming them back.
- *
- * @author Trevor Parscal
- * @author Roan Kattouw
  *
  * @class
  * @constructor
@@ -78,12 +87,6 @@ function Tokenizer( regex, token ) {
  * CSSJanus transforms CSS rules with horizontal relevance so that a left-to-right stylesheet can
  * become a right-to-left stylesheet automatically. Processing can be bypassed for an entire rule
  * or a single property by adding a / * @noflip * / comment above the rule or property.
- *
- * @author Trevor Parscal <trevorparscal@gmail.com>
- * @author Roan Kattouw <roankattouw@gmail.com>
- * @author Lindsey Simon <elsigh@google.com>
- * @author Roozbeh Pournader <roozbeh@gmail.com>
- * @author Bryon Engelhardt <ebryon77@gmail.com>
  *
  * @class
  * @constructor
