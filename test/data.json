@@ -767,6 +767,9 @@
 			],
 			[
 				"[class*=\"span\"].pull-right,.row-fluid [class*=\"span\"].pull-right { color: red; }"
+			],
+			[
+				".foo-left ~ .foo-right { width: 0; }"
 			]
 		]
 	},
