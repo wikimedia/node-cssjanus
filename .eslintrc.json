@@ -1,6 +1,10 @@
 {
-	"extends": "wikimedia",
+	"root": true,
+	"extends": "wikimedia/common",
 	"env": {
 		"node": true
-	}
+	},
+	"ignorePatterns": [
+		"package*.json"
+	]
 }
