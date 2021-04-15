@@ -127,7 +127,7 @@ function CSSJanus() {
 		// See <https://github.com/cssjanus/php-cssjanus/issues/14> and <https://phabricator.wikimedia.org/T215746#4944830>.
 		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*?',
 		lookAheadNotLetterPattern = '(?![a-zA-Z])',
-		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'|"[^"]*"|' + commentToken + ')*?{)',
+		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|~|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'|"[^"]*"|' + commentToken + ')*?{)',
 		lookAheadNotClosingParenPattern = '(?!' + urlCharsPattern + validAfterUriCharsPattern + '\\))',
 		lookAheadForClosingParenPattern = '(?=' + urlCharsPattern + validAfterUriCharsPattern + '\\))',
 		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
