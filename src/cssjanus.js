@@ -116,7 +116,7 @@ function CSSJanus() {
 		nmcharPattern = '(?:[_a-z0-9-]|' + nonAsciiPattern + '|' + escapePattern + ')',
 		identPattern = '-?' + nmstartPattern + nmcharPattern + '*',
 		quantPattern = numPattern + '(?:\\s*' + unitPattern + '|' + identPattern + ')?',
-		signedQuantPattern = '((?:-?' + quantPattern + ')|(?:inherit|auto))',
+		signedQuantPattern = '((?:-?' + quantPattern + ')|(?:inherit|auto)|(?:calc\\(.*\\)))',
 		fourNotationQuantPropsPattern = '((?:margin|padding|border-width)\\s*:\\s*)',
 		fourNotationColorPropsPattern = '((?:-color|border-style)\\s*:\\s*)',
 		colorPattern = '(#?' + nmcharPattern + '+|(?:rgba?|hsla?)\\([ \\d.,%-]+\\))',
