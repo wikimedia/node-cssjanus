@@ -111,6 +111,18 @@
 			[
 				".foo { padding: 1px calc( 2 * 4px ) 3px 4px !important; color: red; }",
 				".foo { padding: 1px 4px 3px calc( 2 * 4px ) !important; color: red; }"
+			],
+			[
+				".foo { padding: 1px calc( ( 1 + 1 ) * 1px ) 3px 4px; }",
+				".foo { padding: 1px 4px 3px calc( ( 1 + 1 ) * 1px ); }"
+			],
+			[
+				".bar { padding: 1px 4px 3px calc( 1 * 1px ); content: attr(data-title); }",
+				".bar { padding: 1px calc( 1 * 1px ) 3px 4px; content: attr(data-title); }"
+			],
+			[
+				".bar { padding: 1px 4px 3px calc( 10 / 5 * 1px ); content: attr(data-title); }",
+				".bar { padding: 1px calc( 10 / 5 * 1px ) 3px 4px; content: attr(data-title); }"
 			]
 		]
 	},
