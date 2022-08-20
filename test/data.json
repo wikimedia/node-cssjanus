@@ -123,6 +123,10 @@
 			[
 				".bar { padding: 1px 4px 3px calc( 10 / 5 * 1px ); content: attr(data-title); }",
 				".bar { padding: 1px calc( 10 / 5 * 1px ) 3px 4px; content: attr(data-title); }"
+			],
+			[
+				".foo { padding: 1px calc( ( 1 + 1 ) * 1px - ( 1 / 1 ) ) 3px 4px; }",
+				".foo { padding: 1px 4px 3px calc( ( 1 + 1 ) * 1px - ( 1 / 1 ) ); }"
 			]
 		]
 	},
