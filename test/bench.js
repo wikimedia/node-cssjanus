@@ -70,7 +70,7 @@ function fetch( url ) {
 			res.on( 'end', function () {
 				resolve( data );
 			} );
-		} ).on( 'end', function ( err ) {
+		} ).on( 'error', function ( err ) {
 			reject( err );
 		} );
 	} );
