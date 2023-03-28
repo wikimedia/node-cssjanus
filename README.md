@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/cssjanus/cssjanus.svg?branch=main)](https://travis-ci.com/cssjanus/cssjanus) [![Coverage Status](https://coveralls.io/repos/github/cssjanus/cssjanus/badge.svg?branch=main)](https://coveralls.io/github/cssjanus/cssjanus?branch=main) [![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus) [![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
+[![npm](https://img.shields.io/npm/v/cssjanus.svg?style=flat)](https://www.npmjs.com/package/cssjanus)
+[![Tested with QUnit](https://img.shields.io/badge/tested_with-qunit-9c3493.svg)](https://qunitjs.com/)
 
 # CSSJanus
 
@@ -51,7 +52,8 @@ If a rule is not meant to be flipped by CSSJanus, use a `/* @noflip */` comment 
 ## Integrations
 
 * **[css](https://www.npmjs.com/package/css)** parser: [rtl-converter](https://github.com/HosseinAlipour/rtl-converter).
-* **Grunt**: [grunt-cssjanus](https://github.com/cssjanus/grunt-cssjanus).
+* **Grunt**: [grunt-cssjanus](https://gerrit.wikimedia.org/g/mediawiki/tools/grunt-cssjanus).
+* **PHP** port: [php-cssjanus](https://gerrit.wikimedia.org/g/mediawiki/libs/php-cssjanus/).
 * **Gulp**: [gulp-cssjanus](https://github.com/tomyam1/gulp-cssjanus).
 * **PostCSS**: [postcss-cssjanus](https://www.npmjs.com/package/postcss-janus).
 * **styled-components**: [styled-components-rtl](https://www.npmjs.com/package/styled-components-rtl).
@@ -60,7 +62,7 @@ If a rule is not meant to be flipped by CSSJanus, use a `/* @noflip */` comment 
 
 ## Who uses CSSJanus?
 
-* **[Wikimedia Foundation](https://www.wikimedia.org/)**, the non-profit behind Wikipedia and other free knowledge projects. Used as part of [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) and [VisualEditor](https://github.com/wikimedia/VisualEditor/#readme) on [Wikipedia](https://ar.wikipedia.org/), and [more](https://doc.wikimedia.org/).
+* **[Wikimedia Foundation](https://www.wikimedia.org/)**, the non-profit behind Wikipedia and other free knowledge projects. Used as part of [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) and [VisualEditor](https://gerrit.wikimedia.org/g/VisualEditor/VisualEditor) on [Wikipedia](https://ar.wikipedia.org/), and [more](https://doc.wikimedia.org/).
 * **[WordPress](https://wordpress.org/)**, a free and open-source content management system. Used for the interface of wp-admin and the default yearly themes.
 * **[styled-components](https://styled-components.com/)**, an ecosystem of visual primitives. Its RTL support is powered by CSSJanus.
 * **[AdminLTE](https://adminlte.io/)**, an open-source admin dashboard and control panel theme. See
@@ -69,3 +71,9 @@ If a rule is not meant to be flipped by CSSJanus, use a `/* @noflip */` comment 
 ## See also
 
 * [Interactive demo](https://cssjanus.github.io)
+
+## Contribute
+
+* Issue tracker: <https://phabricator.wikimedia.org/tag/cssjanus/>
+* Source code: <https://gerrit.wikimedia.org/g/mediawiki/libs/node-cssjanus>
+* Submit patches via Gerrit: <https://www.mediawiki.org/wiki/Developer_account>

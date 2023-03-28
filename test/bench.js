@@ -94,6 +94,7 @@ function getFixture( name, sha1, url ) {
 		pData = fetch( url );
 	}
 	return pData.then( function ( data ) {
+		data = Buffer.from( data, 'base64' ).toString( 'utf8' );
 		if ( fetched ) {
 			if ( checksum( 'sha1', data ) !== sha1 ) {
 				return Promise.reject( new Error( 'Checksum mis-match' ) );
@@ -123,12 +124,12 @@ function benchFixtures() {
 		{
 			name: 'mediawiki',
 			sha1: '6277eb6b3ce25e2abcaa720f5da1b979686ea166',
-			src: 'https://github.com/wikimedia/mediawiki/raw/1064426/resources/src/mediawiki.legacy/shared.css'
+			src: 'https://gerrit.wikimedia.org/g/mediawiki/core/+/10644263276ab941b19d2365e16813bd57e9d1f5/resources/src/mediawiki.legacy/shared.css?format=TEXT'
 		},
 		{
 			name: 'ooui',
 			sha1: 'b6f7ebc0e26c53617284d3f3a99552f9ffbf85fa',
-			src: 'https://github.com/wikimedia/mediawiki/raw/130344b/resources/lib/oojs-ui/oojs-ui-core-wikimediaui.css'
+			src: 'https://gerrit.wikimedia.org/g/mediawiki/core/+/130344b47ad939114400d2d0dfbc4018d6d2b5a9/resources/lib/oojs-ui/oojs-ui-core-wikimediaui.css?format=TEXT'
 		}
 	];
 	function next( fixture ) {

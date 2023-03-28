@@ -1,5 +1,5 @@
 /*!
- * CSSJanus. https://github.com/cssjanus/cssjanus
+ * CSSJanus. https://www.mediawiki.org/wiki/CSSJanus
  *
  * Copyright 2014 Trevor Parscal
  * Copyright 2010 Roan Kattouw
@@ -124,7 +124,7 @@ function CSSJanus() {
 		// the intended match. This affects 'urlCharsPattern' and 'lookAheadNotOpenBracePattern'.
 		// We have not yet found this problem on Node.js, but we have on PHP 7, where it was
 		// mitigated by using a possessive quantifier ("*+"), which are not supported in JS.
-		// See <https://github.com/cssjanus/php-cssjanus/issues/14> and <https://phabricator.wikimedia.org/T215746#4944830>.
+		// See <https://phabricator.wikimedia.org/T215746#4944830>.
 		urlCharsPattern = '(?:' + urlSpecialCharsPattern + '|' + nonAsciiPattern + '|' + escapePattern + ')*?',
 		lookAheadNotLetterPattern = '(?![a-zA-Z])',
 		lookAheadNotOpenBracePattern = '(?!(' + nmcharPattern + '|\\r?\\n|\\s|#|\\:|\\.|\\,|\\+|>|~|\\(|\\)|\\[|\\]|=|\\*=|~=|\\^=|\'[^\']*\'|"[^"]*"|' + commentToken + ')*?{)',

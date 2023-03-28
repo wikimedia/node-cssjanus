@@ -1,4 +1,4 @@
-CSSJanus. https://github.com/cssjanus/cssjanus
+CSSJanus. https://www.mediawiki.org/wiki/CSSJanus
 
 Copyright 2014 Trevor Parscal
 Copyright 2010 Roan Kattouw

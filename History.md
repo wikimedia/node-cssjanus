@@ -53,7 +53,6 @@ Node.js 10 or later is required.
 
 ## v1.1.0 / 2014-09-23
 
-* Move repository to github.com/cssjanus (Timo Tijhof).
 * Drop support for node.js v0.8 (Timo Tijhof).
 * Correct documentation of calculateNewBorderRadius (Ed Sanders).
 * test: Convert test cases to JSON (Timo Tijhof).
