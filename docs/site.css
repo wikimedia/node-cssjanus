@@ -1,20 +1,182 @@
-.demo-footer {
-	padding-top: 40px;
-	padding-bottom: 40px;
-	margin-top: 100px;
-	background: #f9f9f9;
-	color: #777;
-	text-align: center;
-	border-top: 1px solid #e5e5e5
+/*! CSSJanus Demo | Based on <https://design.wikimedia.org/style-guide/> */
+
+:root {
+	--cssjanus-desktop-wide: 1200px;
 }
 
-.demo-form-group {
+html {
+	background-color: var( --wmui-color-base80 );
+	font-family: sans-serif; /* Basic support without css-variables */
+	font-family: var( --font-family-system-sans );
+	line-height: var( --line-height-base );
+	font-size: 62.5%;
+	color: var( --color-base );
+}
+
+body {
+	margin: 0;
+	font-size: 1.6rem;
+}
+
+/* Header */
+
+header .wm-container {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+}
+
+header [role="banner"] {
+	line-height: 4.9rem;
+	font-weight: bold;
+	color: inherit;
+}
+header [role="banner"] em {
+	font-weight: normal;
+	font-style: normal;
+}
+
+.wm-header-caption {
+	line-height: 4.9rem;
+}
+@media ( max-width: 768px ) {
+	.wm-header-caption {
+		display: none;
+	}
+}
+
+/* Body */
+
+.wm-container {
+	margin: 0 auto;
+	max-width: var( --cssjanus-desktop-wide );
+	padding: 0 1rem;
+	box-sizing: border-box;
+}
+@media ( min-width: 720px ) {
+	/* Beyond --width-breakpoint-tablet */
+	.wm-container {
+		padding: 0 3.2rem;
+	}
+}
+
+p {
+	line-height: 1.5;
+}
+
+a {
+	color: var( --wmui-color-accent50 );
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+	text-underline-position: under;
+}
+
+code {
 	display: inline-block;
-	width: 48%;
+	font-size: 1.4rem;
+	background-color: var( --wmui-color-base90 );
+	border: var( --border-width-base ) var( --border-style-base ) var( --wmui-color-base80 );
+	border-radius: var( --border-radius-base );
+	padding: 0.2rem 0.4rem;
 }
 
-.demo-fork-me {
-	position: absolute;
-	top: 0;
-	right: 0;
+main {
+	background: var( --wmui-color-base100 );
+	box-shadow: 0 1px 4px 0 rgba( 0, 0 ,0, 0.25 );
+	padding: 3.2rem 0 6rem 0;
+}
+
+ul {
+	margin: 1rem;
+	padding: 0;
+}
+ul ul {
+	margin: 0 0 0 1em;
+}
+
+.wm-btn {
+	display: inline-block;
+	padding: 5px 12px;
+	background-color: var( --background-color-framed );
+	border-radius: var( --border-radius-base );
+	border: var( --border-base );
+	color: var( --color-base );
+	font-weight: bold;
+	font-size: 1.4rem;
+	line-height: 1.42857143;
+	cursor: pointer;
+}
+.wm-btn:hover {
+	background-color: var( --background-color-framed--hover );
+	border-color: var( --border-color-base--hover );
+	color: var( --color-base--hover );
+}
+.wm-btn--progressive {
+	background-color: var( --color-primary );
+	border-color: var( --border-color-primary );
+	color: var( --color-base--inverted );
+}
+.wm-btn--progressive:hover {
+	background-color: var( --color-primary--hover );
+	border-color: var( --border-color-primary--hover );
+	color: var( --color-base--inverted );
+}
+.wm-btn--progressive:active {
+	background-color: var( --color-primary--active );
+	border-color: var( --border-color-primary--active );
+	color: var( --color-base--inverted );
+}
+
+/* Footer */
+
+footer {
+	padding: 2.4rem 0;
+	font-size: 1.3rem;
+}
+
+/* CSSJanus */
+
+.cssjanus-form {
+	display: flex;
+	flex-flow: row wrap;
+	column-gap: 30px;
+	row-gap: 10px;
+}
+
+.cssjanus-form label {
+	display: block;
+}
+
+.cssjanus-form > * {
+	flex-grow: 1;
+}
+
+.cssjanus-form-ioside {
+	min-width: 300px;
+}
+
+.cssjanus-form-ioside label {
+	font-weight: bold;
+}
+
+.cssjanus-form-ioside textarea {
+	width: 100%;
+	font-family: var( --font-family-monospace );
+	font-size: 1.4rem;
+	border: var( --border-base );
+	max-height: 80vh;
+	padding: var( --padding-vertical-base ) var( --padding-horizontal-input-text );
+}
+
+textarea[readonly],
+fieldset[disabled] {
+	cursor: not-allowed;
+	background-color: var( --wmui-color-base90 );
+	opacity: 1;
+}
+
+.cssjanus-form-row {
+	width: 100%;
 }

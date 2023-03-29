@@ -25,6 +25,8 @@
 		"LICENSE.txt"
 	],
 	"scripts": {
+		"doc": "cp src/cssjanus.js docs/lib/cssjanus.js",
+		"renew-doc-deps": "curl -s https://unpkg.com/wikimedia-ui-base@0.19.0/wikimedia-ui-base.css -o docs/lib/wikimedia-ui-base-0.19.0.css",
 		"test": "eslint . && qunit test/unit.js",
 		"coverage": "nyc qunit test/unit.js"
 	},

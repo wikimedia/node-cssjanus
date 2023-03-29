@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <meta charset="utf-8">
-<title>CSSJanus Demos</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" integrity="sha384-Ej0hUpn6wbrOTJtRExp8jvboBagaz+Or6E9zzWT+gHCQuuZQQVZUcbmhXQzSG17s" crossorigin="anonymous">
+<title>CSSJanus Live demos</title>
+<link rel="stylesheet" href="../lib/wikimedia-ui-base-0.19.0.css">
 <link rel="stylesheet" href="../site.css">
 <link rel="icon" href="../favicon.svg">
 <style id="css">
@@ -13,6 +13,28 @@
 		-webkit-writing-mode: horizontal-tb;
 		writing-mode: horizontal-tb;
 		direction: ltr;
+	}
+
+	section {
+		margin: 1rem 0;
+	}
+	section:after {
+		content: " ";
+		display: table;
+		clear: both;
+	}
+	section h3 {
+		font-size: 2.4rem;
+		padding-bottom: 2px;
+		border-bottom: 3px solid var( --wmui-color-base80 );
+	}
+
+	.well {
+		background: var( --wmui-color-base90 );
+		border: 1px solid var( --wmui-color-base80 );
+		border-radius: 2px;
+		padding: 1rem;
+		margin: 0 0 1rem 0;
 	}
 
 	/* Content direction */
@@ -313,22 +335,28 @@
 		-webkit-writing-mode: horizontal-tb;
 		writing-mode: horizontal-tb;
 		direction: ltr;
-		position: fixed;
+		position: sticky;
 		top: 1%;
-		left: 0;
-		right: 0;
 		text-align: center;
 	}
 </style>
 </head>
-<div class="container">
-	<div class="page-header">
-		<h1>CSSJanus Demos</h1>
-		<p class="lead"><a href="../">Return to flip service</a>.</p>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Content direction</h3></div>
-		<div class="panel-body">
+
+<header><div class="wm-container">
+	<a href="../" role="banner" title="Return to flip service"><em>CSSJanus</em> Live demos</a>
+	<span class="wm-header-caption">Convert CSS stylesheets between left-to-right and right-to-left.</span>
+</div></header>
+
+<main>
+	<div class="wm-container">
+		<div class="cje-form">
+			<p>
+				<button type="button" class="wm-btn" data-value="ltr">LTR</button>
+				<button type="button" class="wm-btn" data-value="rtl">RTL</button>
+			</p>
+		</div>
+		<section>
+			<h3>Content direction</h3>
 			<div class="inline-arrow-container">
 				<div class="inline-arrow-body">
 					Inline direction
@@ -341,41 +369,30 @@
 				</div>
 				<div class="block-arrow-head"></div>
 			</div>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Floated content</h3></div>
-		<div class="panel-body">
-			<div class="well well-sm"><span class="floatpointer">Point to the end</span></div>
-			<div class="clearfix"></div>
-			<div class="p-float well well-sm">Floatation</div>
+		</section>
+		<section>
+			<h3>Floated content</h3>
+			<div class="well"><span class="floatpointer">Point to the end</span></div>
+			<div class="p-float well">Floatation</div>
 			<p><em>Cupcake ipsum dolor sit. Amet I love croissant chocolate chocolate cake gummi bears chocolate. Chocolate jelly beans I love jelly. Sweet roll pastry sweet. Tart lemon drops pie. Jelly candy canes brownie pie macaroon pudding pie.</em></p>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Sides</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Sides</h3>
 			<div class="p-float p-sides">Flotation</div>
 			<p>A floating box at the far end of the box has borders on two sides (using <code>border-color</code> with four values), and <code>border-radius</code> on the one visible corner. It also has a margin on two sides, with different units.</p>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Vertical</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Vertical</h3>
 			<div class="p-container">
 				<p>This paragraph is in a container that has padding on each side, using the two-value ("padding: 0 20%;") syntax. When rotated (top to bottom), the values should be flipped, so that the padding is on the top and bottom.</p>
 			</div>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Text</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Text</h3>
 			<p class="p-indent">This paragraph is has a <code>text-indent</code>. <em>Sed efficitur vulputate arcu a facilisis. Sed et libero volutpat, facilisis ex vel, dapibus nisi. Maecenas bibendum, est non consequat consectetur, tellus erat elementum tortor, ut aliquet tellus enim sed ligula. Sed luctus congue purus sit amet condimentum. Suspendisse est ligula, accumsan laoreet porta vel, rutrum finibus dui.</em></p>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Spacing</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Spacing</h3>
 			<p><code>padding</code> and <code>margin</code> styles. <span class="padding">Padding</span>.</p>
 			<p>
 				<span class="space-after">This span has both padding and margin after the text, using margin-[direction]/padding-[direction] properties.</span> When flipping from ltr to rtl, padding-right becomes padding-left. For tb-lr, it becomes padding-bottom.
@@ -386,29 +403,22 @@
 			<p>
 				Lorem ipsum. <span class="space-both">This span has both padding and margin on both sides of the text, using the three-value syntax.</span> When rotated, this gets converted to four-value syntax.
 			</p>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Borders</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Borders</h3>
 			<p>A <span class="border">border</span> and <span class="radius">border radius</span>.</p>
 			<p><span class="border-styles">This span has a red border after the text, with rounded corners.</span></p>
 			<p><span class="border-images">This span has a thicker border <span class="border-images-block-start">closer to the preceding line</span>, a thinner border to the <span class="border-images-inline-start">inline-start direction</span>, and repeating text at the <span class="border-images-block-end">border closer to the following line</span>. </span></p>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Shadows</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Shadows</h3>
 			<p>Using <code>box-shadow</code>, <code>text-shadow</code>, including inset positioning and overlapping shadows.</p>
 			<p class="text-shadows">This text has a red shadow before the text slightly closer to the previous line, and a blue shadow after the text and slightly closer to the following line.</p>
 			<p class="box-shadows">This box has an inset shadow, visible before the text.</p>
 			<div class="box-shadows2">This box has a light orange shadow at the start and above the text. And a red shadow at the end and below the text.</div>
-		</li>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Transform</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Transform</h3>
 			<p><code>transform: translate( 25%, 50% );</code></p>
 			<div class="well p-float untransformed">
 			Original
@@ -416,38 +426,32 @@
 			<div class="well p-float transformed">
 			Transformed<br>(25% towards end of line, 50% toward end of page)
 			</div>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Position</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Position</h3>
 			<p><code>position: relative;</code></p>
-			<ul class="list-group">
-				<li class="list-group-item posholder">Moved <span class="posbase"></span><span class="postop">toward the following line</span><span class="posbase"></span>.</li>
-				<li class="list-group-item posholder">Moved <span class="posbase"></span><span class="posbottom">toward the previous line</span><span class="posbase"></span>.</li>
-				<li class="list-group-item posholder">Moved <span class="posbase"></span><span class="posleft">forward in the direction of the text</span><span class="posbase"></span>.</li>
-				<li class="list-group-item posholder">Moved <span class="posbase"></span><span class="posright">backward in the direction of the text</span><span class="posbase"></span>.</li>
+			<ul>
+				<li class="well posholder">Moved <span class="posbase"></span><span class="postop">toward the following line</span><span class="posbase"></span>.</li>
+				<li class="well posholder">Moved <span class="posbase"></span><span class="posbottom">toward the previous line</span><span class="posbase"></span>.</li>
+				<li class="well posholder">Moved <span class="posbase"></span><span class="posleft">forward in the direction of the text</span><span class="posbase"></span>.</li>
+				<li class="well posholder">Moved <span class="posbase"></span><span class="posright">backward in the direction of the text</span><span class="posbase"></span>.</li>
 			</ul>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Cursors</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Cursors</h3>
 			<p class="cursor-pointer">Cursor is shown when hovering over the text.</p>
-			<ul class="list-group">
-				<li class="list-group-item resize-r">The cursor points in the text direction.</li>
-				<li class="list-group-item resize-l">The cursor points against the text direction.</li>
-				<li class="list-group-item resize-v">The cursor is perpendicular to the text direction.</li>
-				<li class="list-group-item resize-rd">The cursor points to the diagonal between the block direction and inline direction.</li>
-				<li class="list-group-item resize-d">diagonal cursor</li>
-				<li class="list-group-item resize-row">row cursor</li>
-				<li class="list-group-item resize-column">column cursor</li>
+			<ul>
+				<li class="well resize-r">The cursor points in the text direction.</li>
+				<li class="well resize-l">The cursor points against the text direction.</li>
+				<li class="well resize-v">The cursor is perpendicular to the text direction.</li>
+				<li class="well resize-rd">The cursor points to the diagonal between the block direction and inline direction.</li>
+				<li class="well resize-d">diagonal cursor</li>
+				<li class="well resize-row">row cursor</li>
+				<li class="well resize-column">column cursor</li>
 			</ul>
-		</div>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3 class="panel-title">Background image</h3></div>
-		<div class="panel-body">
+		</section>
+		<section>
+			<h3>Background image</h3>
 			<p>Background-images, including URL flips, and positioning.</p>
 			<ul class="outer">
 				<li>Outer</li>
@@ -456,22 +460,16 @@
 				<li class="inline-start-background">This element has a background arrow pointing toward the text, positioned at the text beginning.</li>
 				<li class="block-after-background">This element has repeated background arrows on a line after the the text's block, pointing toward the inline direction.</li>
 			</ul>
-		</div>
+		</section>
 	</div>
-</div>
-<div class="cje-form">
-	<div class="btn-group" role="group">
-		<button type="button" class="btn btn-default" data-value="ltr">LTR</button>
-		<button type="button" class="btn btn-default" data-value="rtl">RTL</button>
-	</div>
-</div>
-<footer class="demo-footer" role="contentinfo">
-	<div class="container">
-		<p><a href="../">Flip service</a> · <a href="https://github.com/cssjanus/cssjanus.github.io/blob/master/demo/index.html">Source code of this page</a></p>
+</main>
+
+<footer>
+	<div class="wm-container">
+		<p><a href="../">Flip service</a> · <a href="https://gerrit.wikimedia.org/g/mediawiki/libs/node-cssjanus/+/HEAD/docs/demo/index.html">Source code of this page</a></p>
 	</div>
 </footer>
-<!-- es5-shim for old IE -->
-<script src="../lib/es5-shim.js"></script>
+
 <script src="../lib/cssjanus.js"></script>
 <script>
 ( function () {
@@ -487,8 +485,10 @@
 			} else {
 				cssElem.firstChild.nodeValue = cssjanus.transform(
 					css,
-					true,
-					true
+					{
+						transformDirInUrl: true,
+						transformEdgeInUrl: true
+					}
 				);
 			}
 			this.className += ' active';

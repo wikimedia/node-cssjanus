@@ -2,95 +2,91 @@
 <html lang="en">
 <meta charset="utf-8">
 <title>CSSJanus</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" integrity="sha384-Ej0hUpn6wbrOTJtRExp8jvboBagaz+Or6E9zzWT+gHCQuuZQQVZUcbmhXQzSG17s" crossorigin="anonymous">
+<link rel="stylesheet" href="./lib/wikimedia-ui-base-0.19.0.css">
 <link rel="stylesheet" href="./site.css">
 <link rel="icon" href="./favicon.svg">
-<div class="container">
-	<div class="page-header">
-		<h1>CSSJanus</h1>
-		<p class="lead">Convert CSS stylesheets between left-to-right and right-to-left.</p>
-	</div>
-	<form role="form" id="demo-form">
-		<div class="form-group col-sm-6">
+
+<header><div class="wm-container">
+	<span role="banner">CSSJanus</span>
+	<span class="wm-header-caption">Convert CSS stylesheets between left-to-right and right-to-left.</span>
+</div></header>
+
+<main><div class="wm-container">
+	<form role="form" class="cssjanus-form" id="demo-form">
+		<div class="cssjanus-form-ioside">
 			<label for="demo-input">Input</label>
-			<textarea class="form-control" rows="16" placeholder="Enter CSS..." id="demo-input" autofocus></textarea>
+			<textarea class="form-control" rows="21" placeholder="Enter CSS..." id="demo-input" autofocus></textarea>
 		</div>
-		<div class="form-group col-sm-6">
-			<label for="demo-input">Output</label>
-			<textarea class="form-control" rows="16" placeholder="Flipped CSS." id="demo-output" readonly></textarea>
+		<div class="cssjanus-form-ioside">
+			<label for="demo-output">Output</label>
+			<textarea class="form-control" rows="21" placeholder="Flipped CSS." id="demo-output" readonly></textarea>
 		</div>
-		<div class="form-group col-sm-6">
-			<div class="checkbox">
-				<label><input type="checkbox" id="demo-swap-ltr"> Flip <code>ltr</code> in urls</label>
-			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" id="demo-swap-left"> Flip <code>left</code> in urls</label>
-			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-			<button class="btn btn-default" id="demo-example">Insert example</button>
+		<div class="cssjanus-form-row">
+			<label><input type="checkbox" id="demo-swap-ltr"> Flip <code>ltr</code> in urls</label>
+			<label><input type="checkbox" id="demo-swap-left"> Flip <code>left</code> in urls</label>
+		</div>
+		<div class="cssjanus-form-row">
+			<button type="submit" class="wm-btn wm-btn--progressive">Submit</button>
+			<button class="wm-btn" id="demo-example">Insert example</button>
 		</div>
 	</form>
-</div>
-<footer class="demo-footer" role="contentinfo">
-	<div class="container">
-		<p><a href="./demo/">Demos</a> · <a href="https://github.com/cssjanus/cssjanus">Source repository</a> · <a dir="ltr" lang="en" href="https://github.com/cssjanus/cssjanus/issues">Issue tracker</a></p>
-		<p><a href="https://www.npmjs.org/package/cssjanus"><img src="https://badge.fury.io/js/cssjanus.svg" alt="NPM version"></a></p>
+</div></main>
+
+<footer>
+	<div class="wm-container">
+		<p><a href="./demo/">Live demos</a> · <a href="https://www.npmjs.org/package/cssjanus">npm package</a> · <a href="https://gerrit.wikimedia.org/g/mediawiki/libs/node-cssjanus">Source repository</a> · <a dir="ltr" lang="en" href="https://phabricator.wikimedia.org/tag/cssjanus/">Issue tracker</a></p>
+	    <p>Made with <a href="https://performance.wikimedia.org">♥ by Wikimedia Performance Team</a> at <a href="https://www.wikimedia.org">Wikimedia Foundation</a>.</p>
 	</div>
 </footer>
-<a href="https://github.com/cssjanus/cssjanus"><img class="demo-fork-me" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
-<!-- es5-shim for old IE -->
-<script src="./lib/es5-shim.js"></script>
+
 <script src="./lib/cssjanus.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-<script>
-( function () {
-	/* eslint-env jquery, browser */
+<script type="module">
+	/* eslint-env es6, browser */
 	/* global cssjanus */
-	var $input = $( '#demo-input' ),
-		$output = $( '#demo-output' ),
-		$swapLtr = $( '#demo-swap-ltr' ),
-		$swapLeft = $( '#demo-swap-left' ),
-		hashPrefix = '#input/';
+	const areaInput = document.querySelector( '#demo-input' );
+	const areaOutput = document.querySelector( '#demo-output' );
+	const checkSwapLtr = document.querySelector( '#demo-swap-ltr' );
+	const checkSwapLeft = document.querySelector( '#demo-swap-left' );
+	const btnExample = document.querySelector( '#demo-example' );
+	const form = document.querySelector( '#demo-form' );
+	const hashPrefix = '#input/';
 
 	function submit( input ) {
-		$output.val( cssjanus.transform( input, {
-			transformDirInUrl: $swapLtr[ 0 ].checked,
-			transformEdgeInUrl: $swapLeft[ 0 ].checked
-		} ) );
+		areaOutput.value = cssjanus.transform( input, {
+			transformDirInUrl: checkSwapLtr.checked,
+			transformEdgeInUrl: checkSwapLeft.checked
+		} );
 		if ( history.replaceState ) {
 			history.replaceState( null, document.title, hashPrefix + encodeURIComponent( input ) );
 		}
 	}
 
 	if ( location.hash.indexOf( hashPrefix ) === 0 ) {
-		$input.val( decodeURIComponent( location.hash.slice( hashPrefix.length ) ) );
+		areaInput.value = decodeURIComponent( location.hash.slice( hashPrefix.length ) );
 	}
 
-	$( '#demo-example' ).on( 'click', function () {
-		$input.val( '.foo {\n\tpadding: 1px 2px 3px 4px;\n\tmargin-left: 1em;\n\tbackground-position: 5% 100px;\n\tbackground: #fff (arrow-ltr.png) no-repeat;\n\tcursor: ne-resize;\n\tborder-radius: 1px 2px;\n}\n\n/* @noflip */ .ignored {\n\tfloat: left;\n}\n\n.not-ignored {\n\tfloat: left;\n\t/* @noflip */ background: #fff (poster-ltr.png);\n}' );
-	} );
+	btnExample.onclick = function () {
+		areaInput.value = '.foo {\n\tpadding: 1px 2px 3px 4px;\n\tmargin-left: 1em;\n\tbackground-position: 5% 100px;\n\tbackground: #fff (arrow-ltr.png) no-repeat;\n\tcursor: ne-resize;\n\tborder-radius: 1px 2px;\n}\n\n/* @noflip */ .ignored {\n\tfloat: left;\n}\n\n.not-ignored {\n\tfloat: left;\n\t/* @noflip */ background: #fff (poster-ltr.png);\n}';
+	};
 
-	$input.on( 'change keyup', function () {
-		submit( $( this ).val() );
-	} );
+	areaInput.onchange = areaInput.onkeyup = function () {
+		submit( this.value );
+	};
 
-	$( '#demo-swap-ltr, #demo-swap-left' ).on( 'change', function () {
-		submit( $input.val() );
-	} );
+	checkSwapLtr.onchange = checkSwapLeft.onchange = function () {
+		submit( areaInput.value );
+	};
 
-	$( '#demo-form' ).on( 'submit', function ( e ) {
+	form.onsubmit = function ( e ) {
 		e.preventDefault();
-		submit( $input.val() );
-	} );
+		submit( areaInput.value );
+	};
 
-	$output.on( {
-		focus: function () {
-			this.select();
-		},
-		mouseup: function ( e ) {
-			e.preventDefault();
-		}
-	} );
-}() );
+	areaOutput.onfocus = function () {
+		this.select();
+	};
+	areaOutput.onmouseup = function ( e ) {
+		e.preventDefault();
+	};
 </script>
 </html>

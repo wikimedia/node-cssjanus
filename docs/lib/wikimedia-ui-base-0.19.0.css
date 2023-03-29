@@ -1,0 +1,313 @@
+/**
+ * WikimediaUI Base v0.19.0
+ * Wikimedia Foundation user interface base variables
+ * https://gerrit.wikimedia.org/g/wikimedia-ui-base/
+ *
+ * See also https://design.wikimedia.org/style-guide/
+ */
+
+:root {
+	/* == Breakpoints == */
+	/* The following numbers are prone to change with new information. */
+
+	/**
+	 * Minimum available screen width at which a device can be considered a mobile device
+	 * Many older feature phones have screens smaller than this value.
+	 */
+	--width-breakpoint-mobile: 320px;
+
+	/**
+	 * Minimum available screen width at which a device can be considered a tablet
+	 * The number is currently based on the device width of a Samsung Galaxy S5 mini and is low
+	 * enough to cover iPad (768px).
+	 */
+	--width-breakpoint-tablet: 720px;
+
+	/* Minimum available screen width at which a device can be considered a desktop. */
+	--width-breakpoint-desktop: 1000px;
+
+	/* Wider desktop breakpoint, currently used in Flow. */
+	--width-breakpoint-desktop-wide: 1200px;
+
+	/* Extra wide desktop breakpoint */
+	--width-breakpoint-desktop-extrawide: 2000px;
+
+
+	/* == Colors == */
+	/**
+	 * WikimediaUI (`wmui`) color palette
+	 * See https://design.wikimedia.org/style-guide/visual-style_colors.html
+	 * Don't use those variables directly, instead define your vars
+	 * referring to them as applied further below.
+	 */
+	--wmui-color-base0:    #000;    /* = HSB 0°, 0%, 0% */
+	--wmui-color-base10:   #202122; /* = HSB 210°, 6%, 13% */
+	--wmui-color-base20:   #54595d; /* = HSB 207°, 10%, 36%; WCAG 2.0 level AAA 7.09:1 contrast ratio on `#fff` */
+	--wmui-color-base30:   #72777d; /* = HSB 210°, 9%, 49%; WCAG 2.0 level AA at 4.52:1 contrast ratio on `#fff` */
+	--wmui-color-base50:   #a2a9b1; /* = HSB 212°, 8%, 69% */
+	--wmui-color-base70:   #c8ccd1; /* = HSB 213°, 4%, 82% */
+	--wmui-color-base80:   #eaecf0; /* = HSB 220°, 3%, 94% */
+	--wmui-color-base90:   #f8f9fa; /* = HSB 210°, 1%, 98% */
+	--wmui-color-base100:  #fff;    /* = HSB 0°, 0%, 100% */
+
+	--wmui-color-accent30: #2a4b8d; /* = HSB 220°, 70%, 55% */
+	--wmui-color-accent50: #36c;    /* = HSB 220°, 75%, 80% */
+	--wmui-color-accent90: #eaf3ff; /* = HSB 214°, 8%, 100% */
+
+	--wmui-color-red30:    #b32424; /* = HSB 360°, 80%, 70% */
+	--wmui-color-red50:    #d33;    /* = HSB 360°, 77%, 87% */
+	--wmui-color-red90:    #fee7e6; /* = HSB 3°, 9%, 100% */
+
+	--wmui-color-yellow30: #ac6600; /* = HSB 36°, 100%, 67% */
+	--wmui-color-yellow50: #fc3;    /* = HSB 45°, 80%, 100% */
+	--wmui-color-yellow90: #fef6e7; /* = HSB 39°, 9%, 100% */
+
+	--wmui-color-green30:  #14866d; /* = HSB 167°, 85%, 53% */
+	--wmui-color-green50:  #00af89; /* = HSB 167°, 100%, 69% */
+	--wmui-color-green90:  #d5fdf4; /* = HSB 166°, 16%, 99% */
+
+	/* Modifier colors, not part of official palette, limited to interaction state usage. */
+	--wmui-color-base10--lighten: #404244;
+	--wmui-color-accent50--lighten: #447ff5; /* = `filter: brightness( 109% )` */
+	--wmui-color-red50--lighten: #ff4242; /* ~= `filter: brightness( 120% )` */
+	--wmui-color-green50--lighten: #1c6665;
+	--wmui-color-purple50: #6b4ba1;
+
+	/* From here on no static color values, only variable references. */
+	/* Background Colors */
+	--background-color-base:           var( --wmui-color-base100 );
+	--background-color-base--hover:    var( --wmui-color-base80 );
+	--background-color-base--disabled: var( --wmui-color-base80 );
+	--background-color-base--read-only: var( --wmui-color-base90 );
+	--background-color-code:           var( --wmui-color-base90 );
+	/* 'Framed' UI elements (Framed Buttons, Dropdowns, ToggleSwitches…) */
+	--background-color-framed:         var( --wmui-color-base90 );
+	--background-color-framed--hover:  var( --wmui-color-base100 );
+	--background-color-framed--active: var( --wmui-color-base70 );
+	/* 'Filled' UI elements (Checkboxes, Radios, ProgressBars…) */
+	--background-color-filled--disabled: var( --wmui-color-base70 );
+	/* Binary Input elements (Checkboxes, Radios, Toggle Switches) */
+	--background-color-input-binary--active: var( --color-primary--active );
+	--background-color-input-binary--checked: var( --color-primary );
+	/* Quiet Buttons */
+	--background-color-quiet:          var( --background-color-base );
+	/* Use `rgba()` values here as the quiet buttons need to blend in with background. */
+	--background-color-quiet--hover:   rgba( 0, 24, 73, 7/255 ); /* = `--wmui-color-base90` on white. */
+	--background-color-quiet--active:  rgba( 0, 36, 73, 21/255 ); /* = `--wmui-color-base80` on white. */
+	/* Toolbar and Tools */
+	--background-color-toolbar:        var( --background-color-base );
+	--background-color-tool--hover:    var( --background-color-base--hover );
+	--background-color-tool--active:   var( --background-color-primary );
+	--background-color-tool--active-hover: var( --background-color-primary--hover );
+	/* Tabs Navigation Background Color */
+	--background-color-tabs:           var( --wmui-color-base80 );
+	/* User system messages (errors, warnings, successes, notices) */
+	--background-color-error--framed:  var( --wmui-color-red90 );
+	--background-color-warning--framed: var( --wmui-color-yellow90 );
+	--background-color-success--framed: var( --wmui-color-green90 );
+	--background-color-notice--framed: var( --wmui-color-base80 );
+	/* Highlight Colors for text highlighting, think metaphorically text marker */
+	--background-color-highlight:      rgba( 255, 182, 13, 0.4 ); /* Equals to `#ffe29e` on `#fff` background. */
+
+	/* Foreground Colors */
+	--color-base:                      var( --wmui-color-base10 );
+	--color-base--hover:               var( --wmui-color-base10--lighten );
+	--color-base--active:              var( --wmui-color-base0 );
+	--color-base--inverted:            var( --wmui-color-base100 );
+	--color-base--emphasized:          var( --color-base--active );
+	--color-base--subtle:              var( --wmui-color-base30 );
+	--color-base--disabled:            var( --wmui-color-base30 );
+	--color-filled--disabled:          var( --color-base--inverted );
+	--color-accessory:                 var( --wmui-color-base20 );
+	--color-placeholder:               var( --wmui-color-base30 );
+	/* Primary 'Progressive' Color, Background Color and states */
+	--background-color-primary:        var( --wmui-color-accent90 );
+	--background-color-primary--hover: rgba( 41, 98, 204, 0.1 );
+	--color-primary:                   var( --wmui-color-accent50 );
+	--color-primary--hover:            var( --wmui-color-accent50--lighten );
+	--color-primary--active:           var( --wmui-color-accent30 );
+	--color-primary--focus:            var( --color-primary );
+	/* 'Destructive' Color, Background Color and states */
+	--background-color-destructive:    var( --wmui-color-red90 );
+	--color-destructive:               var( --wmui-color-red50 );
+	--color-destructive--hover:        var( --wmui-color-red50--lighten );
+	--color-destructive--active:       var( --wmui-color-red30 );
+	--color-destructive--focus:        var( --color-destructive );
+	/* Secondary Color and states (links only) */
+	--color-secondary:                 var( --wmui-color-green50 );
+	--color-secondary--hover:          var( --wmui-color-green50--lighten );
+	--color-secondary--active:         var( --wmui-color-green30 );
+	--color-secondary--focus:          var( --color-secondary );
+	/* User system messages (errors, warnings, successes, notices) */
+	--color-error:                     var( --wmui-color-red50 );
+	--color-warning:                   var( --wmui-color-base0 );
+	--color-success:                   var( --wmui-color-green30 );
+	--color-success--framed:           var( --wmui-color-base0 );
+	--color-notice:                    var( --wmui-color-base0 );
+	/* Toolbar and Tools */
+	--color-tool--hover:               var( --color-base--emphasized ); /* Used here in combination with `:hover` background-color turning light grey */
+	--color-tool--active:              var( --color-primary );
+
+
+	/* Opacity */
+	--opacity-base:                    1;
+	--opacity-base--disabled:          0.51; /* = `#7d7d7d` on `background-color: #fff`; HSB 0°, 0%, 49% */
+	--opacity-icon-base:               0.87; /* = `#222` on `background-color: #fff`, closest to `#202122` */
+	--opacity-icon-base--hover:        0.74; /* = `#424242` on `background-color: #fff`, closest to `#404244` */
+	--opacity-icon-base--selected:     1;
+	--opacity-icon-accessory:          0.67; /* = `#555`, closest to `#54595d` on background-color `#fff`. */
+
+
+	/* == Positioning == */
+	/* Positioning Model */
+	/* Use `px` unit to prevent pixel rounding error when using `@size-input-binary / 4`. */
+	/* Works with different sizes on mobile and desktop as it negatively offsets from outside. */
+	--position-offset-input-radio-focus: -4px;
+
+	/* Z-Index */
+	--z-index-base:                    0;
+	--z-index-overlay:                 101;
+
+
+	/* == Box Model properties == */
+	/* `--*size` variables are used for `*width` & `*height` properties. */
+	--min-size-base:                   32px; /* Values used for `min-*` are defined in `px`, see T130691. */
+	--size-base:                       32px;
+	--size-full:                       100%;
+
+	--min-size-icon:                   20px;
+	--size-icon:                       20px;
+	--min-size-indicator:              12px;
+	--size-indicator:                  12px;
+	--size-input-binary:               20px;
+	--size-tool:                       42px;
+
+	/* Max Widths */
+	--max-width-base:                  50em;
+	--max-width-button:                28.75em; /* = `460px` at `16px` base, see T95367 */
+	--max-width-input:                 var( --max-width-base );
+	--max-width-input-inline:          100%;
+
+	/* Border */
+	--border-base:                     var( --border-width-base ) var( --border-style-base ) var( --border-color-base );
+	--border-dialog:                   var( --border-base );
+	--border-menu:                     var( --border-base );
+	--border-input-binary:             var( --border-width-base ) var( --border-style-base ) var( --border-color-input-binary );
+	/* User system messages (errors, warnings, successes, notices) */
+	--border-error:                    var( --border-width-base ) var( --border-style-base ) var( --border-color-error );
+	--border-warning:                  var( --border-width-base ) var( --border-style-base ) var( --border-color-warning );
+	--border-success:                  var( --border-width-base ) var( --border-style-base ) var( --border-color-success );
+	--border-notice:                   var( --border-base );
+	/* Border Colors */
+	--border-color-base:               var( --wmui-color-base50 );
+	--border-color-base--hover:        var( --wmui-color-base50 );
+	--border-color-base--active:       var( --wmui-color-base30 );
+	--border-color-base--focus:        var( --color-primary--focus );
+	--border-color-base--disabled:     var( --wmui-color-base70 );
+	--border-color-filled-disabled:    var( --color-filled--disabled );
+	/* Border Colors primary buttons */
+	--border-color-primary:            var( --color-primary );
+	--border-color-primary--hover:     var( --color-primary--hover );
+	--border-color-primary--active:    var( --color-primary--active );
+	--border-color-primary--focus:     var( --border-color-primary );
+	--border-color-destructive:        var( --color-destructive );
+	--border-color-destructive--hover: var( --color-destructive--hover );
+	--border-color-destructive--active: var( --color-destructive--active );
+	--border-color-destructive--focus: var( --border-color-destructive );
+	--border-color-inset--focus:       var( --color-base--inverted );
+	--border-color-input--hover:       var( --border-color-base--active );
+	--border-color-input-binary:       var( --border-color-base--active );
+	--border-color-input-binary--active: var( --color-primary--active );
+	--border-color-input-binary--checked: var( --color-primary );
+	--border-color-heading:            var( --wmui-color-base70 );
+	--border-color-divider:            var( --wmui-color-base50 );
+	--border-color-wikitable:          rgba( 84, 89, 93, 0.3 ); /* See T168029 */
+	/* Border Colors user system messages */
+	--border-color-error:              var( --color-error );
+	--border-color-warning:            var( --wmui-color-yellow50 );
+	--border-color-success:            var( --color-success );
+	--border-color-notice:             var( --border-color-base );
+	/* Border Styles */
+	--border-style-base:               solid;
+	/* Border Widths */
+	--border-width-base:               1px;
+	/* Border Radius */
+	--border-radius-base:              2px;
+	--border-radius-circle:            50%;
+	--border-radius-input-radio:       var( --border-radius-circle );
+
+	/* Paddings */
+	--padding-base:                    var( --padding-vertical-base ) var( --padding-horizontal-base );
+	--padding-input-text:              var( --padding-vertical-base ) var( --padding-horizontal-input-text );
+	--padding-horizontal-base:         12px;
+	/* Must be < `8` as it cuts off scripts like Burmese. Directly connected to `line-height` further down. */
+	--padding-vertical-base:           5px;
+	--padding-horizontal-input-text:   8px;
+	/* Menu items don't have a border. So add it to padding. */
+	--padding-vertical-menu:           calc( var( --padding-vertical-base ) + var( --border-width-base ) );
+
+	/* Box Shadows */
+	/* Base widget `box-shadow` set to `transparent` for transition purpose. */
+	--box-shadow-base:                 inset 0 0 0 1px transparent;
+	--box-shadow-base--focus:          inset 0 0 0 1px var( --wmui-color-accent50 );
+	--box-shadow-primary-focus:        inset 0 0 0 1px var( --color-primary ), inset 0 0 0 2px var( --color-base--inverted );
+	--box-shadow-destructive--focus:   inset 0 0 0 1px var( --color-destructive ), inset 0 0 0 2px var( --color-base--inverted );
+	--box-shadow-inset--inverted:      inset 0 0 0 1px var( --color-base--inverted );
+	--box-shadow-filled--disabled:     inset 0 0 0 1px var( --color-filled--disabled );
+	--box-shadow-card:                 0 1px 1px rgba( 0, 0, 0, 0.15 );
+	--box-shadow-dialog:               0 2px 2px 0 rgba( 0, 0, 0, 0.25 );
+	--box-shadow-menu:                 var( --box-shadow-dialog );
+
+	/* Outlines */
+	/* Enable Windows high contrast mode on certain widgets, that have default outlines overridden. */
+	--outline-base--focus:             var( --border-width-base ) var( --border-style-base ) transparent;
+
+
+	/* == Typography incl. print properties == */
+	/* See https://design.wikimedia.org/style-guide/visual-style_typography.html */
+	/* Font Families */
+	--font-family-base:                var( --font-family-sans );
+	--font-family-heading-main:        var( --font-family-serif );
+	/* To be deprecated, see T247166. */
+	--font-family-sans:                'Helvetica Neue', 'Helvetica', 'Liberation Sans', 'Arial', sans-serif;
+	/* Provide better operating system-specific readability, see T175877. */
+	/* `system-ui` is currently not an option due to OS/language combination issues, see T175877#4776576. */
+	--font-family-system-sans:         -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Lato', 'Helvetica', 'Arial', sans-serif;
+	--font-family-sans--fallback:      sans-serif;
+	--font-family-serif:               'Linux Libertine', 'Georgia', 'Times', serif;
+	--font-family-serif--fallback:     serif;
+	/* Provide better operating system-specific monospace stack, see T209915. */
+	--font-family-monospace:           'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+	--font-family-monospace--fallback: monospace, monospace; /* See T176636. */
+	/* Font Weights */
+	--font-weight-base:                var( --font-weight-normal );
+	/* See https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight#Common_weight_name_mapping */
+	--font-weight-hairline:            100;
+	--font-weight-light:               300;
+	--font-weight-normal:              400;
+	--font-weight-semi-bold:           600;
+	--font-weight-bold:                700;
+	/* Line Heights */
+	--line-height-base:                1.6;
+	--line-height-heading:             1.3;
+	--text-decoration-link--hover:     none;
+	/* Text Shadows */
+	--text-shadow-base:                0 1px 1px var( --color-base--inverted ); /* 'coined' effect */
+	--text-shadow-base--disabled:      var( --text-shadow-base );
+
+
+	/* == Other Properties == */
+	/* Cursors */
+	--cursor-base--disabled:           default;
+
+
+	/* == Animation & Transition == */
+	/* Transitions */
+	--transition-base:                 var( --transition-duration-base ); /* `ease` is the initial value */
+	--transition-ease-medium:          var( --transition-duration-medium );
+	/* `ease-out` is preferably used on human initiated transitions, for example dialogs */
+	--transition-ease-out-medium:      ease-out var( --transition-duration-medium );
+	/* Transitions > Durations */
+	--transition-duration-base:        100ms;
+	--transition-duration-medium:      250ms;
+}
