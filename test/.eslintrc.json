@@ -1,4 +1,8 @@
 {
 	"root": true,
-	"extends": "wikimedia/server"
+	"extends": [
+		"wikimedia",
+		"wikimedia/node",
+		"wikimedia/language/es2021"
+	]
 }

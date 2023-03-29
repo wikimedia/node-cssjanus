@@ -103,7 +103,7 @@ async function getFixture( name, sha1, url ) {
 
 async function benchFixture( fixture ) {
 	const data = await getFixture( fixture.name, fixture.sha1, fixture.src );
-	const ops = 1000;
+	const ops = 10_000;
 	const bench = Object.create( baseBench );
 	let i = ops;
 	bench.start( fixture.name );
