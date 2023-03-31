@@ -76,50 +76,44 @@ function fetch( url ) {
 	} );
 }
 
-function getFixture( name, sha1, url ) {
+async function getFixture( name, sha1, url ) {
 	const file = __dirname + '/fixture.' + name + '.dat';
-	let pData;
-	let fetched;
+	let data;
+
 	try {
-		const data = fs.readFileSync( file, 'utf8' );
-		if ( checksum( 'sha1', data ) !== sha1 ) {
-			fetched = true;
-			pData = fetch( url );
-		} else {
-			// re-use cached fixture
-			pData = Promise.resolve( data );
+		data = fs.readFileSync( file, 'utf8' );
+		if ( checksum( 'sha1', data ) === sha1 ) {
+			return data;
 		}
 	} catch ( e ) {
-		fetched = true;
-		pData = fetch( url );
+		// Ignore
 	}
-	return pData.then( function ( data ) {
-		data = Buffer.from( data, 'base64' ).toString( 'utf8' );
-		if ( fetched ) {
-			if ( checksum( 'sha1', data ) !== sha1 ) {
-				return Promise.reject( new Error( 'Checksum mis-match' ) );
-			}
-			fs.writeFileSync( file, data );
-		}
-		return data;
-	} );
+
+	data = await fetch( url );
+	data = Buffer.from( data, 'base64' ).toString( 'utf8' );
+
+	if ( checksum( 'sha1', data ) !== sha1 ) {
+		return Promise.reject( new Error( 'Checksum mis-match' ) );
+	}
+
+	fs.writeFileSync( file, data );
+
+	return data;
 }
 
-function benchFixture( fixture ) {
-	return getFixture( fixture.name, fixture.sha1, fixture.src )
-		.then( function ( data ) {
-			const ops = 1000;
-			const bench = Object.create( baseBench );
-			let i = ops;
-			bench.start( fixture.name );
-			while ( i-- ) {
-				cssjanus.transform( data );
-			}
-			bench.end( ops );
-		} );
+async function benchFixture( fixture ) {
+	const data = await getFixture( fixture.name, fixture.sha1, fixture.src );
+	const ops = 1000;
+	const bench = Object.create( baseBench );
+	let i = ops;
+	bench.start( fixture.name );
+	while ( i-- ) {
+		cssjanus.transform( data );
+	}
+	bench.end( ops );
 }
 
-function benchFixtures() {
+async function main() {
 	const fixtures = [
 		{
 			name: 'mediawiki',
@@ -132,17 +126,12 @@ function benchFixtures() {
 			src: 'https://gerrit.wikimedia.org/g/mediawiki/core/+/130344b47ad939114400d2d0dfbc4018d6d2b5a9/resources/lib/oojs-ui/oojs-ui-core-wikimediaui.css?format=TEXT'
 		}
 	];
-	function next( fixture ) {
-		return benchFixture( fixture ).then( function () {
-			if ( fixtures[ 0 ] ) {
-				return next( fixtures.shift() );
-			}
-		} );
+	for ( const fixture of fixtures ) {
+		await benchFixture( fixture );
 	}
-	return next( fixtures.shift() );
 }
 
-benchFixtures().catch( function ( err ) {
+main().catch( function ( err ) {
 	console.error( err );
 	process.exit( 1 );
 } );
