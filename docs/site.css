@@ -136,6 +136,23 @@ footer {
 	font-size: 1.3rem;
 }
 
+@media ( min-width: 768px ) {
+	/* Render bullet list as horizontal line when there is more space */
+	footer nav ul {
+	  margin: 0;
+	}
+	footer nav ul li {
+	  list-style: none;
+	  display: inline-block;
+	  padding: 0 0.8rem 0 0;
+	}
+	footer nav li:not( :last-child )::after {
+	  content: "\2022";
+	  color: var( --color-base--subtle );
+	  padding: 0 0 0 0.8rem;
+	}
+}
+
 /* CSSJanus */
 
 .cssjanus-form {
