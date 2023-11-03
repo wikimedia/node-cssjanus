@@ -2,13 +2,16 @@
 
 :root {
 	--cssjanus-desktop-wide: 1200px;
+	--cssjanus-background-color-neutral: #eaecf0;
+	--cssjanus-background-color-neutral-subtle: #f8f9fa;
+	--cssjanus-border-color-soft: #eaecf0;
 }
 
 html {
-	background-color: var( --wmui-color-base80 );
+	background-color: var( --cssjanus-background-color-neutral );
 	font-family: sans-serif; /* Basic support without css-variables */
 	font-family: var( --font-family-system-sans );
-	line-height: var( --line-height-base );
+	line-height: var( --line-height-medium );
 	font-size: 62.5%;
 	color: var( --color-base );
 }
@@ -28,7 +31,7 @@ header .wm-container {
 
 header [role="banner"] {
 	line-height: 4.9rem;
-	font-weight: bold;
+	font-weight: var( --font-weight-bold );
 	color: inherit;
 }
 header [role="banner"] em {
@@ -65,7 +68,7 @@ p {
 }
 
 a {
-	color: var( --wmui-color-accent50 );
+	color: var( --color-progressive );
 	text-decoration: none;
 }
 a:hover {
@@ -76,15 +79,15 @@ a:hover {
 code {
 	display: inline-block;
 	font-size: 1.4rem;
-	background-color: var( --wmui-color-base90 );
-	border: var( --border-width-base ) var( --border-style-base ) var( --wmui-color-base80 );
+	background-color: var( --cssjanus-background-color-neutral-subtle );
+	border: var( --border-width-base ) var( --border-style-base ) var( --cssjanus-border-color-soft );
 	border-radius: var( --border-radius-base );
 	padding: 0.2rem 0.4rem;
 }
 
 main {
-	background: var( --wmui-color-base100 );
-	box-shadow: 0 1px 4px 0 rgba( 0, 0 ,0, 0.25 );
+	background: var( --background-color-base );
+	box-shadow: 0 1px 4px 0 rgba( 0, 0, 0, 0.25 );
 	padding: 3.2rem 0 6rem 0;
 }
 
@@ -99,35 +102,35 @@ ul ul {
 .wm-btn {
 	display: inline-block;
 	padding: 5px 12px;
-	background-color: var( --background-color-framed );
+	background-color: var( --background-color-interactive-subtle );
 	border-radius: var( --border-radius-base );
 	border: var( --border-base );
 	color: var( --color-base );
-	font-weight: bold;
+	font-weight: var( --font-weight-bold );
 	font-size: 1.4rem;
 	line-height: 1.42857143;
 	cursor: pointer;
-}
-.wm-btn:hover {
-	background-color: var( --background-color-framed--hover );
-	border-color: var( --border-color-base--hover );
+  }
+  .wm-btn:hover {
+	background-color: var( --background-color-base );
+	border-color: var( --border-color-base );
 	color: var( --color-base--hover );
-}
-.wm-btn--progressive {
-	background-color: var( --color-primary );
-	border-color: var( --border-color-primary );
-	color: var( --color-base--inverted );
-}
-.wm-btn--progressive:hover {
-	background-color: var( --color-primary--hover );
-	border-color: var( --border-color-primary--hover );
-	color: var( --color-base--inverted );
-}
-.wm-btn--progressive:active {
-	background-color: var( --color-primary--active );
-	border-color: var( --border-color-primary--active );
-	color: var( --color-base--inverted );
-}
+  }
+  .wm-btn--progressive {
+	background-color: var( --background-color-progressive );
+	border-color: var( --border-color-progressive );
+	color: var( --color-inverted );
+  }
+  .wm-btn--progressive:hover {
+	background-color: var( --background-color-progressive--hover );
+	border-color: var( --border-color-progressive--hover );
+	color: var( --color-inverted );
+  }
+  .wm-btn--progressive:active {
+	background-color: var( --color-progressive--active);
+	border-color: var( --border-color-progressive--active );
+	color: var( --color-inverted );
+  }
 
 /* Footer */
 
@@ -148,7 +151,7 @@ footer {
 	}
 	footer nav li:not( :last-child )::after {
 	  content: "\2022";
-	  color: var( --color-base--subtle );
+	  color: var( --color-subtle );
 	  padding: 0 0 0 0.8rem;
 	}
 }
@@ -164,6 +167,7 @@ footer {
 
 .cssjanus-form label {
 	display: block;
+	margin-bottom: var( --spacing-25 );
 }
 
 .cssjanus-form > * {
@@ -175,7 +179,7 @@ footer {
 }
 
 .cssjanus-form-ioside label {
-	font-weight: bold;
+	font-weight: var( --font-weight-bold );
 }
 
 .cssjanus-form-ioside textarea {
@@ -184,13 +188,13 @@ footer {
 	font-size: 1.4rem;
 	border: var( --border-base );
 	max-height: 80vh;
-	padding: var( --padding-vertical-base ) var( --padding-horizontal-input-text );
+	padding: var( --spacing-30 ) var( --spacing-50 );
 }
 
 textarea[readonly],
 fieldset[disabled] {
 	cursor: not-allowed;
-	background-color: var( --wmui-color-base90 );
+	background-color: var( --background-color-interactive-subtle );
 	opacity: 1;
 }
 
