@@ -237,8 +237,12 @@ function CSSJanus() {
 	function calculateNewBorderRadius( match, pre ) {
 		var values,
 			args = [].slice.call( arguments ),
-			firstGroup = args.slice( 2, 6 ).filter( function ( val ) { return val; } ),
-			secondGroup = args.slice( 6, 10 ).filter( function ( val ) { return val; } ),
+			firstGroup = args.slice( 2, 6 ).filter( function ( val ) {
+				return val;
+			} ),
+			secondGroup = args.slice( 6, 10 ).filter( function ( val ) {
+				return val;
+			} ),
 			post = args[ 10 ] || '';
 
 		if ( secondGroup.length ) {

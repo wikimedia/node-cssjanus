@@ -23,7 +23,7 @@ for ( const name in testData ) {
 					args[ 1 ]
 				),
 				output,
-				`case #${i + 1}`
+				`case #${ i + 1 }`
 			);
 
 			if ( roundtrip ) {
@@ -35,13 +35,13 @@ for ( const name in testData ) {
 						args[ 1 ]
 					),
 					input,
-					`case #${i + 1} roundtrip`
+					`case #${ i + 1 } roundtrip`
 				);
 
 				// Keep test data clean
 				assert.true(
 					data.cases[ i ][ 1 ] !== input,
-					`case #${i + 1} should not specify output if it matches the input`
+					`case #${ i + 1 } should not specify output if it matches the input`
 				);
 			}
 		}

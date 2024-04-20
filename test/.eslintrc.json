@@ -4,5 +4,8 @@
 		"wikimedia",
 		"wikimedia/node",
 		"wikimedia/language/es2021"
-	]
+	],
+	"rules": {
+		"n/no-process-exit": "warn"
+	}
 }
