@@ -39,7 +39,7 @@ function checksum( algorithm, str ) {
 
 function fetch( url ) {
 	let redirects = 0;
-	return new Promise( function ( resolve, reject ) {
+	return new Promise( ( resolve, reject ) => {
 		https.get( url, function handleResponse( res ) {
 			let data = '';
 			// Handle redirect
@@ -64,13 +64,13 @@ function fetch( url ) {
 				return;
 			}
 			res.setEncoding( 'utf8' );
-			res.on( 'data', function ( chunk ) {
+			res.on( 'data', ( chunk ) => {
 				data += chunk;
 			} );
-			res.on( 'end', function () {
+			res.on( 'end', () => {
 				resolve( data );
 			} );
-		} ).on( 'error', function ( err ) {
+		} ).on( 'error', ( err ) => {
 			reject( err );
 		} );
 	} );
@@ -131,7 +131,7 @@ async function main() {
 	}
 }
 
-main().catch( function ( err ) {
+main().catch( ( err ) => {
 	console.error( err );
 	process.exit( 1 );
 } );
