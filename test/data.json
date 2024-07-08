@@ -902,5 +902,26 @@
 				".x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}.x{left:0}"
 			]
 		]
+	},
+	"do not touch CSS Logical": {
+		"cases": [
+			[
+				"ul { margin-top: 0.3em; margin-right: 0; margin-bottom: 0; margin-left: 1.6em; margin-inline-start: 1.6em; margin-inline-end: 0; padding: 0; }",
+				"ul { margin-top: 0.3em; margin-left: 0; margin-bottom: 0; margin-right: 1.6em; margin-inline-start: 1.6em; margin-inline-end: 0; padding: 0; }"
+			],
+			[
+				"ol { margin: 0.3em 0 0 3.2em; margin-inline: 3.2em 0; padding: 0; }",
+				"ol { margin: 0.3em 3.2em 0 0; margin-inline: 3.2em 0; padding: 0; }"
+			],
+			[
+				".foo { float: inline-start; text-align: end; } .bar { clear: inline-end; text-align: start; }"
+			],
+			[
+				"div { inline-size: min-content; min-inline-size: max-content; max-inline-size: fit-content(10%); block-size: min-content; min-block-size: 10q; max-block-size: none; margin-block-start: auto; margin-block-end: 1ex; margin-inline-start: 10%; margin-inline-end: initial; margin-block: 1ex 10%; margin-inline: 20%; inset-block-start: 10px; inset-block-end: auto; inset-inline-start: auto; inset-inline-end: 10%; inset-block: 20% 10%; inset-inline: 10px; inset: 10px 20px 10px; padding-block-start: auto; bad-value-for-property; padding-block-end: 1ex; padding-inline-start: 10%; padding-inline-end: unset; padding-block: 10% 20%; padding-inline: 30%; }"
+			],
+			[
+				"span { border-block-start-width: 1px; border-block-end-width: medium; border-inline-start-width: thin; border-inline-end-width: thick; border-block-width: thick thin; border-inline-width: medium; border-block-start-style: dotted; border-block-end-style: solid; border-inline-start-style: none; border-inline-end-style: outset; border-block-style: outset solid; border-inline-style: dotted; border-block-start-color: red; border-block-end-color: red; border-inline-start-color: red; border-inline-end-color: red; border-block-color: green; border-inline-color: transparent red; border-block-start: 1px; border-block-end: medium; border-inline-start: thin; border-inline-end: thick; border-block: thick; border-inline: red; border-start-start-radius: red; border-start-end-radius: red; border-end-start-radius: red; border-end-end-radius: red; }"
+			]
+		]
 	}
 }
