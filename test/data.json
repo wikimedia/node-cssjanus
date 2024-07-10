@@ -923,5 +923,19 @@
 				"span { border-block-start-width: 1px; border-block-end-width: medium; border-inline-start-width: thin; border-inline-end-width: thick; border-block-width: thick thin; border-inline-width: medium; border-block-start-style: dotted; border-block-end-style: solid; border-inline-start-style: none; border-inline-end-style: outset; border-block-style: outset solid; border-inline-style: dotted; border-block-start-color: red; border-block-end-color: red; border-inline-start-color: red; border-inline-end-color: red; border-block-color: green; border-inline-color: transparent red; border-block-start: 1px; border-block-end: medium; border-inline-start: thin; border-inline-end: thick; border-block: thick; border-inline: red; border-start-start-radius: red; border-start-end-radius: red; border-end-start-radius: red; border-end-end-radius: red; }"
 			]
 		]
+	},
+	"do not touch dir attribute selector and dir pseudo-class selector": {
+		"cases": [
+			[
+				"div[dir=rtl] { padding: 1em } html[ dir='ltr' ] { padding: 1em } div[dir=\"rtl\"] { padding: 1em }"
+			],
+			[
+				".x:dir( ltr ) { padding: 1em } .x:dir(rtl) :not( [ dir='ltr' ] ) { padding: 1em } .x:dir(ltr) { padding: 1em }"
+			],
+			[
+				"span:dir(rtl) { direction: ltr; padding-right: 1em; } span[dir=ltr] { direction: rtl; padding-right: 1em; }",
+				"span:dir(rtl) { direction: rtl; padding-left: 1em; } span[dir=ltr] { direction: ltr; padding-left: 1em; }"
+			]
+		]
 	}
 }
