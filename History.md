@@ -1,5 +1,9 @@
 # Release History
 
+## v2.2.0 / 2024-07-23
+
+* Flip `calc()` in four value notation (Moh'd Khier Abualruz).
+
 ## v2.1.0 / 2021-05-02
 
 * Fix unexpected flipping in selectors with the general sibling combinator (Mainframe98, [#85](https://github.com/cssjanus/cssjanus/issues/85)).
