@@ -96,6 +96,8 @@ function CSSJanus() {
 	var
 		// Tokens
 		temporaryToken = '`TMP`',
+		temporaryLtrToken = '`TMPLTR`',
+		temporaryRtlToken = '`TMPRTL`',
 		noFlipSingleToken = '`NOFLIP_SINGLE`',
 		noFlipClassToken = '`NOFLIP_CLASS`',
 		commentToken = '`COMMENT`',
@@ -139,6 +141,8 @@ function CSSJanus() {
 		suffixPattern = '(\\s*(?:!important\\s*)?[;}])',
 		// Regular expressions
 		temporaryTokenRegExp = /`TMP`/g,
+		temporaryLtrTokenRegExp = /`TMPLTR`/g,
+		temporaryRtlTokenRegExp = /`TMPRTL`/g,
 		commentRegExp = new RegExp( commentPattern, 'gi' ),
 		noFlipSingleRegExp = new RegExp( '(' + noFlipPattern + lookAheadNotOpenBracePattern + '[^;}]+;?)', 'gi' ),
 		noFlipClassRegExp = new RegExp( '(' + noFlipPattern + charsWithinSelectorPattern + '})', 'gi' ),
@@ -148,6 +152,8 @@ function CSSJanus() {
 		rightRegExp = new RegExp( nonLetterPattern + '(right)' + lookAheadNotLetterPattern + lookAheadNotClosingParenPattern + lookAheadNotOpenBracePattern, 'gi' ),
 		leftInUrlRegExp = new RegExp( nonLetterPattern + '(left)' + lookAheadForClosingParenPattern, 'gi' ),
 		rightInUrlRegExp = new RegExp( nonLetterPattern + '(right)' + lookAheadForClosingParenPattern, 'gi' ),
+		ltrDirSelector = /(:dir\( *)ltr( *\))/g,
+		rtlDirSelector = /(:dir\( *)rtl( *\))/g,
 		ltrInUrlRegExp = new RegExp( nonLetterPattern + '(ltr)' + lookAheadForClosingParenPattern, 'gi' ),
 		rtlInUrlRegExp = new RegExp( nonLetterPattern + '(rtl)' + lookAheadForClosingParenPattern, 'gi' ),
 		cursorEastRegExp = new RegExp( nonLetterPattern + '([ns]?)e-resize', 'gi' ),
@@ -348,9 +354,13 @@ function CSSJanus() {
 			if ( options.transformDirInUrl ) {
 				// Replace 'ltr' with 'rtl' and vice versa in background URLs
 				css = css
+					.replace( ltrDirSelector, '$1' + temporaryLtrToken + '$2' )
+					.replace( rtlDirSelector, '$1' + temporaryRtlToken + '$2' )
 					.replace( ltrInUrlRegExp, '$1' + temporaryToken )
 					.replace( rtlInUrlRegExp, '$1ltr' )
-					.replace( temporaryTokenRegExp, 'rtl' );
+					.replace( temporaryTokenRegExp, 'rtl' )
+					.replace( temporaryLtrTokenRegExp, 'ltr' )
+					.replace( temporaryRtlTokenRegExp, 'rtl' );
 			}
 			if ( options.transformEdgeInUrl ) {
 				// Replace 'left' with 'right' and vice versa in background URLs
