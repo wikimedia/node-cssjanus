@@ -1,5 +1,9 @@
 # Release History
 
+## v2.3.0 / 2024-08-06
+
+* Don't change `:dir()` pseudo-selector target (Ebrahim Byagowi).
+
 ## v2.2.0 / 2024-07-23
 
 * Flip `calc()` in four value notation (Moh'd Khier Abualruz).
