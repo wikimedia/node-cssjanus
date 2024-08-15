@@ -49,6 +49,24 @@ If a rule is not meant to be flipped by CSSJanus, use a `/* @noflip */` comment 
 }
 ```
 
+## CSS Logical
+
+We encourage and recommend use of
+[CSS logical properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_logical_properties_and_values)
+for the subset of CSS features where a native
+direction-aware version of a CSS property exists
+(be sure to check [browser support](https://caniuse.com/)
+for specific properties). You can, for example, set
+properties like `margin-inline-start` instead of
+`margin-left`, which the browser flips based on content
+direction, and work seamlessly alongside other CSS
+properties that CSSJanus flips instead.
+
+Note that CSS logical properties flip based on nearest
+content direction and content language, whereas CSSJanus
+is generally configured to flip by user language and
+UI direction.
+
 ## Integrations
 
 * **[css](https://www.npmjs.com/package/css)** parser: [rtl-converter](https://github.com/HosseinAlipour/rtl-converter).
