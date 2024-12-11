@@ -182,12 +182,17 @@ function CSSJanus() {
 	 * @return {string} Inverted property
 	 */
 	function calculateNewBackgroundPosition( match, pre, value ) {
-		var idx, len;
+		// Check if inside a known color function
+		var lowerPre = pre.toLowerCase();
+		if (/(?:rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch|color|color-mix|linear-gradient)\(/.test(lowerPre)) {
+			// Do not flip if inside a color function
+			return pre + value;
+		}
+
 		if ( value.slice( -1 ) === '%' ) {
-			idx = value.indexOf( '.' );
+			var idx = value.indexOf( '.' );
 			if ( idx !== -1 ) {
-				// Two off, one for the "%" at the end, one for the dot itself
-				len = value.length - idx - 2;
+				var len = value.length - idx - 2;
 				value = 100 - parseFloat( value );
 				value = value.toFixed( len ) + '%';
 			} else {
