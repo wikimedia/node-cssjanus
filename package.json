@@ -38,7 +38,7 @@
 		"eslint": "8.57.0",
 		"eslint-config-wikimedia": "0.28.2",
 		"nyc": "^15.1.0",
-		"qunit": "2.20.0"
+		"qunit": "2.24.1"
 	},
 	"nyc": {
 		"include": [
