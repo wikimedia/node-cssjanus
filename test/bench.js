@@ -93,7 +93,7 @@ async function getFixture( name, sha1, url ) {
 	data = Buffer.from( data, 'base64' ).toString( 'utf8' );
 
 	if ( checksum( 'sha1', data ) !== sha1 ) {
-		return Promise.reject( new Error( 'Checksum mis-match' ) );
+		throw new Error( 'Checksum mis-match' );
 	}
 
 	fs.writeFileSync( file, data );
