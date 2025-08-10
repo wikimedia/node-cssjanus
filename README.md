@@ -5,7 +5,7 @@
 
 Convert CSS stylesheets between left-to-right and right-to-left.
 
-Based the original [Google project](https://code.google.com/p/cssjanus/).
+Based on the original [Google project](https://code.google.com/p/cssjanus/).
 
 See **[Interactive demo](https://doc.wikimedia.org/cssjanus/master/)**.
 
@@ -19,8 +19,16 @@ npm install cssjanus
 
 ```javascript
 var cssjanus = require( 'cssjanus' );
+
+// Example: convert LTR CSS to RTL
+var ltrCss = 'body { margin-left: 10px; }';
 var rtlCss = cssjanus.transform( ltrCss );
+
+console.log( rtlCss );
+// → body { margin-right: 10px; }
 ```
+
+Signature:
 
 ```
 transform( string css [, Object options ] ) : string
