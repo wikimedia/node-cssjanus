@@ -7,7 +7,7 @@ Convert CSS stylesheets between left-to-right and right-to-left.
 
 Based the original [Google project](https://code.google.com/p/cssjanus/).
 
-See **[Interactive demo](https://cssjanus.github.io)**.
+See **[Interactive demo](https://doc.wikimedia.org/cssjanus/master/)**.
 
 ## Install
 

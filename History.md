@@ -10,13 +10,13 @@
 
 ## v2.1.0 / 2021-05-02
 
-* Fix unexpected flipping in selectors with the general sibling combinator (Mainframe98, [#85](https://github.com/cssjanus/cssjanus/issues/85)).
+* Fix unexpected flipping in selectors with the general sibling combinator (Mainframe98). [T400635](https://phabricator.wikimedia.org/T400635)).
 
 ## v2.0.0 / 2020-08-23
 
 Node.js 10 or later is required.
 
-* Fix unexpected flipping in certain cases involving double quotes or comments in selectors (YairRand, [#35](https://github.com/cssjanus/cssjanus/issues/35)).
+* Fix unexpected flipping in certain cases involving double quotes or comments in selectors (YairRand). [T400634](https://phabricator.wikimedia.org/T400634)
 * Drop support for Node.js 6 and 8 (Timo Tijhof).
 
 ## v1.3.2 / 2019-05-10
