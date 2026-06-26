@@ -183,6 +183,10 @@ function CSSJanus() {
 	 */
 	function calculateNewBackgroundPosition( match, pre, value ) {
 		var idx, len;
+		// Inside a function call (unbalanced parens), not a position, so we skip.
+		if ( pre.split( '(' ).length > pre.split( ')' ).length ) {
+			return match;
+		}
 		if ( value.slice( -1 ) === '%' ) {
 			idx = value.indexOf( '.' );
 			if ( idx !== -1 ) {

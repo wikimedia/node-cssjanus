@@ -895,6 +895,29 @@
 			]
 		]
 	},
+	"do not flip percentages inside functions in the background shorthand": {
+		"cases": [
+			[
+				".foo { background: radial-gradient(ellipse 150% 100% at 50% 30%, #fff, transparent); }"
+			],
+			[
+				".foo { background: radial-gradient(circle 80% at 50% 50%, #fff, transparent); }"
+			],
+			[
+				".foo { background: radial-gradient(ellipse 150% 100% at 50% 30%, rgba(128, 0, 0, 0.85) 0%, transparent 95%), rgb(11, 3, 3); }"
+			],
+			[
+				".foo { background: hsl(150 30% 30%); }"
+			],
+			[
+				".foo { background: color-mix(in srgb, red 30%, blue); }"
+			],
+			[
+				".foo { background: linear-gradient(to right, red 30%, blue 70%); }",
+				".foo { background: linear-gradient(to left, red 30%, blue 70%); }"
+			]
+		]
+	},
 	"long content": {
 		"cases": [
 			[
