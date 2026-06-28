@@ -1,6 +1,6 @@
 {
 	"name": "cssjanus",
-	"version": "2.3.0",
+	"version": "2.3.1",
 	"description": "Convert CSS stylesheets between left-to-right and right-to-left directions.",
 	"author": "Trevor Parscal <trevorparscal@gmail.com> (https://trevorparscal.com/)",
 	"license": "Apache-2.0",
@@ -28,6 +28,7 @@
 		"doc": "rm docs/lib/cssjanus.js && cp src/cssjanus.js docs/lib/cssjanus.js",
 		"renew-doc-deps": "curl -s https://unpkg.com/@wikimedia/codex-design-tokens@1.0.0/theme-wikimedia-ui.css -o docs/lib/codex-design-tokens/theme-wikimedia-ui-1.0.0.css",
 		"test": "eslint . && qunit test/unit.js",
+		"changelog": "git log HEAD --format=\"* %s (%aN)\" --no-merges --not --tags | sort | grep -vE \"^\\* (build|docs?|tests?):\"",
 		"coverage": "nyc qunit test/unit.js"
 	},
 	"engines": {

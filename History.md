@@ -1,5 +1,9 @@
 # Release History
 
+## v2.3.1 / 2026-06-28
+
+* Fix unexpected flipping of percentages in functions in background shorthand (Aidan O'Brien). [T333273](https://phabricator.wikimedia.org/T333273)
+
 ## v2.3.0 / 2024-08-06
 
 * Don't change `:dir()` pseudo-selector target (Ebrahim Byagowi).
