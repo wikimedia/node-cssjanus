@@ -37,9 +37,9 @@
 	"dependencies": {},
 	"devDependencies": {
 		"eslint": "8.57.0",
-		"eslint-config-wikimedia": "0.32.4",
+		"eslint-config-wikimedia": "0.32.5",
 		"nyc": "^15.1.0",
-		"qunit": "2.24.1"
+		"qunit": "2.26.0"
 	},
 	"nyc": {
 		"include": [
